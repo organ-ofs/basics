@@ -3,6 +3,8 @@ package com.ofs.sys.entity;
 import com.ofs.web.base.BaseEntity;
 import lombok.*;
 
+import java.util.List;
+
 /**
  * <p>
  *
@@ -33,6 +35,8 @@ public class SysRole extends BaseEntity {
     private String createUser;
 
     private String updateUser;
+
+    private List<SysMenus> menus;
 
 
     public static final String CODE = "code";

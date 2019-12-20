@@ -4,6 +4,8 @@ import com.ofs.web.base.BaseEntity;
 import lombok.*;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 /**
  * <p>
  *
@@ -36,13 +38,8 @@ public class SysUser extends BaseEntity {
 
     private String lastLoginDate;
 
-    private String createDate;
-
-    private String updateDate;
-
-    private String createUser;
-
-    private String updateUser;
+    private List<SysRole> roles;
+    private List<SysMenus> menus;
 
     public static final String LOGIN_ID = "login_id";
 
@@ -57,13 +54,5 @@ public class SysUser extends BaseEntity {
     public static final String GROUP_ID = "group_id";
 
     public static final String LAST_LOGIN_DATE = "last_login_date";
-
-    public static final String CREATE_DATE = "create_date";
-
-    public static final String UPDATE_DATE = "update_date";
-
-    public static final String CREATE_USER = "create_user";
-
-    public static final String UPDATE_USER = "update_user";
 
 }

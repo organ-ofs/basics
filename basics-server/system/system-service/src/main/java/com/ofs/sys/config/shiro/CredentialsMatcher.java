@@ -1,7 +1,9 @@
 package com.ofs.sys.config.shiro;
 
 
+import cn.licoy.encryptbody.util.MD5EncryptUtil;
 import com.ofs.web.jwt.JwtToken;
+import com.ofs.web.utils.BeanConverterUtil;
 import com.ofs.web.utils.JwtUtil;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;

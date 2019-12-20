@@ -38,7 +38,7 @@ public abstract class BaseController<T extends BaseDto> {
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "身份认证Token", required = true)
     ResponseResult update(@PathVariable("id") String id, @RequestBody @Validated T dto) {
 
-        getService().update(id, BeanConverterUtil.convert(dto, BaseEntity.class));
+//        getService().update(id, BeanConverterUtil.convert(dto, BaseEntity.class));
         return ResponseResult.e(ResponseCode.OK);
     }
 
@@ -47,7 +47,7 @@ public abstract class BaseController<T extends BaseDto> {
     @SysLogs("删除指定ID的对象")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "身份认证Token", required = true)
     ResponseResult remove(@PathVariable("id") List<String> ids) {
-        getService().remove(ids);
+//        getService().remove(ids);
         return ResponseResult.e(ResponseCode.OK);
     }
 }

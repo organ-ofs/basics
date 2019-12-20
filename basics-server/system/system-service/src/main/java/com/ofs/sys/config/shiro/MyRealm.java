@@ -2,6 +2,8 @@ package com.ofs.sys.config.shiro;
 
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.ofs.sys.config.jwt.JwtToken;
+import com.ofs.sys.entity.SysUser;
 import com.ofs.system.common.exception.RequestException;
 import com.ofs.system.common.util.JwtUtil;
 import com.ofs.system.core.config.jwt.JwtToken;
