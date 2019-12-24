@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Licoy
- * @version 2018/4/23/13:59
+ * @author gaoly
+ * @version 2019/4/23/13:59
  */
 public interface ShiroService {
 

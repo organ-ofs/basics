@@ -6,13 +6,15 @@ import com.baomidou.mybatisplus.service.IService;
 import java.util.List;
 
 /**
- * @author Licoy
- * @version 2018/5/25/11:43
+ * @author gaoly
+ * @version 2019/5/25/11:43
  */
 public interface BaseService<T extends BaseEntity> extends IService<T> {
     void add(T entity);
 
     void removes(List<String> ids);
+
+    void remove(String id);
 
     Page<T> list(Page<T> page, T entity);
 

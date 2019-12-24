@@ -1,5 +1,6 @@
 package com.ofs.sys.entity;
 
+import com.ofs.web.base.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -9,11 +9,11 @@ import com.ofs.web.base.impl.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**
- * @author Licoy
- * @version 2018/4/28/9:57
+ * @author gaoly
+ * @version 2019/4/28/9:57
  */
 @Service
-public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper,SysLog> implements SysLogService {
+public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper, SysLog> implements SysLogService {
 
     @Override
     public Page<SysLog> list(Page<SysLog> page, SysLog sysLog) {

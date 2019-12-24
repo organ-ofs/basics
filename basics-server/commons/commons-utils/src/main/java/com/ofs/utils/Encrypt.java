@@ -7,7 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 
 /**
- * @author licoy.cn
+ * @author gaoly.cn
  * @version 2017/11/18
  */
 public class Encrypt {

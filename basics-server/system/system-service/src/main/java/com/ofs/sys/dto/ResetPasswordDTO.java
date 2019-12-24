@@ -6,8 +6,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 /**
- * @author Licoy
- * @version 2018/4/25/11:54
+ * @author gaoly
+ * @version 2019/4/25/11:54
  */
 @Data
 public class ResetPasswordDTO {
@@ -16,7 +16,7 @@ public class ResetPasswordDTO {
     private String userId;
 
     @NotBlank(message = "新密码不能为空")
-    @Pattern(regexp = "^(\\w){6,18}$",message = "密码应为[A-Za-z0-9_]组成的6-18位字符！")
+    @Pattern(regexp = "^(\\w){6,18}$", message = "密码应为[A-Za-z0-9_]组成的6-18位字符！")
     private String password;
 
 }

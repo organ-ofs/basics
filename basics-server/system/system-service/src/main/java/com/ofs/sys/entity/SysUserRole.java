@@ -5,11 +5,9 @@ import com.ofs.web.base.BaseEntity;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
-
 /**
- * @author Licoy
- * @version 2018/4/16/11:31
+ * @author gaoly
+ * @version 2019/4/16/11:31
  */
 @Data
 @AllArgsConstructor

@@ -2,12 +2,10 @@ package com.ofs.sys.config.shiro;
 
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.ofs.sys.config.jwt.JwtToken;
 import com.ofs.sys.entity.SysUser;
 import com.ofs.system.common.exception.RequestException;
 import com.ofs.system.common.util.JwtUtil;
 import com.ofs.system.core.config.jwt.JwtToken;
-import com.ofs.system.core.entity.SysUser;
 import com.ofs.system.core.service.system.SysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
@@ -23,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 /**
- * @author licoy.cn
+ * @author gaoly.cn
  * @version 2017/9/22
  */
 @Slf4j

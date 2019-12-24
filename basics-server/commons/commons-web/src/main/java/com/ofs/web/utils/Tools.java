@@ -1,6 +1,6 @@
 package com.ofs.web.utils;
 
-import com.ofs.web.bean.ResponseCode;
+import com.ofs.web.bean.SystemCode;
 import com.ofs.web.exception.RequestException;
 import com.ofs.web.jwt.JwtToken;
 import org.apache.shiro.SecurityUtils;
@@ -13,8 +13,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @author Licoy
- * @version 2018/4/28/9:46
+ * @author gaoly
+ * @version 2019/4/28/9:46
  */
 public class Tools {
 
@@ -68,12 +68,12 @@ public class Tools {
             subject.login(token);
         } catch (DisabledAccountException e) {
             if ("verifyFail".equals(e.getMessage())) {
-                throw new RequestException(ResponseCode.NOT_SING_IN.code, "身份已过期，请重新登录", e);
+                throw new RequestException(SystemCode.NOT_SING_IN.code, "身份已过期，请重新登录", e);
             }
-            throw new RequestException(ResponseCode.SIGN_IN_INPUT_FAIL.code, e.getMessage(), e);
+            throw new RequestException(SystemCode.SIGN_IN_INPUT_FAIL.code, e.getMessage(), e);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RequestException(ResponseCode.SIGN_IN_FAIL, e);
+            throw new RequestException(SystemCode.SIGN_IN_FAIL, e);
         }
         // 如果没有抛出异常则代表登入成功，返回true
         return true;

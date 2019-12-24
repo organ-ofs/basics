@@ -1,8 +1,8 @@
 package com.ofs.web.jwt;
 
 import com.alibaba.fastjson.JSON;
-import com.ofs.web.bean.ResponseCode;
 import com.ofs.web.bean.ResponseResult;
+import com.ofs.web.bean.SystemCode;
 import com.ofs.web.exception.RequestException;
 import com.ofs.web.utils.Tools;
 import org.apache.shiro.subject.Subject;
@@ -44,7 +44,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
         HttpServletResponse res = WebUtils.toHttp(response);
         if (!isLoginAttempt(request, response)) {
-            writerResponse(res, ResponseCode.NOT_SING_IN.code, "无身份认证权限标示");
+            writerResponse(res, SystemCode.NOT_SING_IN.code, "无身份认证权限标示");
             return false;
         }
         try {
@@ -66,9 +66,9 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
             }
         }
         if (null == subject.getPrincipal()) {//表示没有登录，返回登录提示
-            writerResponse(res, ResponseCode.NOT_SING_IN.code, ResponseCode.NOT_SING_IN.msg);
+            writerResponse(res, SystemCode.NOT_SING_IN.code, SystemCode.NOT_SING_IN.msg);
         } else {
-            writerResponse(res, ResponseCode.FAIL.code, "无权限访问");
+            writerResponse(res, SystemCode.FAIL.code, "无权限访问");
         }
         return false;
     }

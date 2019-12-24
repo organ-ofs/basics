@@ -19,8 +19,8 @@ import java.time.Duration;
 
 
 /**
- * @author Licoy
- * @version 2018/5/3/9:45
+ * @author gaoly
+ * @version 2019/5/3/9:45
  */
 @Configuration
 public class RedisCacheConfig extends CachingConfigurerSupport {

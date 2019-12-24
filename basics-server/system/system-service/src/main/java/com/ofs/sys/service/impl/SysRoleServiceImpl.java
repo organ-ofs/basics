@@ -2,9 +2,7 @@ package com.ofs.sys.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.ofs.sys.core.global.ShiroService;
-import com.ofs.sys.entity.SysResource;
 import com.ofs.sys.entity.SysRole;
 import com.ofs.sys.entity.SysUserRole;
 import com.ofs.sys.mapper.SysRoleMapper;
@@ -24,7 +22,7 @@ import java.util.List;
 
 @Service
 @Transactional
-public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper,SysRole> implements SysRoleService {
+public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
 
     @Autowired
     private SysMenusService roleMenusService;
@@ -54,22 +52,22 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper,SysRole> i
     }
 
     @Override
-    public Page<SysRole> list(Page<SysRole> page,SysRole role) {
+    public Page<SysRole> list(Page<SysRole> page, SysRole role) {
         EntityWrapper<SysRole> wrapper = new EntityWrapper<>();
         wrapper.orderBy(SysRole.CODE, true);
         Page<SysRole> rolePage = this.selectPage(new Page<SysRole>(page.getCurrent(),
                 page.getSize()), wrapper);
-            if (rolePage.getRecords() != null) {
+        if (rolePage.getRecords() != null) {
 //                rolePage.getRecords().forEach(v->
-                //添加资源列表
+            //添加资源列表
 //                        v.setResources(roleMenusService.findAllResourceByRoleId(v.getId())));
-            }
+        }
         return rolePage;
     }
 
     @Override
     public void removes(List<String> ids) {
-        ids.forEach(id->{
+        ids.forEach(id -> {
             SysRole role = super.selectById(id);
             if (id == null) {
                 throw RequestException.fail("角色不存在！");

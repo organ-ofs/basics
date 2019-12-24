@@ -29,8 +29,8 @@ import java.lang.reflect.Method;
 import java.util.Date;
 
 /**
- * @author Licoy
- * @version 2018/4/27/17:19
+ * @author gaoly
+ * @version 2019/4/27/17:19
  */
 @Aspect
 @Component

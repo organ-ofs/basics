@@ -1,7 +1,7 @@
 package com.ofs.web.resolver;
 
 import com.ofs.web.annotation.JwtClaim;
-import com.ofs.web.bean.ResponseCode;
+import com.ofs.web.bean.SystemCode;
 import com.ofs.web.exception.RequestException;
 import com.ofs.web.utils.JwtUtil;
 import org.springframework.core.MethodParameter;
@@ -14,8 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
 
 /**
- * @author licoy.cn
- * @version 2018/10/16
+ * @author gaoly.cn
+ * @version 2019/10/16
  */
 public class JwtTokenArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
@@ -45,7 +45,7 @@ public class JwtTokenArgumentResolver implements HandlerMethodArgumentResolver {
             return result;
         }
         if (token == null || token.exception()) {
-            throw new RequestException(ResponseCode.NOT_SING_IN);
+            throw new RequestException(SystemCode.NOT_SING_IN);
         } else {
             return null;
         }

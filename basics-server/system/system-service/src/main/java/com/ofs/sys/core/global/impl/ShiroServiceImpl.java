@@ -4,7 +4,7 @@ import com.ofs.sys.config.shiro.MyRealm;
 import com.ofs.sys.core.global.ShiroService;
 import com.ofs.sys.entity.SysMenus;
 import com.ofs.sys.service.SysMenusService;
-import com.ofs.web.bean.ResponseCode;
+import com.ofs.web.bean.SystemCode;
 import com.ofs.web.exception.RequestException;
 import com.ofs.web.utils.SpringUtils;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Licoy
- * @version 2018/4/23/14:01
+ * @author gaoly
+ * @version 2019/4/23/14:01
  */
 @Service
 @Transactional
@@ -99,7 +99,7 @@ public class ShiroServiceImpl implements ShiroService {
         try {
             abstractShiroFilter = (AbstractShiroFilter) shiroFilterFactoryBean.getObject();
         } catch (Exception e) {
-            throw new RequestException(ResponseCode.FAIL.code, "重新加载权限失败", e);
+            throw new RequestException(SystemCode.FAIL.code, "重新加载权限失败", e);
         }
         PathMatchingFilterChainResolver filterChainResolver =
                 (PathMatchingFilterChainResolver) abstractShiroFilter.getFilterChainResolver();

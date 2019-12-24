@@ -8,11 +8,11 @@ package com.ofs.web.knowledge;
 public interface IMessageEnum {
 
     /**
-     * 返回枚举对应的消息ID
+     * 返回枚举对应的消息Code
      *
-     * @return 消息ID
+     * @return 消息Code
      */
-    String getId();
+    String getCode();
 
     /**
      * 返回枚举对应的消息内容(中文)

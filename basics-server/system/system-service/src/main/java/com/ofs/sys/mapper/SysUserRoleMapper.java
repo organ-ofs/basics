@@ -6,8 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 /**
- * @author Licoy
- * @version 2018/4/16/11:31
+ * @author gaoly
+ * @version 2019/4/16/11:31
  */
 @Mapper
 @Repository
