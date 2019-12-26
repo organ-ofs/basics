@@ -41,7 +41,7 @@ public class JwtUtil {
      *
      * @return token中包含的用户名
      */
-    public static String getUsername(String token) {
+    public static String getLoginId(String token) {
         try {
             DecodedJWT jwt = JWT.decode(token);
             return jwt.getClaim("username").asString();

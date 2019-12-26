@@ -1,4 +1,4 @@
-package com.ofs.sys.config;
+package com.ofs.web.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,7 +7,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 /**
- * @author gaoly
+ * @author Licoy
  * @version 2019/4/18/11:51
  */
 @Configuration

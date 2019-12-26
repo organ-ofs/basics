@@ -1,7 +1,7 @@
 package com.ofs.sys.config.shiro;
 
 
-import cn.gaoly.encryptbody.util.MD5EncryptUtil;
+import cn.licoy.encryptbody.util.MD5EncryptUtil;
 import com.ofs.web.jwt.JwtToken;
 import com.ofs.web.utils.JwtUtil;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -10,7 +10,7 @@ import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 
 /**
- * @author gaoly.cn
+ * @author gaoly
  * @version 2017/9/25
  */
 public class CredentialsMatcher extends SimpleCredentialsMatcher {
@@ -21,12 +21,12 @@ public class CredentialsMatcher extends SimpleCredentialsMatcher {
         Object accountCredentials = getCredentials(info);
         if (jwtToken.getPassword() != null) {
             Object tokenCredentials = MD5EncryptUtil.encrypt(String.valueOf(
-                    jwtToken.getPassword()) + jwtToken.getUsername());
+                    jwtToken.getPassword()) + jwtToken.getLoginId());
             if (!accountCredentials.equals(tokenCredentials)) {
                 throw new DisabledAccountException("密码不正确！");
             }
         } else {
-            boolean verify = JwtUtil.verify(jwtToken.getToken(), jwtToken.getUsername(), accountCredentials.toString());
+            boolean verify = JwtUtil.verify(jwtToken.getToken(), jwtToken.getLoginId(), accountCredentials.toString());
             if (!verify) {
                 throw new DisabledAccountException("verifyFail");
             }

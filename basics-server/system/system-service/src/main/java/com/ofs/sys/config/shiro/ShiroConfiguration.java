@@ -1,6 +1,7 @@
 package com.ofs.sys.config.shiro;
 
 import com.ofs.sys.core.global.ShiroService;
+import com.ofs.web.jwt.JwtFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
@@ -22,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author gaoly.cn
+ * @author gaoly
  * @version 2017/9/22
  */
 @Configuration

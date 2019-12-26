@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class RoleController extends BaseController<SysRole> {
 
     @Autowired
-    private SysRoleService sysRoleService;
+    private SysRoleService service;
 
     @Override
     public SysRoleService getService() {
-        return sysRoleService;
+        return service;
     }
 }

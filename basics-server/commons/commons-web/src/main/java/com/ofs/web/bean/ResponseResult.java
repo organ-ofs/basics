@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 
 /**
- * @author gaoly.cn
+ * @author gaoly
  * @version 2017/11/17
  */
 @Data
@@ -47,7 +47,7 @@ public class ResponseResult<T> implements Serializable {
         return res;
     }
 
-    public synchronized static <T> ResponseResult<T> successInfo() {
+    public synchronized static <T> ResponseResult<T> success() {
         ResponseResult<T> res = new ResponseResult<>();
         res.setStatus(ResponseCode.OK.getCode());
         res.setMsg(ResponseCode.OK.getMsg());
@@ -55,7 +55,7 @@ public class ResponseResult<T> implements Serializable {
         return res;
     }
 
-    public synchronized static <T> ResponseResult<T> successInfo(T data) {
+    public synchronized static <T> ResponseResult<T> success(T data) {
         ResponseResult<T> res = new ResponseResult<>();
         res.setStatus(ResponseCode.OK.getCode());
         res.setMsg(ResponseCode.OK.getMsg());
@@ -63,7 +63,7 @@ public class ResponseResult<T> implements Serializable {
         return res;
     }
 
-    public synchronized static <T> ResponseResult<T> failureInfo(IMessageEnum messageEnum) {
+    public synchronized static <T> ResponseResult<T> failure(IMessageEnum messageEnum) {
         ResponseResult<T> res = new ResponseResult<>();
         res.setStatus(ResponseCode.SERVER_ERROR.getCode());
         res.setMsg(messageEnum.getMessage());
@@ -71,7 +71,7 @@ public class ResponseResult<T> implements Serializable {
         return res;
     }
 
-    public synchronized static <T> ResponseResult<T> AuthInfo() {
+    public synchronized static <T> ResponseResult<T> Auth() {
         ResponseResult<T> res = new ResponseResult<>();
         res.setStatus(ResponseCode.SERVER_ERROR.getCode());
         res.setMsg(ResponseCode.SERVER_ERROR.getMsg());

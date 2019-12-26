@@ -10,15 +10,15 @@ public class JwtToken implements AuthenticationToken {
 
     private String token;
 
-    private String username;
+    private String loginId;
 
     private String password;
 
     private String uid;
 
-    public JwtToken(String token, String username, String password) {
+    public JwtToken(String token, String loginId, String password) {
         this.token = token;
-        this.username = username;
+        this.loginId = loginId;
         this.password = password;
     }
 

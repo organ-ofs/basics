@@ -1,5 +1,6 @@
 package com.ofs.web.utils;
 
+import com.ofs.web.bean.StaticConstant;
 import com.ofs.web.bean.SystemCode;
 import com.ofs.web.exception.RequestException;
 import com.ofs.web.jwt.JwtToken;
@@ -57,7 +58,7 @@ public class Tools {
 
     public static boolean executeLogin(ServletRequest request) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        String authorization = httpServletRequest.getHeader("Authorization");
+        String authorization = httpServletRequest.getHeader(StaticConstant.AUTHORIZATION);
         if (authorization == null || "".equals(authorization.trim())) {
             throw RequestException.fail("未含授权标示，禁止访问");
         }
@@ -79,6 +80,9 @@ public class Tools {
         return true;
     }
 
+    /**
+     * 登陆验证 根据Authorization
+     */
     public static synchronized void executeLogin() {
         HttpServletRequest request =
                 ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();

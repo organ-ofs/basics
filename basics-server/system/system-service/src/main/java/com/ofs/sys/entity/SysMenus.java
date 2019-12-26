@@ -3,6 +3,7 @@ package com.ofs.sys.entity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.ofs.web.base.BaseEntity;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Accessors
 @EqualsAndHashCode(callSuper = true)
 public class SysMenus extends BaseEntity {
 
@@ -25,7 +27,11 @@ public class SysMenus extends BaseEntity {
 
     private String name;
 
+    @TableField
     private String parentId;
+
+    @TableField
+    private String resource_id;
 
     @TableField
     private String grade;
@@ -56,14 +62,6 @@ public class SysMenus extends BaseEntity {
 
     private String description;
 
-    private String createDate;
-
-    private String updateDate;
-
-    private String createUser;
-
-    private String updateUser;
-
     @TableField(exist = false)
     private List<SysMenus> children;
 
@@ -71,6 +69,8 @@ public class SysMenus extends BaseEntity {
     public static final String NAME = "name";
 
     public static final String PARENT_ID = "parent_id";
+
+    public static final String RESOURCE_ID = "resource_id";
 
     public static final String GRADE = "grade";
 
@@ -89,13 +89,5 @@ public class SysMenus extends BaseEntity {
     public static final String HIDDEN = "hidden";
 
     public static final String DESCRIPTION = "description";
-
-    public static final String CREATE_DATE = "create_date";
-
-    public static final String UPDATE_DATE = "update_date";
-
-    public static final String CREATE_USER = "create_user";
-
-    public static final String UPDATE_USER = "update_user";
 
 }

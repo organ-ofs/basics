@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 /**
- * @author gaoly.cn
+ * @author gaoly
  * @version 2017/11/18
  */
 @ControllerAdvice(basePackages = {"cn.ofs.web"})

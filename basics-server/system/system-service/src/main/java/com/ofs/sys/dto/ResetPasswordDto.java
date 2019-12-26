@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
  * @version 2019/4/25/11:54
  */
 @Data
-public class ResetPasswordDTO {
+public class ResetPasswordDto {
 
     @NotBlank(message = "用户标识ID不能为空")
     private String userId;

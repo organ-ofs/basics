@@ -1,6 +1,7 @@
 package com.ofs.web.resolver;
 
 import com.ofs.web.annotation.JwtClaim;
+import com.ofs.web.bean.StaticConstant;
 import com.ofs.web.bean.SystemCode;
 import com.ofs.web.exception.RequestException;
 import com.ofs.web.utils.JwtUtil;
@@ -14,8 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
 
 /**
- * @author gaoly.cn
+ *
+ * @author gaoly
  * @version 2019/10/16
+ * 自定义参数解析器
+ * supportsParameter：用于判定是否需要处理该参数分解，返回true为需要，并会去调用下面的方法resolveArgument。
+ * resolveArgument：真正用于处理参数分解的方法，返回的Object就是controller方法上的形参对象。
+ *
  */
 public class JwtTokenArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
@@ -26,7 +32,7 @@ public class JwtTokenArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
-        String authorization = request.getHeader("Authorization");
+        String authorization = request.getHeader(StaticConstant.AUTHORIZATION);
         String result = null;
         JwtClaim token = null;
         if (authorization != null) {

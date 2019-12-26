@@ -1,10 +1,10 @@
 package com.ofs.sys.service.impl;
 
-import cn.gaoly.encryptbody.util.MD5EncryptUtil;
+import cn.licoy.encryptbody.util.MD5EncryptUtil;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.ofs.sys.core.global.ShiroService;
-import com.ofs.sys.dto.ResetPasswordDTO;
+import com.ofs.sys.dto.ResetPasswordDto;
 import com.ofs.sys.dto.SignInDto;
 import com.ofs.sys.entity.SysMenus;
 import com.ofs.sys.entity.SysRole;
@@ -14,11 +14,11 @@ import com.ofs.sys.service.SysMenusService;
 import com.ofs.sys.service.SysRoleService;
 import com.ofs.sys.service.SysUserRoleService;
 import com.ofs.sys.service.SysUserService;
+import com.ofs.utils.DateUtils;
 import com.ofs.web.base.impl.BaseServiceImpl;
 import com.ofs.web.bean.SystemCode;
 import com.ofs.web.exception.RequestException;
 import com.ofs.web.jwt.JwtToken;
-import com.ofs.web.utils.Tools;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.subject.Subject;
@@ -27,7 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,8 +51,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     private SysMenusService menusService;
 
     @Override
-    public SysUser findUserByName(String name, boolean hasMenu) {
-        SysUser user = this.selectOne(new EntityWrapper<SysUser>().eq("username", name));
+    public SysUser findUserByLoginId(String loginId, boolean hasMenu) {
+        SysUser user = this.selectOne(new EntityWrapper<SysUser>().eq(SysUser.LOGIN_ID, loginId));
         if (user == null) {
             return null;
         }
@@ -73,10 +72,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
     @Override
     public void signIn(SignInDto signInDto) {
-        if ("".equals(signInDto.getUsername()) || "".equals(signInDto.getPassword())) {
+        if ("".equals(signInDto.getLoginId()) || "".equals(signInDto.getPassword())) {
             throw new RequestException(SystemCode.SING_IN_INPUT_EMPTY);
         }
-        JwtToken token = new JwtToken(null, signInDto.getUsername(), signInDto.getPassword());
+        JwtToken token = new JwtToken(null, signInDto.getLoginId(), signInDto.getPassword());
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(token);
@@ -93,18 +92,12 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
     @Override
     public SysUser getCurrentUser() {
-        Tools.executeLogin();
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
             throw new RequestException(SystemCode.NOT_SING_IN);
         }
-        JwtToken jwtToken = new JwtToken();
-        Object principal = subject.getPrincipal();
-        if (principal == null) {
-            throw RequestException.fail("用户信息获取失败");
-        }
-        BeanUtils.copyProperties(principal, jwtToken);
-        SysUser user = this.findUserByName(jwtToken.getUsername(), false);
+        JwtToken jwtToken = super.getJwtToken();
+        SysUser user = this.findUserByLoginId(jwtToken.getLoginId(), false);
         if (user == null) {
             throw RequestException.fail("用户不存在");
         }
@@ -116,19 +109,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
     @Override
     public List<String> getAllPermissionTag() {
-        Tools.executeLogin();
-        Subject subject = SecurityUtils.getSubject();
-        if (!subject.isAuthenticated()) {
-            throw new RequestException(SystemCode.NOT_SING_IN);
-        }
-        JwtToken jwtToken = new JwtToken();
-        Object principal = subject.getPrincipal();
-        if (principal == null) {
-            throw RequestException.fail("用户信息获取失败");
-        }
-        BeanUtils.copyProperties(principal, jwtToken);
+        JwtToken jwtToken = super.getJwtToken();
         SysUser user = this.selectOne(new EntityWrapper<SysUser>()
-                .eq("username", jwtToken.getUsername())
+                .eq(SysUser.LOGIN_ID, jwtToken.getLoginId())
                 .setSqlSelect("id"));
         if (user == null) {
             throw RequestException.fail("用户不存在");
@@ -195,13 +178,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
     @Override
     public void add(SysUser user) {
-        SysUser findUser = this.findUserByName(user.getLoginId(), false);
+        SysUser findUser = this.findUserByLoginId(user.getLoginId(), false);
         if (findUser != null) {
             throw RequestException.fail(
                     String.format("已经存在用户名为 %s 的用户", user.getLoginId()));
         }
         try {
-            user.setCreateDate(LocalDateTime.now());
+            user.setCreateDate(DateUtils.getCurrentTime());
             user.setPassword(MD5EncryptUtil.encrypt(String.valueOf(findUser.getPassword()) + findUser.getLoginId()));
             this.insert(user);
         } catch (Exception e) {
@@ -232,7 +215,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     }
 
     @Override
-    public void resetPassword(ResetPasswordDTO resetPasswordDTO) {
+    public void resetPassword(ResetPasswordDto resetPasswordDTO) {
         SysUser user = this.selectById(resetPasswordDTO.getUserId().trim());
         if (user == null) {
             throw RequestException.fail(String.format("不存在ID为 %s 的用户", resetPasswordDTO.getUserId()));

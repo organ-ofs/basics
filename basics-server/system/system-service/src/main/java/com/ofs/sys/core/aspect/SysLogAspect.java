@@ -1,14 +1,15 @@
 package com.ofs.sys.core.aspect;
 
 import com.alibaba.fastjson.JSON;
-import com.ofs.system.common.annotation.SysLogs;
-import com.ofs.system.common.util.Tools;
-import com.ofs.system.core.config.jwt.JwtToken;
-import com.ofs.system.core.dto.SignInDTO;
-import com.ofs.system.core.dto.system.user.ResetPasswordDTO;
-import com.ofs.system.core.dto.system.user.UserAddDTO;
-import com.ofs.system.core.entity.SysLog;
-import com.ofs.system.core.service.system.SysLogService;
+import com.ofs.sys.dto.ResetPasswordDto;
+import com.ofs.sys.dto.SignInDto;
+import com.ofs.sys.entity.SysLog;
+import com.ofs.sys.entity.SysUser;
+import com.ofs.sys.service.SysLogService;
+import com.ofs.utils.DateUtils;
+import com.ofs.web.annotation.SysLogs;
+import com.ofs.web.jwt.JwtToken;
+import com.ofs.web.utils.Tools;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
@@ -26,7 +27,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
-import java.util.Date;
 
 /**
  * @author gaoly
@@ -43,7 +43,7 @@ public class SysLogAspect {
         this.sysLogService = sysLogService;
     }
 
-    @Pointcut("@annotation(com.ofs.system.common.annotation.SysLogs)")
+    @Pointcut("@annotation(com.ofs.web.annotation.SysLogs)")
     public void log() {
     }
 
@@ -58,10 +58,10 @@ public class SysLogAspect {
         }
         SysLog sysLog = new SysLog();
         //获取动作Action释义
-        sysLog.setActionName(getMethodSysLogsAnnotationValue(joinPoint));
+        sysLog.setContent(getMethodSysLogsAnnotationValue(joinPoint));
         //获取IP
         sysLog.setIp(Tools.getClientIp(request));
-        sysLog.setAjax(Tools.ajax(request) ? 1 : 0);
+        sysLog.setAjax(Tools.ajax(request) ? "1" : "0");
         sysLog.setUri(request.getRequestURI());
         String s = this.paramFilter(joinPoint.getArgs());
         //根据系统需求自定义
@@ -73,13 +73,11 @@ public class SysLogAspect {
         if (spc != null) {
             JwtToken jwtToken = new JwtToken();
             BeanUtils.copyProperties(spc.getPrimaryPrincipal(), jwtToken);
-            sysLog.setUsername(jwtToken.getUsername());
-            sysLog.setUid(jwtToken.getUid());
+            sysLog.setCreateUser(jwtToken.getUid());
         } else {
-            sysLog.setUsername("游客");
-            sysLog.setUid("0");
+            sysLog.setCreateUser("0");
         }
-        sysLog.setCreateDate(new Date());
+        sysLog.setCreateDate(DateUtils.getCurrentTime());
         sysLogService.insert(sysLog);
     }
 
@@ -100,18 +98,18 @@ public class SysLogAspect {
         final String filterString = "******";
         if (params.length > 0) {
             for (int i = 0; i < params.length; i++) {
-                if (params[i] instanceof SignInDTO) {
-                    SignInDTO sign = (SignInDTO) params[i];
+                if (params[i] instanceof SignInDto) {
+                    SignInDto sign = (SignInDto) params[i];
                     sign.setPassword(filterString);
                     params[i] = sign;
                 }
-                if (params[i] instanceof UserAddDTO) {
-                    UserAddDTO userAddDTO = (UserAddDTO) params[i];
+                if (params[i] instanceof SysUser) {
+                    SysUser userAddDTO = (SysUser) params[i];
                     userAddDTO.setPassword(filterString);
                     params[i] = userAddDTO;
                 }
-                if (params[i] instanceof ResetPasswordDTO) {
-                    ResetPasswordDTO resetPasswordDTO = (ResetPasswordDTO) params[i];
+                if (params[i] instanceof ResetPasswordDto) {
+                    ResetPasswordDto resetPasswordDTO = (ResetPasswordDto) params[i];
                     resetPasswordDTO.setPassword(filterString);
                     params[i] = resetPasswordDTO;
                 }

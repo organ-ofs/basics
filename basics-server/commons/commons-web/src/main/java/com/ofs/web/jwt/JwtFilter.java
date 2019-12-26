@@ -2,6 +2,7 @@ package com.ofs.web.jwt;
 
 import com.alibaba.fastjson.JSON;
 import com.ofs.web.bean.ResponseResult;
+import com.ofs.web.bean.StaticConstant;
 import com.ofs.web.bean.SystemCode;
 import com.ofs.web.exception.RequestException;
 import com.ofs.web.utils.Tools;
@@ -28,7 +29,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
     @Override
     protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
         HttpServletRequest req = (HttpServletRequest) request;
-        String authorization = req.getHeader("Authorization");
+        String authorization = req.getHeader(StaticConstant.AUTHORIZATION);
         return authorization != null;
     }
 

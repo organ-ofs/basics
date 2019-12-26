@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofs.sys.mapper.SysResourceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ofs.sys.entity.SysResource">
+        <result column="ID" property="id"/>
+        <result column="code" property="code"/>
+        <result column="name" property="name"/>
+        <result column="permission" property="permission"/>
+        <result column="url" property="url"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="type" property="type"/>
+        <result column="description" property="description"/>
+        <result column="create_date" property="createDate"/>
+        <result column="update_date" property="updateDate"/>
+        <result column="create_user" property="createUser"/>
+        <result column="update_user" property="updateUser"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+                ID,
+            code, name, permission, url, parent_id, type, description, create_date, update_date, create_user, update_user
+        </sql>
+
+
+    <!-- 默认where判断条件 -->
+    <sql id="BASE_WHERE_CLAUSE">
+        <where>
+            <trim prefixOverrides="and">
+                <if test="id != null">and T.ID = #{id}</if>
+                <if test="name != null">and T.RESOURCE_NAME = #{name}</if>
+                <if test="url != null">and T.url = #{url}</if>
+                <if test="status != null">and T.STATUS = #{status}</if>
+                <if test="parentId != null">and T.PARENT_ID = #{parentId}</if>
+                <if test="type != null">and T.TYPE = #{type}</if>
+                <if test="roleId != null">and R.ROLE_ID = #{roleId}</if>
+            </trim>
+        </where>
+    </sql>
+
+    <!-- 根据条件查询信息 -->
+    <select id="getList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        , (select case when count(*) >0 then 0 else 1 end from TAX_RESOURCE_INFO M where M.PARENT_ID=T.ID) LEAF
+        , DECODE(R.ROLE_ID,NULL,0,1 ) IS_AUTH
+        FROM TAX_RESOURCE_INFO T
+        LEFT JOIN TAX_ROLE_RESOURCE R ON R.RESOURCE_ID=T.ID
+        <include refid="BASE_WHERE_CLAUSE"/>
+        ORDER BY T.ROW_ORDER
+    </select>
+    <!-- 根据角色ID条件查询信息 -->
+    <select id="getListByRole" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        , (select case when count(*) >0 then 0 else 1 end from TAX_RESOURCE_INFO M where M.PARENT_ID=T.ID) LEAF
+        FROM TAX_RESOURCE_INFO T
+        INNER JOIN TAX_ROLE_RESOURCE R ON R.RESOURCE_ID=T.ID
+        <include refid="BASE_WHERE_CLAUSE"/>
+        ORDER BY T.ROW_ORDER
+    </select>
+
+    <delete id="deleteChildren">
+        DELETE FROM TAX_RESOURCE_INFO T WHERE T.PARENT_ID in
+        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+</mapper>

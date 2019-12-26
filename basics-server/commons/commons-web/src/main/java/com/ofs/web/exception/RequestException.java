@@ -6,8 +6,8 @@ import lombok.*;
 import java.io.Serializable;
 
 /**
- * @author gaoly.cn
- * @version 2017/11/18
+ * @author gaoly
+ * @version 2019/11/18
  */
 @EqualsAndHashCode(callSuper = true)
 @Data

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * @author gaoly.cn
+ * @author gaoly
  * @version 2019/4/22
  */
 @RestController
@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class MenuController extends BaseController<SysMenus> {
 
     @Autowired
-    private SysMenusService menusService;
+    private SysMenusService service;
 
     @Override
     public BaseService<SysMenus> getService() {
-        return menusService;
+        return service;
     }
 
 

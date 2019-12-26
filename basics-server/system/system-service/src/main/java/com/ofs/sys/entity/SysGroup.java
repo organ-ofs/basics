@@ -2,6 +2,7 @@ package com.ofs.sys.entity;
 
 import com.ofs.web.base.BaseEntity;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -15,6 +16,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Accessors
 @EqualsAndHashCode(callSuper = true)
 public class SysGroup extends BaseEntity {
 
@@ -26,14 +28,6 @@ public class SysGroup extends BaseEntity {
 
     private String description;
 
-    private String createDate;
-
-    private String updateDate;
-
-    private String createUser;
-
-    private String updateUser;
-
 
     public static final String CODE = "code";
 
@@ -41,12 +35,5 @@ public class SysGroup extends BaseEntity {
 
     public static final String DESCRIPTION = "description";
 
-    public static final String CREATE_DATE = "create_date";
-
-    public static final String UPDATE_DATE = "update_date";
-
-    public static final String CREATE_USER = "create_user";
-
-    public static final String UPDATE_USER = "update_user";
 
 }

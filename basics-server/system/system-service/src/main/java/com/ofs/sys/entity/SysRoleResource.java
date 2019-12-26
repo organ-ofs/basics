@@ -1,29 +1,27 @@
 package com.ofs.sys.entity;
 
-import com.baomidou.mybatisplus.annotations.TableId;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.io.Serializable;
+import com.ofs.web.base.BaseEntity;
+import lombok.*;
+import lombok.experimental.Accessors;
 
 /**
  * @author gaoly
  * @version 2019/4/16/8:58
  */
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class SysRoleResource implements Serializable {
-
-    @TableId
-    private String id;
-
-    private String rid;
-
-    private String pid;
-
+@EqualsAndHashCode(callSuper = true)
+@Accessors
+public class SysRoleResource extends BaseEntity {
     private static final long serialVersionUID = 1L;
+
+    private String roleId;
+
+    private String resourceId;
+
+    public static final String ROLE_ID = "role_id";
+
+    public static final String RESOURCE_ID = "resource_id";
 }

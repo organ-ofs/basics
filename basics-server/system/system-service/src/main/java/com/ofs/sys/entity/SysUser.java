@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
+@Accessors
 public class SysUser extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -29,6 +29,8 @@ public class SysUser extends BaseEntity {
     private String password;
 
     private String name;
+
+    private String status;
 
     private String mobile;
 
@@ -46,6 +48,8 @@ public class SysUser extends BaseEntity {
     public static final String PASSWORD = "password";
 
     public static final String NAME = "name";
+
+    public static final String STATUS = "status";
 
     public static final String MOBILE = "mobile";
 

@@ -2,7 +2,7 @@ package com.ofs.sys.service;
 
 
 import com.baomidou.mybatisplus.plugins.Page;
-import com.ofs.sys.dto.ResetPasswordDTO;
+import com.ofs.sys.dto.ResetPasswordDto;
 import com.ofs.sys.dto.SignInDto;
 import com.ofs.sys.entity.SysMenus;
 import com.ofs.sys.entity.SysRole;
@@ -16,10 +16,10 @@ public interface SysUserService extends BaseService<SysUser> {
     /**
      * 根据用户名查找用户
      *
-     * @param name 用户名
+     * @param loginId 登陆名
      * @return User
      */
-    SysUser findUserByName(String name, boolean hasMenu);
+    SysUser findUserByLoginId(String loginId, boolean hasMenu);
 
     /**
      * 根据ID查找用户
@@ -73,5 +73,5 @@ public interface SysUserService extends BaseService<SysUser> {
      *
      * @param user
      */
-    void resetPassword(ResetPasswordDTO user);
+    void resetPassword(ResetPasswordDto user);
 }

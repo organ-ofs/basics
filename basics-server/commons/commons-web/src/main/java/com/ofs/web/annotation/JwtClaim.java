@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author gaoly.cn
+ * @author gaoly
  * @version 2019/10/16
  */
 @Target(ElementType.PARAMETER)

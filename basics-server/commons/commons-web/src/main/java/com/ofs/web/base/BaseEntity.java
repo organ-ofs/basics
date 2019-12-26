@@ -12,7 +12,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 
 /**
@@ -54,7 +53,7 @@ public class BaseEntity implements Serializable {
      */
 
     @TableField(value = "CREATE_DATE", fill = FieldFill.INSERT)
-    public LocalDateTime createDate;
+    public String createDate;
 
     /**
      * 更新者
@@ -66,7 +65,7 @@ public class BaseEntity implements Serializable {
      * 更新日期
      */
     @TableField(value = "UPDATE_DATE", fill = FieldFill.INSERT_UPDATE)
-    public LocalDateTime updateDate;
+    public String updateDate;
 
     public static final String ID = "ID";
 
@@ -82,8 +81,4 @@ public class BaseEntity implements Serializable {
 
     public static final String DELETE_FLAG = "DELETE_FLAG";
 
-    public static final String VERSION_NUM_FILED = "versionNum";
-
-
-    public static final String ID_FILED = "id";
 }

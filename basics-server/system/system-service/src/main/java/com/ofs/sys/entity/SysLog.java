@@ -3,6 +3,7 @@ package com.ofs.sys.entity;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.ofs.web.base.BaseEntity;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -16,6 +17,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Accessors
 @EqualsAndHashCode(callSuper = true)
 public class SysLog extends BaseEntity {
 
@@ -48,15 +50,6 @@ public class SysLog extends BaseEntity {
     @TableField
     private String classMethod;
 
-    private String createDate;
-
-    private String updateDate;
-
-    private String createUser;
-
-    private String updateUser;
-
-
     public static final String MENU_ID = "menu_id";
 
     public static final String TYPE = "type";
@@ -74,13 +67,5 @@ public class SysLog extends BaseEntity {
     public static final String HTTP_METHOD = "http_method";
 
     public static final String CLASS_METHOD = "class_method";
-
-    public static final String CREATE_DATE = "create_date";
-
-    public static final String UPDATE_DATE = "update_date";
-
-    public static final String CREATE_USER = "create_user";
-
-    public static final String UPDATE_USER = "update_user";
 
 }

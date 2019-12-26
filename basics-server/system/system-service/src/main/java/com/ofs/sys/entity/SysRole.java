@@ -2,6 +2,7 @@ package com.ofs.sys.entity;
 
 import com.ofs.web.base.BaseEntity;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Accessors
 @EqualsAndHashCode(callSuper = true)
 public class SysRole extends BaseEntity {
 
@@ -28,14 +30,6 @@ public class SysRole extends BaseEntity {
 
     private String description;
 
-    private String createDate;
-
-    private String updateDate;
-
-    private String createUser;
-
-    private String updateUser;
-
     private List<SysMenus> menus;
 
 
@@ -44,13 +38,5 @@ public class SysRole extends BaseEntity {
     public static final String NAME = "name";
 
     public static final String DESCRIPTION = "description";
-
-    public static final String CREATE_DATE = "create_date";
-
-    public static final String UPDATE_DATE = "update_date";
-
-    public static final String CREATE_USER = "create_user";
-
-    public static final String UPDATE_USER = "update_user";
 
 }

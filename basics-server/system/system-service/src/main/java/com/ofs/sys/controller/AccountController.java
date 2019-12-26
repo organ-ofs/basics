@@ -8,7 +8,6 @@ import com.ofs.web.bean.ResponseResult;
 import com.ofs.web.bean.SystemCode;
 import com.ofs.web.jwt.JwtToken;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.shiro.SecurityUtils;
@@ -38,28 +37,24 @@ public class AccountController {
     @Autowired
     private RedisTemplate redisTemplate;
 
-    @PostMapping(value = {"/sign-in"})
+    @PostMapping("/sign-in")
     @ApiOperation(value = "登录")
     @SysLogs("登录")
     public ResponseResult signIn(@RequestBody @Validated @ApiParam(value = "登录数据", required = true) SignInDto sign) {
-        redisTemplate.opsForValue().set("aaa", "aaa");
-        System.out.println(redisTemplate.opsForValue().get("aaa"));
         userService.signIn(sign);
-        return ResponseResult.e(SystemCode.SIGN_IN_OK, ((JwtToken) SecurityUtils.getSubject().getPrincipal()).getToken());
+        return ResponseResult.success(((JwtToken) SecurityUtils.getSubject().getPrincipal()).getToken());
     }
 
     @PostMapping(value = "/current")
     @ApiOperation(value = "获取当前用户信息")
     @SysLogs("获取当前用户信息")
-    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "身份认证Token")
     public ResponseResult current() {
-        return ResponseResult.e(SystemCode.OK, userService.getCurrentUser());
+        return ResponseResult.success(userService.getCurrentUser());
     }
 
     @PostMapping(value = "/logout")
     @ApiOperation(value = "注销登录")
     @SysLogs("注销登录")
-    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "身份认证Token")
     public ResponseResult logout() {
         try {
             Subject subject = SecurityUtils.getSubject();
@@ -72,9 +67,8 @@ public class AccountController {
 
     @PostMapping(value = "/all-permission-tag")
     @ApiOperation(value = "获取所有的权限标示")
-    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "身份认证Token")
     public ResponseResult<List<String>> getAllPermissionTag(@JwtClaim String t) {
-        return ResponseResult.e(SystemCode.OK, userService.getAllPermissionTag());
+        return ResponseResult.success(userService.getAllPermissionTag());
     }
 
 }

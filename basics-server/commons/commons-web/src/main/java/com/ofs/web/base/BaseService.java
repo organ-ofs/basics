@@ -2,6 +2,7 @@ package com.ofs.web.base;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
+import com.ofs.web.jwt.JwtToken;
 
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface BaseService<T extends BaseEntity> extends IService<T> {
     List<T> list(T entity);
 
     void update(T entity);
+
+    JwtToken getJwtToken();
 }

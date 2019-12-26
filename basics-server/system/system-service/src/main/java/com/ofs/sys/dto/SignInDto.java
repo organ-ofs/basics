@@ -13,7 +13,7 @@ import javax.validation.constraints.Pattern;
 public class SignInDto {
 
     @NotBlank(message = "用户名不可以为空！")
-    private String username;
+    private String loginId;
 
     @NotBlank(message = "密码不可以为空！")
     @Pattern(regexp = "^(\\w){6,18}$", message = "密码应为[A-Za-z0-9_]组成的6-18位字符！")

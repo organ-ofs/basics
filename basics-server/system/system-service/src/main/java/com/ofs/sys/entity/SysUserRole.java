@@ -1,6 +1,5 @@
 package com.ofs.sys.entity;
 
-import com.baomidou.mybatisplus.annotations.TableId;
 import com.ofs.web.base.BaseEntity;
 import lombok.*;
 import lombok.experimental.Accessors;
@@ -12,15 +11,12 @@ import lombok.experimental.Accessors;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @EqualsAndHashCode(callSuper = true)
-@Accessors(chain = true)
+@Builder
+@Accessors
 public class SysUserRole extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
-
-    @TableId
-    private String id;
 
     private String userId;
 

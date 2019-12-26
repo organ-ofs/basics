@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofs.sys.mapper.SysLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ofs.sys.entity.SysLog">
+        <result column="ID" property="id"/>
+        <result column="menu_id" property="menuId"/>
+        <result column="type" property="type"/>
+        <result column="content" property="content"/>
+        <result column="ip" property="ip"/>
+        <result column="ajax" property="ajax"/>
+        <result column="uri" property="uri"/>
+        <result column="params" property="params"/>
+        <result column="http_method" property="httpMethod"/>
+        <result column="class_method" property="classMethod"/>
+        <result column="create_date" property="createDate"/>
+        <result column="update_date" property="updateDate"/>
+        <result column="create_user" property="createUser"/>
+        <result column="update_user" property="updateUser"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+                ID,
+            menu_id, type, content, ip, ajax, uri, params, http_method, class_method, create_date, update_date, create_user, update_user
+        </sql>
+
+</mapper>

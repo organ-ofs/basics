@@ -3,10 +3,10 @@ package com.ofs.sys.config.shiro;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.ofs.sys.entity.SysUser;
-import com.ofs.system.common.exception.RequestException;
-import com.ofs.system.common.util.JwtUtil;
-import com.ofs.system.core.config.jwt.JwtToken;
-import com.ofs.system.core.service.system.SysUserService;
+import com.ofs.sys.service.SysUserService;
+import com.ofs.web.exception.RequestException;
+import com.ofs.web.jwt.JwtToken;
+import com.ofs.web.utils.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 /**
- * @author gaoly.cn
+ * @author gaoly
  * @version 2017/9/22
  */
 @Slf4j
@@ -43,15 +43,15 @@ public class MyRealm extends AuthorizingRealm {
         log.info("Shiro权限验证执行");
         JwtToken jwtToken = new JwtToken();
         BeanUtils.copyProperties(principalCollection.getPrimaryPrincipal(), jwtToken);
-        if (jwtToken.getUsername() != null) {
+        if (jwtToken.getLoginId() != null) {
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-            SysUser findUser = userService.findUserByName(jwtToken.getUsername(), true);
+            SysUser findUser = userService.findUserByLoginId(jwtToken.getLoginId(), true);
             if (findUser != null) {
                 if (findUser.getRoles() != null) {
                     findUser.getRoles().forEach(role -> {
                         info.addRole(role.getName());
-                        if (role.getResources() != null) {
-                            role.getResources().forEach(v -> {
+                        if (role.getMenus() != null) {
+                            role.getMenus().forEach(v -> {
                                 if (!"".equals(v.getPermission().trim())) {
                                     info.addStringPermission(v.getPermission());
                                 }
@@ -69,7 +69,7 @@ public class MyRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {
         JwtToken token = (JwtToken) authenticationToken;
         SysUser user;
-        String username = token.getUsername() != null ? token.getUsername() : JwtUtil.getUsername(token.getToken());
+        String username = token.getLoginId() != null ? token.getLoginId() : JwtUtil.getLoginId(token.getToken());
         try {
             user = userService.selectOne(new EntityWrapper<SysUser>()
                     .eq("username", username)
@@ -80,13 +80,13 @@ public class MyRealm extends AuthorizingRealm {
         if (user == null) {
             throw new DisabledAccountException("用户不存在！");
         }
-        if (user.getStatus() != 1) {
+        if (user.getStatus() != "1") {
             throw new DisabledAccountException("用户账户已锁定，暂无法登陆！");
         }
-        if (token.getUsername() == null) {
-            token.setUsername(user.getUsername());
+        if (token.getLoginId() == null) {
+            token.setLoginId(user.getLoginId());
         }
-        String sign = JwtUtil.sign(user.getId(), user.getUsername(), user.getPassword());
+        String sign = JwtUtil.sign(user.getId(), user.getLoginId(), user.getPassword());
         if (token.getToken() == null) {
             token.setToken(sign);
         }

@@ -28,18 +28,18 @@ import java.util.List;
 public class LogController extends BaseController<SysLog> {
 
     @Autowired
-    private SysLogService sysLogService;
+    private SysLogService service;
 
     @Override
     public BaseService<SysLog> getService() {
-        return sysLogService;
+        return service;
     }
 
     @PostMapping("/remove")
     @ApiOperation("批量删除")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "身份认证Token")
     public ResponseResult removeList(@RequestBody @ApiParam("ID集合") List<String> logList) {
-        sysLogService.removes(logList);
+        service.removes(logList);
         return ResponseResult.e(SystemCode.OK);
     }
 
