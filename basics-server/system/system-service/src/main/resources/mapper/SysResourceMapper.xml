@@ -5,24 +5,26 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ofs.sys.entity.SysResource">
         <result column="ID" property="id"/>
-        <result column="code" property="code"/>
-        <result column="name" property="name"/>
-        <result column="permission" property="permission"/>
-        <result column="url" property="url"/>
-        <result column="parent_id" property="parentId"/>
-        <result column="type" property="type"/>
-        <result column="description" property="description"/>
-        <result column="create_date" property="createDate"/>
-        <result column="update_date" property="updateDate"/>
-        <result column="create_user" property="createUser"/>
-        <result column="update_user" property="updateUser"/>
+        <result column="CODE" property="code"/>
+        <result column="NAME" property="name"/>
+        <result column="PERMISSION" property="permission"/>
+        <result column="URL" property="url"/>
+        <result column="PARENT_ID" property="parentId"/>
+        <result column="TYPE" property="type"/>
+        <result column="DESCRIPTION" property="description"/>
+        <result column="CREATE_DATE" property="createDate"/>
+        <result column="UPDATE_DATE" property="updateDate"/>
+        <result column="CREATE_USER" property="createUser"/>
+        <result column="UPDATE_USER" property="updateUser"/>
+        <result column="IS_AUTH" property="isAuth"/>
+        <result column="LEAF" property="leaf"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
-    <sql id="Base_Column_List">
-                ID,
-            code, name, permission, url, parent_id, type, description, create_date, update_date, create_user, update_user
-        </sql>
+    <sql id="BASE_COLUMN_LIST">
+        T.ID, T.CODE, T.NAME, T.PERMISSION, T.URL, T.PARENT_ID, T.TYPE, T.DESCRIPTION,
+        T.CREATE_DATE, T.UPDATE_DATE, T.CREATE_USER, T.UPDATE_USER
+    </sql>
 
 
     <!-- 默认where判断条件 -->
@@ -43,27 +45,27 @@
     <!-- 根据条件查询信息 -->
     <select id="getList" resultMap="BaseResultMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        , (select case when count(*) >0 then 0 else 1 end from TAX_RESOURCE_INFO M where M.PARENT_ID=T.ID) LEAF
+        <include refid="BASE_COLUMN_LIST"/>
+        , (select case when count(*) >0 then 0 else 1 end from SYS_RESOURCE M where M.PARENT_ID=T.ID) LEAF
         , DECODE(R.ROLE_ID,NULL,0,1 ) IS_AUTH
-        FROM TAX_RESOURCE_INFO T
-        LEFT JOIN TAX_ROLE_RESOURCE R ON R.RESOURCE_ID=T.ID
+        FROM SYS_RESOURCE T
+        LEFT JOIN SYS_ROLE_RESOURCE R ON R.RESOURCE_ID=T.ID
         <include refid="BASE_WHERE_CLAUSE"/>
-        ORDER BY T.ROW_ORDER
+        ORDER BY T.SORT
     </select>
     <!-- 根据角色ID条件查询信息 -->
     <select id="getListByRole" resultMap="BaseResultMap">
         SELECT
-        <include refid="Base_Column_List"/>
-        , (select case when count(*) >0 then 0 else 1 end from TAX_RESOURCE_INFO M where M.PARENT_ID=T.ID) LEAF
-        FROM TAX_RESOURCE_INFO T
-        INNER JOIN TAX_ROLE_RESOURCE R ON R.RESOURCE_ID=T.ID
+        <include refid="BASE_COLUMN_LIST"/>
+        , (select case when count(*) >0 then 0 else 1 end from SYS_RESOURCE M where M.PARENT_ID=T.ID) LEAF
+        FROM SYS_RESOURCE T
+        INNER JOIN SYS_ROLE_RESOURCE R ON R.RESOURCE_ID=T.ID
         <include refid="BASE_WHERE_CLAUSE"/>
-        ORDER BY T.ROW_ORDER
+        ORDER BY T.SORT
     </select>
 
     <delete id="deleteChildren">
-        DELETE FROM TAX_RESOURCE_INFO T WHERE T.PARENT_ID in
+        DELETE FROM SYS_RESOURCE T WHERE T.PARENT_ID in
         <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>

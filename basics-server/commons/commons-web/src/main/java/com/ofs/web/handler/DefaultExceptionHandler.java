@@ -21,8 +21,12 @@ import java.util.List;
  */
 @ControllerAdvice(basePackages = {"cn.ofs.web"})
 @Slf4j
-public class GlobalDefaultExceptionHandler {
+public class DefaultExceptionHandler {
 
+    /**
+     * 处理所有的Controller层面的异常
+     * 如果这里添加 @ResponseBody 注解 表示抛出的异常以 Rest 的方式返回，这时就系统就不会指向到错误页面 /error
+     */
     @ExceptionHandler(value = RequestException.class)
     @ResponseBody
     public ResponseResult requestExceptionHandler(RequestException e) {

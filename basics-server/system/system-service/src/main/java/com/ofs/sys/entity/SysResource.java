@@ -47,6 +47,10 @@ public class SysResource extends BaseEntity {
     private Boolean leaf;
     private List<String> ids;
     private String roleId;
+    /**
+     * 是否有权限
+     */
+    private String isAuth;
 
     public static final String CODE = "code";
 

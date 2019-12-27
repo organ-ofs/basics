@@ -116,7 +116,6 @@
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.version}</version>
-                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -324,13 +323,6 @@
             <id>test</id>
             <properties>
                 <env>test</env>
-            </properties>
-        </profile>
-        <!-- 准生产测试环境 -->
-        <profile>
-            <id>uat</id>
-            <properties>
-                <env>uat</env>
             </properties>
         </profile>
         <!-- 生产环境 -->

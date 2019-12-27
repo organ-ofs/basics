@@ -5,18 +5,17 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ofs.sys.entity.SysRoleResource">
         <result column="ID" property="id"/>
-        <result column="role_id" property="roleId"/>
-        <result column="resource_id" property="resourceId"/>
-        <result column="create_date" property="createDate"/>
-        <result column="update_date" property="updateDate"/>
-        <result column="create_user" property="createUser"/>
-        <result column="update_user" property="updateUser"/>
+        <result column="ROLE_ID" property="roleId"/>
+        <result column="RESOURCE_ID" property="resourceId"/>
+        <result column="CREATE_DATE" property="createDate"/>
+        <result column="UPDATE_DATE" property="updateDate"/>
+        <result column="CREATE_USER" property="createUser"/>
+        <result column="UPDATE_USER" property="updateUser"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-                ID,
-            role_id, resource_id, create_date, update_date, create_user, update_user
-        </sql>
+         ID, role_id, resource_id, create_date, update_date, create_user, update_user
+    </sql>
 
 </mapper>

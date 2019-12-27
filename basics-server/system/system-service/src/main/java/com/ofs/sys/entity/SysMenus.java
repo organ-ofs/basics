@@ -31,7 +31,7 @@ public class SysMenus extends BaseEntity {
     private String parentId;
 
     @TableField
-    private String resource_id;
+    private String resourceId;
 
     @TableField
     private String grade;
