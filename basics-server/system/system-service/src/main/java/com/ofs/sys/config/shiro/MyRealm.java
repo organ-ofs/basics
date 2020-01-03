@@ -1,7 +1,7 @@
 package com.ofs.sys.config.shiro;
 
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ofs.sys.entity.SysUser;
 import com.ofs.sys.service.SysUserService;
 import com.ofs.web.exception.RequestException;
@@ -71,9 +71,10 @@ public class MyRealm extends AuthorizingRealm {
         SysUser user;
         String username = token.getLoginId() != null ? token.getLoginId() : JwtUtil.getLoginId(token.getToken());
         try {
-            user = userService.selectOne(new EntityWrapper<SysUser>()
-                    .eq("username", username)
-                    .setSqlSelect("id,username,status,password"));
+            QueryWrapper wrapper = new QueryWrapper<SysUser>();
+            wrapper.eq("username", username);
+//            wrapper.set("id,username,status,password")
+            user = userService.getOne(wrapper);
         } catch (RequestException e) {
             throw new DisabledAccountException(e.getMsg());
         }

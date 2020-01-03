@@ -1,7 +1,7 @@
 package com.ofs.sys.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ofs.sys.core.global.ShiroService;
 import com.ofs.sys.entity.SysRole;
 import com.ofs.sys.entity.SysUserRole;
@@ -11,7 +11,6 @@ import com.ofs.sys.service.SysRoleService;
 import com.ofs.sys.service.SysUserRoleService;
 import com.ofs.web.base.impl.BaseServiceImpl;
 import com.ofs.web.exception.RequestException;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -35,10 +34,12 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
 
     @Override
     public List<SysRole> findAllRoleByUserId(String uid, Boolean hasResource) {
-        List<SysUserRole> userRoles = userRoleService.selectList(new EntityWrapper<SysUserRole>().eq(SysUserRole.USER_ID, uid));
+        QueryWrapper<SysUserRole> wrapper = new QueryWrapper();
+        wrapper.eq(SysUserRole.USER_ID, uid);
+        List<SysUserRole> userRoles = userRoleService.list(wrapper);
         List<SysRole> roles = new ArrayList<>();
         userRoles.forEach(v -> {
-            SysRole role = this.selectById(v.getRoleId());
+            SysRole role = this.getById(v.getRoleId());
             if (role != null) {
                 if (hasResource) {
                     //添加资源列表
@@ -53,10 +54,8 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
 
     @Override
     public Page<SysRole> list(Page<SysRole> page, SysRole role) {
-        EntityWrapper<SysRole> wrapper = new EntityWrapper<>();
-        wrapper.orderBy(SysRole.CODE, true);
-        Page<SysRole> rolePage = this.selectPage(new Page<SysRole>(page.getCurrent(),
-                page.getSize()), wrapper);
+        Page<SysRole> rolePage = super.list(new Page<SysRole>(page.getCurrent(),
+                page.getSize()), role);
         if (rolePage.getRecords() != null) {
 //                rolePage.getRecords().forEach(v->
             //添加资源列表
@@ -68,12 +67,12 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
     @Override
     public void removes(List<String> ids) {
         ids.forEach(id -> {
-            SysRole role = super.selectById(id);
+            SysRole role = super.getById(id);
             if (id == null) {
                 throw RequestException.fail("角色不存在！");
             }
             try {
-                this.deleteById(id);
+                this.remove(id);
                 this.updateCache(role, true, false);
             } catch (DataIntegrityViolationException e) {
                 throw RequestException.fail(
@@ -87,7 +86,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
 
     @Override
     public void update(SysRole role) {
-        if (this.selectById(role.getId()) == null) {
+        if (this.getById(role.getId()) == null) {
             throw RequestException.fail("角色不存在！");
         }
         try {
@@ -101,16 +100,16 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
     }
 
     @Override
-    public void add(SysRole addDTO) {
-        SysRole role = this.selectOne(new EntityWrapper<SysRole>().eq("name", addDTO.getName()));
-        if (role != null) {
+    public void add(SysRole role) {
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq(SysRole.NAME, role.getName());
+        SysRole roleOld = this.getOne(wrapper);
+        if (roleOld != null) {
             throw RequestException.fail(
-                    String.format("已经存在名称为 %s 的角色", addDTO.getName()));
+                    String.format("已经存在名称为 %s 的角色", role.getName()));
         }
-        role = new SysRole();
-        BeanUtils.copyProperties(addDTO, role);
         try {
-            this.insert(role);
+            this.add(role);
         } catch (Exception e) {
             throw RequestException.fail("添加失败", e);
         }
@@ -118,9 +117,10 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
 
     @Override
     public void updateCache(SysRole role, Boolean author, Boolean out) {
-        List<SysUserRole> sysUserRoles = userRoleService.selectList(new EntityWrapper<SysUserRole>()
-                .eq("rid", role.getId())
-                .groupBy("uid"));
+        QueryWrapper<SysUserRole> wrapper = new QueryWrapper();
+        wrapper.eq("rid", role.getId());
+        wrapper.groupBy("uid");
+        List<SysUserRole> sysUserRoles = userRoleService.list(wrapper);
         List<String> userIdList = new ArrayList<>();
         if (sysUserRoles != null && sysUserRoles.size() > 0) {
             sysUserRoles.forEach(v -> userIdList.add(v.getUserId()));

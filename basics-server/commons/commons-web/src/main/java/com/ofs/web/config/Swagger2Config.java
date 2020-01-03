@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  * @author gaoly
- * @version 2017/9/14
+ * @version 2019/9/14
  */
 @Configuration
 @EnableSwagger2
@@ -39,7 +39,7 @@ public class Swagger2Config {
                 .groupName("系统管理")
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.ofs.system.core"))
+                .apis(RequestHandlerSelectors.basePackage("com.ofs.sys.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .globalOperationParameters(pars);
@@ -59,8 +59,8 @@ public class Swagger2Config {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Watch Dog API文档")
-                .description("Watch Dog API文档")
+                .title("API文档")
+                .description("API文档")
                 .version("1.0")
                 .build();
     }

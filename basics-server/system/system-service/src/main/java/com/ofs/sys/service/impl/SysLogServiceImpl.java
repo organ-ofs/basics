@@ -1,7 +1,6 @@
 package com.ofs.sys.service.impl;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ofs.sys.entity.SysLog;
 import com.ofs.sys.mapper.SysLogMapper;
 import com.ofs.sys.service.SysLogService;
@@ -17,9 +16,8 @@ public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper, SysLog> imp
 
     @Override
     public Page<SysLog> list(Page<SysLog> page, SysLog sysLog) {
-        EntityWrapper<SysLog> wrapper = new EntityWrapper<>();
-        wrapper.orderBy(true, "create_date");
-        return this.selectPage(page, wrapper);
+
+        return super.list(page, sysLog);
     }
 
 }

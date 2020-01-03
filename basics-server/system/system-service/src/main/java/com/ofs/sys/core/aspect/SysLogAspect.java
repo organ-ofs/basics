@@ -78,7 +78,7 @@ public class SysLogAspect {
             sysLog.setCreateUser("0");
         }
         sysLog.setCreateDate(DateUtils.getCurrentTime());
-        sysLogService.insert(sysLog);
+        sysLogService.add(sysLog);
     }
 
     private String getMethodSysLogsAnnotationValue(JoinPoint joinPoint) {

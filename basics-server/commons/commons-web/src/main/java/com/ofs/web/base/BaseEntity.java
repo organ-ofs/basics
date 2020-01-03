@@ -1,12 +1,7 @@
 package com.ofs.web.base;
 
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableLogic;
-import com.baomidou.mybatisplus.annotations.Version;
-import com.baomidou.mybatisplus.enums.FieldFill;
-import com.baomidou.mybatisplus.enums.IdType;
+import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -30,10 +25,10 @@ public class BaseEntity implements Serializable {
     private String id;
 
     /**
-     * 版本号
+     * 版本号,乐观锁
      */
-    @Version
-    @TableField("VERSION_NUM")
+//    @Version
+//    @TableField("VERSION_NUM")
     private Integer versionNum;
     /**
      * 逻辑删除标识

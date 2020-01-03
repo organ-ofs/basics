@@ -1,26 +1,38 @@
 server:
   port: 6001
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+    min-response-size: 1024
   servlet:
     contextPath: /api
 
-dubbo:
-  protocol:
-    name: dubbo
-    port: 29300
-    payload: 83886080
-  scan:
-    base-packages: com.ryx.tax.merchant
-  consumer:
-    check: false
 spring:
   application:
-    name: csm-metchant-service
+    name: ofs-sys
   profiles:
     include: @env@
-
   level:
     root: debug
-mybatis:
-  type-aliases-package: com.ryx.tax.merchant.model
-  mapper-locations: classpath:mapper/*.xml
 
+  datasource:
+    url: jdbc:mysql://localhost:3306/wdog?useUnicode=yes&characterEncoding=UTF8
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      max-lifetime: 1765000
+      maximum-pool-size: 15
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: root
+    timeout: 3600
+    jedis:
+      pool:
+        max-active: 10
+        max-idle: 3
+        min-idle: 3
+  aop:
+    proxy-target-class: true
+    auto: true

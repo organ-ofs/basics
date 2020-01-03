@@ -26,8 +26,12 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-                ID,
-            name, resource_id, parent_id, grade, path, component, title, permission, sort, icon, hidden, verification, description, create_date, update_date, create_user, update_user
-        </sql>
+        ID,name, resource_id, parent_id, grade, path, component, title, permission, sort, icon, hidden, verification, description, create_date, update_date, create_user, update_user
+    </sql>
 
+    <select id="selectPage" resultMap="BaseResultMap">
+        SELECT id, name
+        FROM user
+        WHERE state = #{state}
+    </select>
 </mapper>

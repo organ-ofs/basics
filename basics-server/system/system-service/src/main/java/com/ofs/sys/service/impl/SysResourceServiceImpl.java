@@ -1,6 +1,6 @@
 package com.ofs.sys.service.impl;
 
-import com.baomidou.mybatisplus.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.ofs.sys.entity.SysResource;
 import com.ofs.sys.mapper.SysResourceMapper;
 import com.ofs.sys.service.SysResourceService;

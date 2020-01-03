@@ -1,7 +1,7 @@
 package com.ofs.sys.service;
 
 
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ofs.sys.dto.ResetPasswordDto;
 import com.ofs.sys.dto.SignInDto;
 import com.ofs.sys.entity.SysMenus;

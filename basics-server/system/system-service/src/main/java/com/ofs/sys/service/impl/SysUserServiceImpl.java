@@ -1,8 +1,8 @@
 package com.ofs.sys.service.impl;
 
 import cn.licoy.encryptbody.util.MD5EncryptUtil;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ofs.sys.core.global.ShiroService;
 import com.ofs.sys.dto.ResetPasswordDto;
 import com.ofs.sys.dto.SignInDto;
@@ -52,7 +52,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
     @Override
     public SysUser findUserByLoginId(String loginId, boolean hasMenu) {
-        SysUser user = this.selectOne(new EntityWrapper<SysUser>().eq(SysUser.LOGIN_ID, loginId));
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq(SysUser.LOGIN_ID, loginId);
+        SysUser user = this.getOne(wrapper);
         if (user == null) {
             return null;
         }
@@ -62,7 +64,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
     @Override
     public SysUser findUserById(String id, boolean hasMenu) {
-        SysUser user = this.selectById(id);
+        SysUser user = this.getById(id);
         if (user == null) {
             return null;
         }
@@ -110,9 +112,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     @Override
     public List<String> getAllPermissionTag() {
         JwtToken jwtToken = super.getJwtToken();
-        SysUser user = this.selectOne(new EntityWrapper<SysUser>()
-                .eq(SysUser.LOGIN_ID, jwtToken.getLoginId())
-                .setSqlSelect("id"));
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.eq(SysUser.LOGIN_ID, jwtToken.getLoginId());
+        SysUser user = this.getOne(wrapper);
         if (user == null) {
             throw RequestException.fail("用户不存在");
         }
@@ -146,9 +148,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
     @Override
     public Page<SysUser> getPage(Page<SysUser> page, SysUser user) {
-        EntityWrapper<SysUser> wrapper = new EntityWrapper<>();
-        wrapper.orderBy(SysUser.CREATE_DATE, true);
-        Page<SysUser> userPage = this.selectPage(new Page<>(page.getCurrent(), page.getSize()), wrapper);
+        QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
+        wrapper.orderByDesc(SysUser.CREATE_DATE);
+        Page<SysUser> userPage = super.list(new Page<>(page.getCurrent(), page.getSize()), user);
 
         userPage.getRecords().forEach(v -> {
             //查找匹配所有用户的角色
@@ -159,7 +161,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
     @Override
     public void remove(String userId) {
-        SysUser user = this.selectById(userId);
+        SysUser user = this.getById(userId);
         if (user == null) {
             throw RequestException.fail("用户不存在！");
         }
@@ -169,7 +171,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
             throw RequestException.fail("不能删除自己的账户！");
         }
         try {
-            this.deleteById(userId);
+            this.remove(userId);
             shiroService.clearAuthByUserId(userId, true, true);
         } catch (Exception e) {
             throw RequestException.fail("删除失败", e);
@@ -186,7 +188,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
         try {
             user.setCreateDate(DateUtils.getCurrentTime());
             user.setPassword(MD5EncryptUtil.encrypt(String.valueOf(findUser.getPassword()) + findUser.getLoginId()));
-            this.insert(user);
+            this.add(user);
         } catch (Exception e) {
             throw RequestException.fail("添加用户失败", e);
         }
@@ -194,11 +196,11 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
     @Override
     public void update(SysUser user) {
-        if (this.selectById(user.getId()) == null) {
+        if (this.getById(user.getId()) == null) {
             throw RequestException.fail(
                     String.format("更新失败，不存在ID为 %s 的用户", user.getId()));
         }
-        SysUser findUser = this.selectOne(new EntityWrapper<SysUser>()
+        SysUser findUser = this.getOne(new QueryWrapper<SysUser>()
                 .eq(SysUser.LOGIN_ID, user.getLoginId()).ne(SysUser.ID, user.getId()));
         if (findUser != null) {
             throw RequestException.fail(
@@ -216,7 +218,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
     @Override
     public void resetPassword(ResetPasswordDto resetPasswordDTO) {
-        SysUser user = this.selectById(resetPasswordDTO.getUserId().trim());
+        SysUser user = this.getById(resetPasswordDTO.getUserId().trim());
         if (user == null) {
             throw RequestException.fail(String.format("不存在ID为 %s 的用户", resetPasswordDTO.getUserId()));
         }

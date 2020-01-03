@@ -1,6 +1,6 @@
 package com.ofs.sys.entity;
 
-import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.ofs.web.base.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +37,8 @@ public class SysResource extends BaseEntity {
     private String permission;
 
     private String description;
+
+    private String status;
 
     @TableField(exist = false)
     private List<SysResource> children;

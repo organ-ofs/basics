@@ -1,7 +1,7 @@
 package com.ofs.web.base;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.IService;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.ofs.web.jwt.JwtToken;
 
 import java.util.List;

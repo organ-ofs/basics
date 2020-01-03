@@ -47,7 +47,8 @@
         SELECT
         <include refid="BASE_COLUMN_LIST"/>
         , (select case when count(*) >0 then 0 else 1 end from SYS_RESOURCE M where M.PARENT_ID=T.ID) LEAF
-        , DECODE(R.ROLE_ID,NULL,0,1 ) IS_AUTH
+        <!--         , DECODE(R.ROLE_ID,NULL,0,1 ) IS_AUTH-->
+        ,case when R.ROLE_ID is null then '0' else '1' end as IS_AUTH
         FROM SYS_RESOURCE T
         LEFT JOIN SYS_ROLE_RESOURCE R ON R.RESOURCE_ID=T.ID
         <include refid="BASE_WHERE_CLAUSE"/>

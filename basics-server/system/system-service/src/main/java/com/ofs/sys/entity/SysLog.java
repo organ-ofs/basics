@@ -1,6 +1,6 @@
 package com.ofs.sys.entity;
 
-import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.ofs.web.base.BaseEntity;
 import lombok.*;
 import lombok.experimental.Accessors;

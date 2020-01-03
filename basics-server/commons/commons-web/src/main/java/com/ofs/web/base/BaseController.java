@@ -1,7 +1,7 @@
 package com.ofs.web.base;
 
 
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ofs.web.annotation.SysLogs;
 import com.ofs.web.bean.ResponseResult;
 import com.ofs.web.utils.BeanConverterUtil;
@@ -23,7 +23,7 @@ public abstract class BaseController<T extends BaseEntity> {
 
     @PostMapping("/list")
     @ApiOperation(value = "分页")
-    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "身份认证Token", required = true)
+    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "身份认证Token", required = false)
     ResponseResult<Page<T>> list(@RequestBody T dto) {
         return ResponseResult.success(getService().list(new Page(), BeanConverterUtil.convert(dto, BaseEntity.class)));
     }
@@ -32,7 +32,6 @@ public abstract class BaseController<T extends BaseEntity> {
     @PostMapping("/update")
     @ApiOperation(value = "更新根据ID")
     @SysLogs("更新根据ID")
-    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "身份认证Token", required = true)
     ResponseResult update(@RequestBody @Validated T dto) {
         getService().update(dto);
         return ResponseResult.success();
@@ -41,7 +40,6 @@ public abstract class BaseController<T extends BaseEntity> {
     @PostMapping("/remove/{id}")
     @ApiOperation(value = "删除根据ID")
     @SysLogs("删除根据ID")
-    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "身份认证Token", required = true)
     ResponseResult remove(@PathVariable("id") String id) {
         getService().remove(id);
         return ResponseResult.success();
@@ -50,18 +48,16 @@ public abstract class BaseController<T extends BaseEntity> {
     @PostMapping("/get/{id}")
     @ApiOperation(value = "查询根据ID")
     @SysLogs("查询根据ID")
-    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "身份认证Token", required = true)
     ResponseResult get(@PathVariable("id") @ApiParam(value = "ID") String id) {
-        getService().selectById(id);
-        return ResponseResult.success();
+        T data = (T) getService().getById(id);
+        return ResponseResult.success(data);
     }
 
     @PostMapping("/add")
     @ApiOperation(value = "新增")
     @SysLogs("新增")
-    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "身份认证Token", required = true)
     ResponseResult add(@RequestBody @Validated T dto) {
-        getService().insert(dto);
+        getService().add(dto);
         return ResponseResult.success();
     }
 }
