@@ -59,8 +59,42 @@
 
         <dependency>
             <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus</artifactId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
     </dependencies>
 
+    <build>
+        <finalName>ofs-sys</finalName>
+        <resources>
+            <!--加载多环境配置-->
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>application-dev.yml</exclude>
+                    <exclude>application-test.yml</exclude>
+                    <exclude>application-pro.yml</exclude>
+                    <exclude>application.yml</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>application-${env}.yml</include>
+                    <include>application.yml</include>
+                </includes>
+            </resource>
+
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.ofs.sys.SystemApiApplication</mainClass>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

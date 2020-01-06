@@ -11,6 +11,9 @@ import com.ofs.web.base.BaseService;
 
 import java.util.List;
 
+/**
+ * @author gaoly
+ */
 public interface SysUserService extends BaseService<SysUser> {
 
     /**

@@ -41,6 +41,7 @@
         <jwt.version>3.7.0</jwt.version>
         <jedis.vetsion>2.9.0</jedis.vetsion>
         <mysql.version>6.0.6</mysql.version>
+        <mybatis.plus.version>3.1.0</mybatis.plus.version>
     </properties>
 
     <dependencyManagement>
@@ -126,12 +127,17 @@
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>1.3.1</version>
+                <version>2.1.0</version>
             </dependency>
             <!--Mybatis-Plus-->
             <dependency>
                 <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus</artifactId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis.plus.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-extension</artifactId>
                 <version>3.1.0</version>
             </dependency>
 
@@ -303,12 +309,9 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    <modules>
-        <module>system</module>
-        <module>commons</module>
-    </modules>
+
     <profiles>
-        <!-- 个人开发环境 （zk\mq与集成测试环境不同，其他相同）-->
+        <!--个人开发环境 （zk\mq与集成测试环境不同，其他相同）-->
         <profile>
             <id>dev</id>
             <activation>
@@ -318,7 +321,7 @@
                 <env>dev</env>
             </properties>
         </profile>
-        <!-- 集成测试环境 -->
+        <!--集成测试环境-->
         <profile>
             <id>test</id>
             <properties>
@@ -333,31 +336,12 @@
             </properties>
         </profile>
     </profiles>
-    <!--<repositories>-->
-    <!--<repository>-->
-    <!--<releases>-->
-    <!--<enabled>true</enabled>-->
-    <!--</releases>-->
-    <!--<snapshots>-->
-    <!--<enabled>true</enabled>-->
-    <!--</snapshots>-->
-    <!--<id>public</id>-->
-    <!--<name>Public Repositories</name>-->
-    <!--<url>http://12.3.10.108:8801/nexus/content/groups/public/</url>-->
-    <!--</repository>-->
-    <!--</repositories>-->
-    <!--<distributionManagement>-->
-    <!--<repository>-->
-    <!--<id>releases</id>-->
-    <!--<name>Nexus Release Repository</name>-->
-    <!--<url>http://12.3.10.108:8801/nexus/content/repositories/releases/</url>-->
-    <!--</repository>-->
-    <!--<snapshotRepository>-->
-    <!--<id>snapshots</id>-->
-    <!--<name>Nexus Snapshot Repository</name>-->
-    <!--<url>http://12.3.10.108:8801/nexus/content/repositories/snapshots/</url>-->
-    <!--</snapshotRepository>-->
-    <!--</distributionManagement>-->
+
+    <modules>
+        <module>system</module>
+        <module>commons</module>
+    </modules>
+
     <build>
         <pluginManagement>
             <plugins>

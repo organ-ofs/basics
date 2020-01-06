@@ -34,16 +34,4 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
     </dependencies>
-    <build>
-        <finalName>ofs-sys</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>com.ofs.sys.SystemApiApplication</mainClass>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>
