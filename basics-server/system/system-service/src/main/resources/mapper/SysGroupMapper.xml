@@ -5,19 +5,18 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ofs.sys.entity.SysGroup">
         <result column="ID" property="id"/>
-        <result column="code" property="code"/>
-        <result column="name" property="name"/>
-        <result column="description" property="description"/>
-        <result column="create_date" property="createDate"/>
-        <result column="update_date" property="updateDate"/>
-        <result column="create_user" property="createUser"/>
-        <result column="update_user" property="updateUser"/>
+        <result column="CODE" property="code"/>
+        <result column="NAME" property="name"/>
+        <result column="DESCRIPTION" property="description"/>
+        <result column="CREATE_DATE" property="createDate"/>
+        <result column="UPDATE_DATE" property="updateDate"/>
+        <result column="CREATE_USER" property="createUser"/>
+        <result column="UPDATE_USER" property="updateUser"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-                ID,
-            code, name, description, create_date, update_date, create_user, update_user
+        ID, CODE, NAME, DESCRIPTION, CREATE_DATE, UPDATE_DATE, CREATE_USER, UPDATE_USER
         </sql>
 
 </mapper>

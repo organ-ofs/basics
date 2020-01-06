@@ -5,18 +5,17 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ofs.sys.entity.SysGroupRole">
         <result column="ID" property="id"/>
-        <result column="group_id" property="groupId"/>
-        <result column="role_codes" property="roleCodes"/>
-        <result column="create_date" property="createDate"/>
-        <result column="update_date" property="updateDate"/>
-        <result column="create_user" property="createUser"/>
-        <result column="update_user" property="updateUser"/>
+        <result column="GROUP_ID" property="groupId"/>
+        <result column="ROLE_ID" property="roleId"/>
+        <result column="CREATE_DATE" property="createDate"/>
+        <result column="UPDATE_DATE" property="updateDate"/>
+        <result column="CREATE_USER" property="createUser"/>
+        <result column="UPDATE_USER" property="updateUser"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-                ID,
-            group_id, role_codes, create_date, update_date, create_user, update_user
+        ID, GROUP_ID, ROLE_ID, CREATE_DATE, UPDATE_DATE, CREATE_USER, UPDATE_USER
         </sql>
 
 </mapper>

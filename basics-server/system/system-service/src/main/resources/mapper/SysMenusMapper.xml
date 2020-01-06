@@ -5,33 +5,41 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ofs.sys.entity.SysMenus">
         <result column="ID" property="id"/>
-        <result column="name" property="name"/>
-        <result column="resource_id" property="resourceId"/>
-        <result column="parent_id" property="parentId"/>
-        <result column="grade" property="grade"/>
-        <result column="path" property="path"/>
-        <result column="component" property="component"/>
-        <result column="title" property="title"/>
-        <result column="permission" property="permission"/>
-        <result column="sort" property="sort"/>
-        <result column="icon" property="icon"/>
-        <result column="hidden" property="hidden"/>
-        <result column="verification" property="verification"/>
-        <result column="description" property="description"/>
-        <result column="create_date" property="createDate"/>
-        <result column="update_date" property="updateDate"/>
-        <result column="create_user" property="createUser"/>
-        <result column="update_user" property="updateUser"/>
+        <result column="NAME" property="name"/>
+        <result column="RESOURCE_ID" property="resourceId"/>
+        <result column="PARENT_ID" property="parentId"/>
+        <result column="GRADE" property="grade"/>
+        <result column="PATH" property="path"/>
+        <result column="COMPONENT" property="component"/>
+        <result column="TITLE" property="title"/>
+        <result column="PERMISSION" property="permission"/>
+        <result column="SORT" property="sort"/>
+        <result column="ICON" property="icon"/>
+        <result column="HIDDEN" property="hidden"/>
+        <result column="VERIFICATION" property="verification"/>
+        <result column="DESCRIPTION" property="description"/>
+        <result column="CREATE_DATE" property="createDate"/>
+        <result column="UPDATE_DATE" property="updateDate"/>
+        <result column="CREATE_USER" property="createUser"/>
+        <result column="UPDATE_USER" property="updateUser"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        ID,name, resource_id, parent_id, grade, path, component, title, permission, sort, icon, hidden, verification, description, create_date, update_date, create_user, update_user
+        T.ID, T.NAME, T.RESOURCE_ID, T.PARENT_ID, T.GRADE, T.PATH, T.COMPONENT, T.TITLE, T.PERMISSION,
+        T.SORT, T.ICON, T.HIDDEN, T.VERIFICATION, T.DESCRIPTION,
+        T.CREATE_DATE, T.UPDATE_DATE, T.CREATE_USER, T.UPDATE_USER
     </sql>
 
-    <select id="selectPage" resultMap="BaseResultMap">
-        SELECT id, name
-        FROM user
-        WHERE state = #{state}
+    <sql id="where">
+        <where>
+            <if test="params.title!=null and params.title!=''">T.TITLE=#{params.title}</if>
+        </where>
+    </sql>
+    <select id="listPage" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_menus T
+        <include refid="where"/>
     </select>
 </mapper>

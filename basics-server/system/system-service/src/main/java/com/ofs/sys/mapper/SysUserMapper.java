@@ -1,12 +1,12 @@
 package com.ofs.sys.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ofs.sys.entity.SysUser;
+import com.ofs.web.base.IBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 @Mapper
 @Repository
-public interface SysUserMapper extends BaseMapper<SysUser> {
+public interface SysUserMapper extends IBaseMapper<SysUser> {
 
 }

@@ -1,10 +1,11 @@
 package com.ofs.web.base.impl;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ofs.web.base.BaseEntity;
 import com.ofs.web.base.BaseService;
+import com.ofs.web.base.IBaseMapper;
 import com.ofs.web.bean.SystemCode;
 import com.ofs.web.exception.RequestException;
 import com.ofs.web.jwt.JwtToken;
@@ -16,7 +17,7 @@ import org.springframework.beans.BeanUtils;
 import java.util.Arrays;
 import java.util.List;
 
-public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> extends ServiceImpl<M, T> implements BaseService<T> {
+public class BaseServiceImpl<M extends IBaseMapper<T>, T extends BaseEntity> extends ServiceImpl<M, T> implements BaseService<T> {
 
     @Override
     public void add(T entity) {
@@ -41,8 +42,8 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends BaseEntity> exte
     }
 
     @Override
-    public Page<T> list(Page<T> page, T entity) {
-        return this.list(page, entity);
+    public IPage<T> listPage(Page<T> page, T entity) {
+        return baseMapper.listPage(page, entity);
     }
 
     @Override

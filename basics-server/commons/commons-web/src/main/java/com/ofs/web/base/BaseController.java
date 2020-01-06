@@ -1,10 +1,10 @@
 package com.ofs.web.base;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ofs.web.annotation.SysLogs;
 import com.ofs.web.bean.ResponseResult;
-import com.ofs.web.utils.BeanConverterUtil;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -24,8 +24,8 @@ public abstract class BaseController<T extends BaseEntity> {
     @PostMapping("/list")
     @ApiOperation(value = "分页")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "身份认证Token", required = false)
-    ResponseResult<Page<T>> list(@RequestBody T dto) {
-        return ResponseResult.success(getService().list(new Page(), BeanConverterUtil.convert(dto, BaseEntity.class)));
+    ResponseResult<IPage<T>> listPage(@RequestBody T dto) {
+        return ResponseResult.success(getService().listPage(new Page(), dto));
     }
 
 

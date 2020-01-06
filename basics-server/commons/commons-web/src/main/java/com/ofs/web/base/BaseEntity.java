@@ -3,7 +3,6 @@ package com.ofs.web.base;
 
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.io.Serializable;
@@ -17,7 +16,6 @@ import java.io.Serializable;
  * @date 2017 /3/10 14:33
  */
 @Data
-@EqualsAndHashCode
 @ToString
 public class BaseEntity implements Serializable {
 

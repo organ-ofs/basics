@@ -1,6 +1,7 @@
 package com.ofs.sys.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ofs.sys.core.global.ShiroService;
 import com.ofs.sys.entity.SysRole;
@@ -53,8 +54,8 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
     }
 
     @Override
-    public Page<SysRole> list(Page<SysRole> page, SysRole role) {
-        Page<SysRole> rolePage = super.list(new Page<SysRole>(page.getCurrent(),
+    public IPage<SysRole> listPage(Page<SysRole> page, SysRole role) {
+        IPage<SysRole> rolePage = super.listPage(new Page<SysRole>(page.getCurrent(),
                 page.getSize()), role);
         if (rolePage.getRecords() != null) {
 //                rolePage.getRecords().forEach(v->

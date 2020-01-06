@@ -2,6 +2,7 @@ package com.ofs.sys.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.ofs.web.base.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -24,30 +25,39 @@ public class SysLog extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @TableField
+    @ApiModelProperty(value = "菜单ID")
     private String menuId;
 
     @TableField
+    @ApiModelProperty(value = "动作名称,菜单增删改查")
     private String type;
 
     @TableField
+    @ApiModelProperty(value = "描述")
     private String content;
 
     @TableField
+    @ApiModelProperty(value = "IP")
     private String ip;
 
     @TableField
+    @ApiModelProperty(value = "请求类型 ajax http")
     private String ajax;
 
     @TableField
+    @ApiModelProperty(value = "URI")
     private String uri;
 
     @TableField
+    @ApiModelProperty(value = "参数")
     private String params;
 
     @TableField
+    @ApiModelProperty(value = "方法")
     private String httpMethod;
 
     @TableField
+    @ApiModelProperty(value = "类")
     private String classMethod;
 
     public static final String MENU_ID = "menu_id";

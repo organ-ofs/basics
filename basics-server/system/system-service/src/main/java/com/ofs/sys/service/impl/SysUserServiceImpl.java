@@ -2,6 +2,7 @@ package com.ofs.sys.service.impl;
 
 import cn.licoy.encryptbody.util.MD5EncryptUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ofs.sys.core.global.ShiroService;
 import com.ofs.sys.dto.ResetPasswordDto;
@@ -147,10 +148,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     }
 
     @Override
-    public Page<SysUser> getPage(Page<SysUser> page, SysUser user) {
+    public IPage<SysUser> getPage(Page<SysUser> page, SysUser user) {
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
         wrapper.orderByDesc(SysUser.CREATE_DATE);
-        Page<SysUser> userPage = super.list(new Page<>(page.getCurrent(), page.getSize()), user);
+        IPage<SysUser> userPage = super.listPage(new Page<>(page.getCurrent(), page.getSize()), user);
 
         userPage.getRecords().forEach(v -> {
             //查找匹配所有用户的角色

@@ -1,5 +1,6 @@
 package com.ofs.sys.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ofs.sys.entity.SysLog;
 import com.ofs.sys.mapper.SysLogMapper;
@@ -15,9 +16,9 @@ import org.springframework.stereotype.Service;
 public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper, SysLog> implements SysLogService {
 
     @Override
-    public Page<SysLog> list(Page<SysLog> page, SysLog sysLog) {
+    public IPage<SysLog> listPage(Page<SysLog> page, SysLog sysLog) {
 
-        return super.list(page, sysLog);
+        return super.listPage(page, sysLog);
     }
 
 }

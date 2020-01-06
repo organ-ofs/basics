@@ -1,7 +1,7 @@
 package com.ofs.sys.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.ofs.sys.entity.SysLog;
+import com.ofs.web.base.IBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  */
 @Mapper
 @Repository
-public interface SysLogMapper extends BaseMapper<SysLog> {
+public interface SysLogMapper extends IBaseMapper<SysLog> {
 }

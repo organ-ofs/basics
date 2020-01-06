@@ -2,6 +2,7 @@ package com.ofs.sys.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.ofs.web.base.BaseEntity;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,21 +24,36 @@ public class SysResource extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
+    @TableField
+    @ApiModelProperty(value = "编码")
     private String code;
 
+    @TableField
+    @ApiModelProperty(value = "名称")
     private String name;
 
+    @TableField
+    @ApiModelProperty(value = "父ID")
     private String parentId;
 
-    //1 菜单 2按钮
+    @TableField
+    @ApiModelProperty(value = "类型：1 菜单 2按钮")
     private String type;
 
+    @TableField
+    @ApiModelProperty(value = "utl")
     private String url;
 
+    @TableField
+    @ApiModelProperty(value = "权限")
     private String permission;
 
+    @TableField
+    @ApiModelProperty(value = "说明")
     private String description;
 
+    @TableField
+    @ApiModelProperty(value = "状态：1启用，0停用")
     private String status;
 
     @TableField(exist = false)

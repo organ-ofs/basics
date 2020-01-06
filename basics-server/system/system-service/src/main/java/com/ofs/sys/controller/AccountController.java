@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,7 +39,7 @@ public class AccountController {
     @PostMapping("/sign-in")
     @ApiOperation(value = "登录")
     @SysLogs("登录")
-    public ResponseResult signIn(@RequestBody @Validated @ApiParam(value = "登录数据", required = true) SignInDto sign) {
+    public ResponseResult signIn(@Validated @ApiParam(value = "登录数据", required = true) SignInDto sign) {
         userService.signIn(sign);
         return ResponseResult.success(((JwtToken) SecurityUtils.getSubject().getPrincipal()).getToken());
     }

@@ -1,5 +1,6 @@
 package com.ofs.web.base;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ofs.web.jwt.JwtToken;
@@ -17,7 +18,7 @@ public interface BaseService<T extends BaseEntity> extends IService<T> {
 
     void remove(String id);
 
-    Page<T> list(Page<T> page, T entity);
+    IPage<T> listPage(Page<T> page, T t);
 
     List<T> list(T entity);
 

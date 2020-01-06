@@ -1,6 +1,7 @@
 package com.ofs.sys.service;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ofs.sys.dto.ResetPasswordDto;
 import com.ofs.sys.dto.SignInDto;
@@ -68,7 +69,7 @@ public interface SysUserService extends BaseService<SysUser> {
      * @param user 过滤条件
      * @return RequestResult
      */
-    Page<SysUser> getPage(Page<SysUser> page, SysUser user);
+    IPage<SysUser> getPage(Page<SysUser> page, SysUser user);
 
 
     /**

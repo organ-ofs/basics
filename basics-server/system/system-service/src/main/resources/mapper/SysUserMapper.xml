@@ -5,23 +5,23 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.ofs.sys.entity.SysUser">
         <result column="ID" property="id"/>
-        <result column="login_id" property="loginId"/>
-        <result column="password" property="password"/>
-        <result column="name" property="name"/>
-        <result column="mobile" property="mobile"/>
-        <result column="email" property="email"/>
-        <result column="group_id" property="groupId"/>
-        <result column="last_login_date" property="lastLoginDate"/>
-        <result column="create_date" property="createDate"/>
-        <result column="update_date" property="updateDate"/>
-        <result column="create_user" property="createUser"/>
-        <result column="update_user" property="updateUser"/>
+        <result column="LOGIN_ID" property="loginId"/>
+        <result column="PASSWORD" property="password"/>
+        <result column="NAME" property="name"/>
+        <result column="MOBILE" property="mobile"/>
+        <result column="EMAIL" property="email"/>
+        <result column="GROUP_ID" property="groupId"/>
+        <result column="LAST_LOGIN_DATE" property="lastLoginDate"/>
+        <result column="CREATE_DATE" property="createDate"/>
+        <result column="UPDATE_DATE" property="updateDate"/>
+        <result column="CREATE_USER" property="createUser"/>
+        <result column="UPDATE_USER" property="updateUser"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
                 ID,
-            login_id, password, name, mobile, email, group_id, last_login_date, create_date, update_date, create_user, update_user
+            login_id, password, name, mobile, email, group_id, last_login_date, CREATE_DATE, UPDATE_DATE, CREATE_USER, UPDATE_USER
         </sql>
 
 </mapper>
