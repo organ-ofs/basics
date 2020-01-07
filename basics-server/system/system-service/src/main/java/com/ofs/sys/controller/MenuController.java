@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 2019/4/22
  */
 @RestController
-@RequestMapping(value = "/system/resource")
+@RequestMapping(value = "/system/menu")
 @Api(value = "菜单管理", tags = {"菜单服务接口"})
 public class MenuController extends BaseController<SysMenus> {
 

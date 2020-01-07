@@ -20,11 +20,17 @@ import java.util.List;
 public class BaseServiceImpl<M extends IBaseMapper<T>, T extends BaseEntity> extends ServiceImpl<M, T> implements BaseService<T> {
 
     @Override
-    public void add(T entity) {
+    public void add(T entity) throws Exception {
+        super.save(entity);
     }
 
     @Override
-    public void removes(List<String> idList) {
+    public void update(T entity) throws Exception {
+        super.updateById(entity);
+    }
+
+    @Override
+    public void removes(List<String> idList) throws Exception {
         try {
             this.removeByIds(idList);
         } catch (Exception e) {
@@ -33,7 +39,7 @@ public class BaseServiceImpl<M extends IBaseMapper<T>, T extends BaseEntity> ext
     }
 
     @Override
-    public void remove(String id) {
+    public void remove(String id) throws Exception {
         try {
             this.removeByIds(Arrays.asList(new String[]{id}));
         } catch (Exception e) {
@@ -49,11 +55,6 @@ public class BaseServiceImpl<M extends IBaseMapper<T>, T extends BaseEntity> ext
     @Override
     public List<T> list(T entity) {
         return null;
-    }
-
-    @Override
-    public void update(T entity) {
-
     }
 
     @Override

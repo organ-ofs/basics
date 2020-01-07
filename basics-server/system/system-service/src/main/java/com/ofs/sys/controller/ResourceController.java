@@ -21,7 +21,7 @@ import java.util.List;
  */
 @RestController
 @Api(value = "资源", tags = {"资源服务接口"})
-@RequestMapping("/resource")
+@RequestMapping("/system/resource")
 public class ResourceController extends BaseController<SysResource> {
 
     @Autowired
@@ -34,15 +34,15 @@ public class ResourceController extends BaseController<SysResource> {
 
     @ApiOperation(value = "获取所有资源树 - 权限配置可用", httpMethod = "POST", produces = "application/json")
     @RequestMapping(value = "/getTree", method = RequestMethod.POST)
-    public ResponseResult getResourceTree(SysResource resource, HttpServletResponse response) {
-        List<SysResource> data = service.getListTree(resource);
+    public ResponseResult getTree(SysResource resource, HttpServletResponse response) {
+        List<SysResource> data = service.getTree(resource);
         return ResponseResult.success(data);
     }
 
     @ApiOperation(value = "根据角色获取资源树-菜单可用", httpMethod = "POST", produces = "application/json")
     @RequestMapping(value = "/getTreeByRole", method = RequestMethod.POST)
-    public ResponseResult getListByRoleId(String roleId, HttpServletResponse response) {
-        List<SysResource> data = service.getListTreeByRole(roleId);
+    public ResponseResult getTreeByRole(String roleId, HttpServletResponse response) {
+        List<SysResource> data = service.getTreeByRole(roleId);
         return ResponseResult.success(data);
     }
 

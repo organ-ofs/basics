@@ -71,7 +71,7 @@ public class ResponseResult<T> implements Serializable {
         return res;
     }
 
-    public synchronized static <T> ResponseResult<T> Auth() {
+    public synchronized static <T> ResponseResult<T> auth() {
         ResponseResult<T> res = new ResponseResult<>();
         res.setStatus(ResponseCode.SERVER_ERROR.getCode());
         res.setMsg(ResponseCode.SERVER_ERROR.getMsg());

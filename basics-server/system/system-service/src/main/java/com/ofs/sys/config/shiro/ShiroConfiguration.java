@@ -62,15 +62,15 @@ public class ShiroConfiguration {
     }
 
     @Bean
-    public SecurityManager securityManager(RedisCacheManager RedisCacheManager) {
+    public SecurityManager securityManager(RedisCacheManager redisCacheManager) {
         DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
         manager.setRealm(myRealm());
-        manager.setCacheManager(RedisCacheManager);
+        manager.setCacheManager(redisCacheManager);
         /*
          * 关闭session存储，禁用Session作为存储策略的实现，
          * 但它没有完全地禁用Session所以需要配合SubjectFactory中的context.setSessionCreationEnabled(false)
+         * manager.setSessionManager(sessionManager());
          */
-        //manager.setSessionManager(sessionManager());
         ((DefaultSessionStorageEvaluator) ((DefaultSubjectDAO) manager.getSubjectDAO())
                 .getSessionStorageEvaluator()).setSessionStorageEnabled(false);
         manager.setSubjectFactory(new AgileSubjectFactory());
@@ -95,9 +95,9 @@ public class ShiroConfiguration {
      */
     @Bean
     public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
-        DefaultAdvisorAutoProxyCreator defaultAAP = new DefaultAdvisorAutoProxyCreator();
-        defaultAAP.setProxyTargetClass(true);
-        return defaultAAP;
+        DefaultAdvisorAutoProxyCreator defaultAap = new DefaultAdvisorAutoProxyCreator();
+        defaultAap.setProxyTargetClass(true);
+        return defaultAap;
     }
 
     @Bean

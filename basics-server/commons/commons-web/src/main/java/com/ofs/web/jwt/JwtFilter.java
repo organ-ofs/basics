@@ -66,7 +66,8 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
                 }
             }
         }
-        if (null == subject.getPrincipal()) {//表示没有登录，返回登录提示
+        //表示没有登录，返回登录提示
+        if (null == subject.getPrincipal()) {
             writerResponse(res, SystemCode.NOT_SING_IN.code, SystemCode.NOT_SING_IN.msg);
         } else {
             writerResponse(res, SystemCode.FAIL.code, "无权限访问");

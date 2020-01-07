@@ -17,7 +17,6 @@ public class SysLogServiceImpl extends BaseServiceImpl<SysLogMapper, SysLog> imp
 
     @Override
     public IPage<SysLog> listPage(Page<SysLog> page, SysLog sysLog) {
-
         return super.listPage(page, sysLog);
     }
 

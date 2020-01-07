@@ -7,7 +7,6 @@ import com.ofs.sys.core.global.ShiroService;
 import com.ofs.sys.entity.SysRole;
 import com.ofs.sys.entity.SysUserRole;
 import com.ofs.sys.mapper.SysRoleMapper;
-import com.ofs.sys.service.SysMenusService;
 import com.ofs.sys.service.SysRoleService;
 import com.ofs.sys.service.SysUserRoleService;
 import com.ofs.web.base.impl.BaseServiceImpl;
@@ -15,17 +14,12 @@ import com.ofs.web.exception.RequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
 public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
-
-    @Autowired
-    private SysMenusService roleMenusService;
 
     @Autowired
     private SysUserRoleService userRoleService;
@@ -43,9 +37,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
             SysRole role = this.getById(v.getRoleId());
             if (role != null) {
                 if (hasResource) {
-                    //添加资源列表
-//                    List<SysResource> permissions = roleMenusService.findAllResourceByRoleId(role.getId());
-//                    role.setResources(permissions);
+
                 }
             }
             roles.add(role);
@@ -58,9 +50,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
         IPage<SysRole> rolePage = super.listPage(new Page<SysRole>(page.getCurrent(),
                 page.getSize()), role);
         if (rolePage.getRecords() != null) {
-//                rolePage.getRecords().forEach(v->
-            //添加资源列表
-//                        v.setResources(roleMenusService.findAllResourceByRoleId(v.getId())));
+
         }
         return rolePage;
     }

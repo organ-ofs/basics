@@ -1,8 +1,11 @@
 package com.ofs.sys.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.ofs.sys.entity.SysResource;
+import com.ofs.sys.entity.SysRoleResource;
 import com.ofs.sys.mapper.SysResourceMapper;
+import com.ofs.sys.service.SysMenusService;
 import com.ofs.sys.service.SysResourceService;
 import com.ofs.web.base.impl.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +27,16 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceMapper, S
     @Autowired
     SysResourceMapper mapper;
 
+    @Autowired
+    SysMenusService menusService;
+
+    @Autowired
+    SysRoleResourceService roleResourceService;
+
 
     @Override
-    public List<SysResource> getListTree(SysResource resource) {
+    @Transactional(rollbackFor = Exception.class)
+    public List<SysResource> getTree(SysResource resource) {
         resource.setParentId("0");
         List<SysResource> list = mapper.getList(resource);
         this.getResource(list, resource);
@@ -55,7 +65,8 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceMapper, S
     }
 
     @Override
-    public List<SysResource> getListTreeByRole(String roleId) {
+    @Transactional(rollbackFor = Exception.class)
+    public List<SysResource> getTreeByRole(String roleId) {
         SysResource resource = SysResource.builder()
                 .roleId(roleId)
                 .parentId("0")
@@ -106,6 +117,28 @@ public class SysResourceServiceImpl extends BaseServiceImpl<SysResourceMapper, S
             });
             mapper.deleteChildren(buttons);
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void remove(String id) {
+        mapper.deleteById(id);
+        QueryWrapper<SysRoleResource> rrWrapper = new QueryWrapper<>();
+        roleResourceService.remove(rrWrapper);
+        // 子类
+        QueryWrapper wrapper = new QueryWrapper<SysResource>();
+        wrapper.eq(SysResource.PARENT_ID, id);
+        List<SysResource> childList = this.list(wrapper);
+        if (CollectionUtils.isNotEmpty(childList)) {
+            // 删除子类
+            mapper.delete(wrapper);
+            // 删除关联关系
+            rrWrapper = new QueryWrapper<>();
+            List<String> idList = childList.stream().map(SysResource::getId).collect(Collectors.toList());
+            rrWrapper.in(SysRoleResource.RESOURCE_ID, idList);
+            roleResourceService.remove(rrWrapper);
+        }
+
     }
 }
 

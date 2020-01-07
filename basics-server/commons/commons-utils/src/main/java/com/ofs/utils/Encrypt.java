@@ -38,7 +38,7 @@ public class Encrypt {
     /**
      * MD5加密-16位小写
      */
-    public static String md5_16(String encryptStr) {
+    public static String md5Sixteen(String encryptStr) {
         return md5(encryptStr).substring(8, 24);
     }
 

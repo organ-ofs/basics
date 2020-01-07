@@ -80,8 +80,7 @@ public enum FrameMessageEnum implements IMessageEnum {
     /**
      * 验签操作失败
      */
-    VERIFY_ERROR("SY16", "验签操作失败")
-    ;
+    VERIFY_ERROR("SY16", "验签操作失败");
 
 
     /**

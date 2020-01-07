@@ -15,13 +15,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.annotation.Annotation;
 
 /**
- *
  * @author gaoly
  * @version 2019/10/16
  * 自定义参数解析器
  * supportsParameter：用于判定是否需要处理该参数分解，返回true为需要，并会去调用下面的方法resolveArgument。
  * resolveArgument：真正用于处理参数分解的方法，返回的Object就是controller方法上的形参对象。
- *
  */
 public class JwtTokenArgumentResolver implements HandlerMethodArgumentResolver {
     @Override

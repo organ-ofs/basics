@@ -20,8 +20,8 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-                ID,
+        ID,
             login_id, password, name, mobile, email, group_id, last_login_date, CREATE_DATE, UPDATE_DATE, CREATE_USER, UPDATE_USER
-        </sql>
+    </sql>
 
 </mapper>

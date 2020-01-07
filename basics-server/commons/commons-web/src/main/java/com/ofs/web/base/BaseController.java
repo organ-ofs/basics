@@ -3,6 +3,7 @@ package com.ofs.web.base;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ofs.utils.IdentifierUtils;
 import com.ofs.web.annotation.SysLogs;
 import com.ofs.web.bean.ResponseResult;
 import io.swagger.annotations.ApiImplicitParam;
@@ -18,6 +19,11 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @version 2019/5/25/11:36
  */
 public abstract class BaseController<T extends BaseEntity> {
+    /**
+     * getService
+     *
+     * @return
+     */
     public abstract BaseService getService();
 
 
@@ -32,7 +38,7 @@ public abstract class BaseController<T extends BaseEntity> {
     @PostMapping("/update")
     @ApiOperation(value = "更新根据ID")
     @SysLogs("更新根据ID")
-    ResponseResult update(@RequestBody @Validated T dto) {
+    ResponseResult update(@RequestBody @Validated T dto) throws Exception {
         getService().update(dto);
         return ResponseResult.success();
     }
@@ -40,7 +46,7 @@ public abstract class BaseController<T extends BaseEntity> {
     @PostMapping("/remove/{id}")
     @ApiOperation(value = "删除根据ID")
     @SysLogs("删除根据ID")
-    ResponseResult remove(@PathVariable("id") String id) {
+    ResponseResult remove(@PathVariable("id") String id) throws Exception {
         getService().remove(id);
         return ResponseResult.success();
     }
@@ -56,7 +62,8 @@ public abstract class BaseController<T extends BaseEntity> {
     @PostMapping("/add")
     @ApiOperation(value = "新增")
     @SysLogs("新增")
-    ResponseResult add(@RequestBody @Validated T dto) {
+    ResponseResult add(@RequestBody @Validated T dto) throws Exception {
+        dto.setId(IdentifierUtils.nextUuid());
         getService().add(dto);
         return ResponseResult.success();
     }

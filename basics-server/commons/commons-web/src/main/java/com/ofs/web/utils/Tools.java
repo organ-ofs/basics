@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
  * @version 2019/4/28/9:46
  */
 public class Tools {
+    public static final String UNKNOWN = "unknown";
+    public static final String VERIFYFAIL = "verifyFail";
 
     /**
      * 获取客户端IP
@@ -27,16 +29,16 @@ public class Tools {
      */
     public static String getClientIp(HttpServletRequest request) {
         String ip = request.getHeader("X-Real-IP");
-        if (ip == null || "".equals(ip.trim()) || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || "".equals(ip.trim()) || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("X-Forwarded-For");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("Proxy-Client-IP");
         }
-        if (ip == null || ip.length() == 0 || "unknow".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getHeader("WL-Proxy-Client-IP");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
         if ("0.0.0.0".equals(ip) || "0:0:0:0:0:0:0:1".equals(ip) || "localhost".equals(ip) || "127.0.0.1".equals(ip)) {
@@ -68,7 +70,7 @@ public class Tools {
         try {
             subject.login(token);
         } catch (DisabledAccountException e) {
-            if ("verifyFail".equals(e.getMessage())) {
+            if (VERIFYFAIL.equals(e.getMessage())) {
                 throw new RequestException(SystemCode.NOT_SING_IN.code, "身份已过期，请重新登录", e);
             }
             throw new RequestException(SystemCode.SIGN_IN_INPUT_FAIL.code, e.getMessage(), e);

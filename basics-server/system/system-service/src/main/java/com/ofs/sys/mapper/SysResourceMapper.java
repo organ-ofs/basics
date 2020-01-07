@@ -30,7 +30,7 @@ public interface SysResourceMapper extends IBaseMapper<SysResource> {
     List<SysResource> getListByRole(SysResource resource);
 
     /**
-     * 根据角色ID条件查询信息
+     * 条件查询信息
      *
      * @param resource
      * @return

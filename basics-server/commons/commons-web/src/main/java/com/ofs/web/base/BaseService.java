@@ -12,17 +12,57 @@ import java.util.List;
  * @version 2019/5/25/11:43
  */
 public interface BaseService<T extends BaseEntity> extends IService<T> {
-    void add(T entity);
+    /**
+     * 新增
+     *
+     * @param entity
+     * @throws Exception
+     */
+    void add(T entity) throws Exception;
 
-    void removes(List<String> ids);
+    /**
+     * update
+     *
+     * @param entity
+     * @throws Exception
+     */
+    void update(T entity) throws Exception;
 
-    void remove(String id);
+    /**
+     * 批量删除
+     *
+     * @param ids
+     * @throws Exception
+     */
+    void removes(List<String> ids) throws Exception;
 
+    /**
+     * 删除
+     *
+     * @param id
+     * @throws Exception
+     */
+    void remove(String id) throws Exception;
+
+    /**
+     * 自定义分页
+     *
+     * @param page
+     * @param t
+     * @return
+     */
     IPage<T> listPage(Page<T> page, T t);
 
+    /**
+     * 查询所有
+     * @param entity
+     * @return
+     */
     List<T> list(T entity);
 
-    void update(T entity);
-
+    /**
+     * 获取登陆信息
+     * @return
+     */
     JwtToken getJwtToken();
 }

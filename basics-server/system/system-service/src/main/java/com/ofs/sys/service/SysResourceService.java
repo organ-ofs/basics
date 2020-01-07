@@ -18,7 +18,7 @@ public interface SysResourceService extends BaseService<SysResource> {
      * @param roleId
      * @return
      */
-    List<SysResource> getListTreeByRole(String roleId);
+    List<SysResource> getTreeByRole(String roleId);
 
     /**
      * 获取资源树
@@ -26,7 +26,7 @@ public interface SysResourceService extends BaseService<SysResource> {
      * @param resource
      * @return
      */
-    List<SysResource> getListTree(SysResource resource);
+    List<SysResource> getTree(SysResource resource);
 
 }
 
