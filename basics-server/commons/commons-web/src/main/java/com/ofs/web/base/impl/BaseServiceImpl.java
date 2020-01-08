@@ -14,7 +14,6 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.BeanUtils;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class BaseServiceImpl<M extends IBaseMapper<T>, T extends BaseEntity> extends ServiceImpl<M, T> implements BaseService<T> {
@@ -41,7 +40,11 @@ public class BaseServiceImpl<M extends IBaseMapper<T>, T extends BaseEntity> ext
     @Override
     public void remove(String id) throws Exception {
         try {
-            this.removeByIds(Arrays.asList(new String[]{id}));
+            T t = super.getById(id);
+            if (t == null) {
+                throw RequestException.fail("删除失败，不存在！");
+            }
+            this.removeById(id);
         } catch (Exception e) {
             throw new RequestException(SystemCode.FAIL.code, "删除失败", e);
         }

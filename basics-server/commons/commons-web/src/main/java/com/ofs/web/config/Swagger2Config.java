@@ -42,7 +42,7 @@ public class Swagger2Config {
                 .groupName("系统管理")
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.ofs.sys.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.ofs.sys.serv.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .globalOperationParameters(pars);

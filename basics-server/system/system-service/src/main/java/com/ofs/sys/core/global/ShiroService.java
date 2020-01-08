@@ -1,6 +1,6 @@
 package com.ofs.sys.core.global;
 
-import com.ofs.sys.entity.SysMenus;
+import com.ofs.sys.serv.entity.SysMenus;
 
 import java.util.List;
 import java.util.Map;

@@ -3,7 +3,7 @@
 <mapper namespace="com.ofs.sys.mapper.SysGroupRoleMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.ofs.sys.entity.SysGroupRole">
+    <resultMap id="BaseResultMap" type="com.ofs.sys.serv.entity.SysGroupRole">
         <result column="ID" property="id"/>
         <result column="GROUP_ID" property="groupId"/>
         <result column="ROLE_ID" property="roleId"/>
@@ -15,7 +15,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        ID, GROUP_ID, ROLE_ID, CREATE_DATE, UPDATE_DATE, CREATE_USER, UPDATE_USER
+        T.ID, T.GROUP_ID, T.ROLE_ID, T.CREATE_DATE, T.UPDATE_DATE, T.CREATE_USER, T.UPDATE_USER
     </sql>
 
 </mapper>

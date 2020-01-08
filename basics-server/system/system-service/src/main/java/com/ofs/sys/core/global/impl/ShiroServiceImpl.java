@@ -1,9 +1,9 @@
 package com.ofs.sys.core.global.impl;
 
-import com.ofs.sys.config.shiro.MyRealm;
+import com.ofs.sys.core.config.shiro.MyRealm;
 import com.ofs.sys.core.global.ShiroService;
-import com.ofs.sys.entity.SysMenus;
-import com.ofs.sys.service.SysMenusService;
+import com.ofs.sys.serv.entity.SysMenus;
+import com.ofs.sys.serv.service.SysMenusService;
 import com.ofs.web.bean.SystemCode;
 import com.ofs.web.exception.RequestException;
 import com.ofs.web.utils.SpringUtils;

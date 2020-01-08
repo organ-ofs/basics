@@ -1,7 +1,10 @@
 package com.ofs.web.base;
 
 
-import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.ToString;
 
@@ -27,13 +30,13 @@ public class BaseEntity implements Serializable {
      */
 //    @Version
 //    @TableField("VERSION_NUM")
-    private Integer versionNum;
+//    private Integer versionNum;
     /**
      * 逻辑删除标识
      */
-    @TableLogic
-    @TableField(value = "DELETE_FLAG")
-    private String deleteFlag;
+//    @TableLogic
+//    @TableField(value = "DELETE_FLAG")
+//    private String deleteFlag;
 
     /**
      * 创建者

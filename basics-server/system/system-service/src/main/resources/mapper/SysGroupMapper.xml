@@ -3,7 +3,7 @@
 <mapper namespace="com.ofs.sys.mapper.SysGroupMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.ofs.sys.entity.SysGroup">
+    <resultMap id="BaseResultMap" type="com.ofs.sys.serv.entity.SysGroup">
         <result column="ID" property="id"/>
         <result column="CODE" property="code"/>
         <result column="NAME" property="name"/>
@@ -16,7 +16,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        ID, CODE, NAME, DESCRIPTION, CREATE_DATE, UPDATE_DATE, CREATE_USER, UPDATE_USER
+        T.ID, T.CODE, T.NAME, T.DESCRIPTION, T.CREATE_DATE, T.UPDATE_DATE, T.CREATE_USER, T.UPDATE_USER
     </sql>
 
 </mapper>

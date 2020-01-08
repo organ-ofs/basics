@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ofs.sys.mapper.SysResourceMapper">
+<mapper namespace="com.ofs.sys.serv.mapper.SysResourceMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.ofs.sys.entity.SysResource">
+    <resultMap id="BaseResultMap" type="com.ofs.sys.serv.entity.SysResource">
         <result column="ID" property="id"/>
         <result column="CODE" property="code"/>
         <result column="NAME" property="name"/>
@@ -31,13 +31,12 @@
     <sql id="BASE_WHERE_CLAUSE">
         <where>
             <trim prefixOverrides="and">
-                <if test="id != null">and T.ID = #{id}</if>
-                <if test="name != null">and T.RESOURCE_NAME = #{name}</if>
-                <if test="url != null">and T.url = #{url}</if>
-                <if test="status != null">and T.STATUS = #{status}</if>
-                <if test="parentId != null">and T.PARENT_ID = #{parentId}</if>
-                <if test="type != null">and T.TYPE = #{type}</if>
-                <if test="roleId != null">and R.ROLE_ID = #{roleId}</if>
+                <if test="params.name != null">and T.RESOURCE_NAME = #{params.name}</if>
+                <if test="params.url != null">and T.url = #{params.url}</if>
+                <!--<if test="params.status != null">and T.STATUS = #{params.status}</if>-->
+                <if test="params.parentId != null">and T.PARENT_ID = #{params.parentId}</if>
+                <if test="params.type != null">and T.TYPE = #{params.type}</if>
+                <if test="params.roleId != null">and R.ROLE_ID = #{params.roleId}</if>
             </trim>
         </where>
     </sql>
@@ -71,4 +70,11 @@
             #{item}
         </foreach>
     </delete>
+
+    <select id="listPage" resultMap="BaseResultMap">
+        SELECT
+        <include refid="BASE_COLUMN_LIST"/>
+        FROM SYS_RESOURCE T
+        <include refid="BASE_WHERE_CLAUSE"/>
+    </select>
 </mapper>

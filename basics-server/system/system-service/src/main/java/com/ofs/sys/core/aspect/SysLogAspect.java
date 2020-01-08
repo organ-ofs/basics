@@ -1,11 +1,11 @@
 package com.ofs.sys.core.aspect;
 
 import com.alibaba.fastjson.JSON;
-import com.ofs.sys.dto.ResetPasswordDto;
-import com.ofs.sys.dto.SignInDto;
-import com.ofs.sys.entity.SysLog;
-import com.ofs.sys.entity.SysUser;
-import com.ofs.sys.service.SysLogService;
+import com.ofs.sys.serv.dto.ResetPasswordDto;
+import com.ofs.sys.serv.dto.SignInDto;
+import com.ofs.sys.serv.entity.SysLog;
+import com.ofs.sys.serv.entity.SysUser;
+import com.ofs.sys.serv.service.SysLogService;
 import com.ofs.utils.DateUtils;
 import com.ofs.web.annotation.SysLogs;
 import com.ofs.web.jwt.JwtToken;
@@ -48,7 +48,7 @@ public class SysLogAspect {
     }
 
     @AfterReturning("log()")
-    public void after(JoinPoint joinPoint) {
+    public void after(JoinPoint joinPoint) throws Exception {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         PrincipalCollection spc = null;

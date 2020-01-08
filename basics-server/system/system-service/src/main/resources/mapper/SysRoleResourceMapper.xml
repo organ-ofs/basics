@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ofs.sys.mapper.SysRoleResourceMapper">
+<mapper namespace="com.ofs.sys.serv.mapper.SysRoleResourceMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.ofs.sys.entity.SysRoleResource">
+    <resultMap id="BaseResultMap" type="com.ofs.sys.serv.entity.SysRoleResource">
         <result column="ID" property="id"/>
         <result column="ROLE_ID" property="roleId"/>
         <result column="RESOURCE_ID" property="resourceId"/>
@@ -15,7 +15,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        ID, role_id, resource_id, CREATE_DATE, UPDATE_DATE, CREATE_USER, UPDATE_USER
+        T.ID, T.role_id, T.resource_id, T.CREATE_DATE, T.UPDATE_DATE, T.CREATE_USER, T.UPDATE_USER
     </sql>
 
 </mapper>

@@ -13,7 +13,7 @@ public class IdentifierUtils {
      * @return
      */
     public static synchronized String nextUuid() {
-        return UUID.randomUUID().toString().replaceAll("_", "");
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
     /**
