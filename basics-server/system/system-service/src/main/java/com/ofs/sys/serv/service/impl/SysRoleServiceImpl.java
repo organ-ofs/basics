@@ -1,8 +1,6 @@
 package com.ofs.sys.serv.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ofs.sys.core.global.ShiroService;
 import com.ofs.sys.serv.entity.SysResource;
 import com.ofs.sys.serv.entity.SysRole;
@@ -51,13 +49,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
             roles.add(role);
         });
         return roles;
-    }
-
-    @Override
-    public IPage<SysRole> listPage(Page<SysRole> page, SysRole role) {
-        IPage<SysRole> rolePage = super.listPage(new Page<SysRole>(page.getCurrent(),
-                page.getSize()), role);
-        return rolePage;
     }
 
     @Override
@@ -122,8 +113,8 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
     @Override
     public void updateCache(String roleId, Boolean author, Boolean out) {
         QueryWrapper<SysUserRole> wrapper = new QueryWrapper();
-        wrapper.eq("rid", roleId);
-        wrapper.groupBy("uid");
+        wrapper.eq("role_id", roleId);
+        wrapper.groupBy("user_id");
         List<SysUserRole> sysUserRoles = userRoleService.list(wrapper);
         List<String> userIdList = new ArrayList<>();
         if (sysUserRoles != null && sysUserRoles.size() > 0) {

@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 @Builder
 @EqualsAndHashCode(callSuper = true)
 @Accessors
-@TableName("角色权限表")
+@TableName("SYS_ROLE_RESOURCE")
 public class SysRoleResource extends BaseEntity {
     private static final long serialVersionUID = 1L;
 

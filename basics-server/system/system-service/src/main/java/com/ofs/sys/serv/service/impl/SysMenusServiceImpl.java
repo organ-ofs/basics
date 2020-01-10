@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.ofs.sys.serv.entity.SysMenus;
 import com.ofs.sys.serv.entity.SysResource;
 import com.ofs.sys.serv.mapper.SysMenusMapper;
-import com.ofs.sys.serv.message.DictEnum;
+import com.ofs.sys.serv.message.Dict;
 import com.ofs.sys.serv.service.SysMenusService;
 import com.ofs.sys.serv.service.SysResourceService;
 import com.ofs.utils.IdentifierUtils;
@@ -36,7 +36,7 @@ public class SysMenusServiceImpl extends BaseServiceImpl<SysMenusMapper, SysMenu
                 .parentId(entity.getParentId())
                 .name(entity.getName())
                 .url(entity.getPath())
-                .type(DictEnum.MENU.getCode())
+                .type(Dict.DictEnum.MENU.getCode())
                 .build();
         resource.setId(IdentifierUtils.nextUuid());
         boolean b = resourceService.save(resource);
@@ -53,18 +53,7 @@ public class SysMenusServiceImpl extends BaseServiceImpl<SysMenusMapper, SysMenu
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(SysMenus entity) throws Exception {
-
-        SysResource resource = SysResource.builder()
-                .parentId(entity.getParentId())
-                .name(entity.getName())
-                .url(entity.getPath())
-                .type(DictEnum.MENU.getCode())
-                .build();
-        boolean b = resourceService.updateById(resource);
-        if (!b) {
-            throw RequestException.fail("操作失败");
-        }
-        b = super.updateById(entity);
+        boolean b = super.updateById(entity);
         if (!b) {
             throw RequestException.fail("操作失败");
         }

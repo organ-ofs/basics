@@ -35,7 +35,7 @@ public class LogController extends BaseController<SysLog> {
         return service;
     }
 
-    @PostMapping("/remove")
+    @PostMapping("/removes")
     @ApiOperation("批量删除")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "身份认证Token")
     public ResponseResult removeList(@RequestBody @ApiParam("ID集合") List<String> logList) throws Exception {

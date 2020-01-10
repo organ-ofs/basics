@@ -3,6 +3,7 @@ package com.ofs.sys.serv.mapper;
 import com.ofs.sys.serv.entity.SysResource;
 import com.ofs.web.base.IBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public interface SysResourceMapper extends IBaseMapper<SysResource> {
      * @param resource
      * @return
      */
-    List<SysResource> getListByRole(SysResource resource);
+    List<SysResource> getListByRole(@Param("params") SysResource resource);
 
     /**
      * 条件查询信息
@@ -35,5 +36,5 @@ public interface SysResourceMapper extends IBaseMapper<SysResource> {
      * @param resource
      * @return
      */
-    List<SysResource> getList(SysResource resource);
+    List<SysResource> getList(@Param("params") SysResource resource);
 }
