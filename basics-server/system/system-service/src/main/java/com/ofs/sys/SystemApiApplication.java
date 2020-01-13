@@ -12,7 +12,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @SpringBootApplication
 @EnableSwagger2
-@MapperScan("com.ofs.sys.mapper")
+@MapperScan("com.ofs.sys.serv.mapper")
 @ComponentScan(basePackages = {"com.ofs"})
 public class SystemApiApplication {
     public static void main(String[] args) {
