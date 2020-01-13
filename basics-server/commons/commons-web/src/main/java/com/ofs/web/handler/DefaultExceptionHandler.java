@@ -1,8 +1,8 @@
 package com.ofs.web.handler;
 
 
-import com.ofs.web.bean.ResponseResult;
-import com.ofs.web.bean.SystemCode;
+import com.ofs.web.base.bean.ResponseResult;
+import com.ofs.web.base.bean.SystemCode;
 import com.ofs.web.exception.RequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;

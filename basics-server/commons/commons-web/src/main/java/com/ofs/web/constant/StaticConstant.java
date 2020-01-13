@@ -1,4 +1,4 @@
-package com.ofs.web.bean;
+package com.ofs.web.constant;
 
 public class StaticConstant {
 

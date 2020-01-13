@@ -1,6 +1,6 @@
 package com.ofs.web.exception;
 
-import com.ofs.web.bean.SystemCode;
+import com.ofs.web.base.bean.SystemCode;
 import lombok.*;
 
 import java.io.Serializable;

@@ -1,8 +1,6 @@
 package com.ofs.sys.serv.service;
 
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ofs.sys.serv.dto.ResetPasswordDto;
 import com.ofs.sys.serv.dto.SignInDto;
 import com.ofs.sys.serv.entity.SysMenus;
@@ -61,16 +59,6 @@ public interface SysUserService extends BaseService<SysUser> {
      * @return 资源集合
      */
     List<SysMenus> userRolesRegexMenu(List<SysRole> roles);
-
-
-    /**
-     * 获取所有用户（分页）
-     *
-     * @param user 过滤条件
-     * @return RequestResult
-     */
-    IPage<SysUser> getPage(Page<SysUser> page, SysUser user);
-
 
     /**
      * 重置用户密码

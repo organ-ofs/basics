@@ -58,7 +58,9 @@ public class SysUser extends BaseEntity {
     @ApiModelProperty(value = "最后登录时间")
     private String lastLoginDate;
 
+    @TableField(exist = false)
     private List<SysRole> roles;
+    @TableField(exist = false)
     private List<SysMenus> menus;
 
     public static final String LOGIN_ID = "login_id";

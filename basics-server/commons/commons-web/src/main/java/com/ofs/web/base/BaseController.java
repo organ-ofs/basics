@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ofs.utils.IdentifierUtils;
 import com.ofs.web.annotation.SysLogs;
-import com.ofs.web.bean.ResponseResult;
+import com.ofs.web.base.bean.ResponseResult;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

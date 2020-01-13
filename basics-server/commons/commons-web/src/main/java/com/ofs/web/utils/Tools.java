@@ -1,7 +1,7 @@
 package com.ofs.web.utils;
 
-import com.ofs.web.bean.StaticConstant;
-import com.ofs.web.bean.SystemCode;
+import com.ofs.web.base.bean.SystemCode;
+import com.ofs.web.constant.StaticConstant;
 import com.ofs.web.exception.RequestException;
 import com.ofs.web.jwt.JwtToken;
 import org.apache.shiro.SecurityUtils;

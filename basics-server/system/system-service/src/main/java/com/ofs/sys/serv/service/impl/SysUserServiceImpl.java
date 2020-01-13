@@ -12,19 +12,17 @@ import com.ofs.sys.serv.entity.SysResource;
 import com.ofs.sys.serv.entity.SysRole;
 import com.ofs.sys.serv.entity.SysUser;
 import com.ofs.sys.serv.mapper.SysUserMapper;
-import com.ofs.sys.serv.service.SysMenusService;
 import com.ofs.sys.serv.service.SysRoleService;
 import com.ofs.sys.serv.service.SysUserRoleService;
 import com.ofs.sys.serv.service.SysUserService;
 import com.ofs.utils.DateUtils;
+import com.ofs.web.base.bean.SystemCode;
 import com.ofs.web.base.impl.BaseServiceImpl;
-import com.ofs.web.bean.SystemCode;
 import com.ofs.web.exception.RequestException;
 import com.ofs.web.jwt.JwtToken;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,9 +44,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
     @Autowired
     private ShiroService shiroService;
-
-    @Autowired
-    private SysMenusService menusService;
 
     @Override
     public SysUser findUserByLoginId(String loginId, boolean hasMenu) {
@@ -147,7 +142,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     }
 
     @Override
-    public IPage<SysUser> getPage(Page<SysUser> page, SysUser user) {
+    public IPage<SysUser> listPage(Page<SysUser> page, SysUser user) {
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
         wrapper.orderByDesc(SysUser.CREATE_DATE);
         IPage<SysUser> userPage = super.listPage(new Page<>(page.getCurrent(), page.getSize()), user);
@@ -165,11 +160,11 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
         if (user == null) {
             throw RequestException.fail("用户不存在！");
         }
-        SysUser sysUser = new SysUser();
-        BeanUtils.copyProperties(SecurityUtils.getSubject().getPrincipal(), sysUser);
-        if (user.getLoginId().equals(sysUser.getLoginId())) {
-            throw RequestException.fail("不能删除自己的账户！");
-        }
+//        SysUser sysUser = new SysUser();
+//        BeanUtils.copyProperties(SecurityUtils.getSubject().getPrincipal(), sysUser);
+//        if (user.getLoginId().equals(sysUser.getLoginId())) {
+//            throw RequestException.fail("不能删除自己的账户！");
+//        }
         try {
             super.removeById(userId);
             shiroService.clearAuthByUserId(userId, true, true);
@@ -187,7 +182,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
         }
         try {
             user.setCreateDate(DateUtils.getCurrentTime());
-            user.setPassword(MD5EncryptUtil.encrypt(String.valueOf(findUser.getPassword()) + findUser.getLoginId()));
+            user.setPassword(MD5EncryptUtil.encrypt(user.getPassword() + user.getLoginId()));
             super.save(user);
         } catch (Exception e) {
             throw RequestException.fail("添加用户失败", e);

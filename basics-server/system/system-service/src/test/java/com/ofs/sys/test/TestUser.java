@@ -24,13 +24,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 public class TestUser extends TestBase {
 
-    String id = "";
+    String id = "02b91e9de6ea4622bfbce0f1cf373baf";
 
     @Test
     @Rollback
     public void add() {
         SysUser info = SysUser.builder()
-                .loginId("222a")
+                .loginId("2221a")
                 .status("1")
                 .password("123456")
                 .email("test@em.com")

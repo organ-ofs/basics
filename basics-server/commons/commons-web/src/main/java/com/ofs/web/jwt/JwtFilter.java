@@ -1,9 +1,9 @@
 package com.ofs.web.jwt;
 
 import com.alibaba.fastjson.JSON;
-import com.ofs.web.bean.ResponseResult;
-import com.ofs.web.bean.StaticConstant;
-import com.ofs.web.bean.SystemCode;
+import com.ofs.web.base.bean.ResponseResult;
+import com.ofs.web.base.bean.SystemCode;
+import com.ofs.web.constant.StaticConstant;
 import com.ofs.web.exception.RequestException;
 import com.ofs.web.utils.Tools;
 import org.apache.shiro.subject.Subject;

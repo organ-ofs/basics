@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ofs.web.base.BaseEntity;
 import com.ofs.web.base.BaseService;
 import com.ofs.web.base.IBaseMapper;
-import com.ofs.web.bean.SystemCode;
+import com.ofs.web.base.bean.SystemCode;
 import com.ofs.web.exception.RequestException;
 import com.ofs.web.jwt.JwtToken;
 import com.ofs.web.utils.Tools;

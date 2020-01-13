@@ -1,7 +1,7 @@
 package com.ofs.web.handler;
 
 import com.alibaba.fastjson.JSON;
-import com.ofs.web.bean.StaticConstant;
+import com.ofs.web.constant.StaticConstant;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 

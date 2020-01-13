@@ -1,4 +1,4 @@
-package com.ofs.web.bean;
+package com.ofs.web.base.bean;
 
 import com.ofs.web.knowledge.IMessageEnum;
 import io.swagger.annotations.ApiModel;
@@ -40,7 +40,7 @@ public class ResponseResult<T> implements Serializable {
     }
 
     public synchronized static <T> ResponseResult<T> e(SystemCode statusEnum, T data) {
-        ResponseResult<T> res = new ResponseResult<>();
+        ResponseResult<T> res = new ResponseResult<T>();
         res.setStatus(statusEnum.code);
         res.setMsg(statusEnum.msg);
         res.setData(data);
@@ -48,7 +48,7 @@ public class ResponseResult<T> implements Serializable {
     }
 
     public synchronized static <T> ResponseResult<T> success() {
-        ResponseResult<T> res = new ResponseResult<>();
+        ResponseResult<T> res = new ResponseResult<T>();
         res.setStatus(ResponseCode.OK.getCode());
         res.setMsg(ResponseCode.OK.getMsg());
         res.setData(null);
