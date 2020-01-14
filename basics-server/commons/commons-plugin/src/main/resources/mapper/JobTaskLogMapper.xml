@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ofs.commons.plugin.quartz.mapper.JobTaskLogMapper">
+
+
+    <select id="listPage" parameterType="com.ofs.commons.plugin.quartz.dto.JobTaskLogDto"
+            resultType="com.ofs.commons.plugin.quartz.dto.JobTaskLogDto">
+        SELECT t.create_date, t.update_date, t.exec_times, t.exec_status, t.error, t.ip
+        FROM ST_TBL_JOB_TASK_LOG t
+        WHERE t.job_name = #{condition.jobName}
+
+          AND t.job_group = #{condition.jobGroup}
+          and t.DELETE_FLAG = '0'
+        order by t.create_date desc
+
+    </select>
+</mapper>

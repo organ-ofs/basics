@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.ofs.web.base.validation.group.UpdateGroup;
 import lombok.Data;
 import lombok.ToString;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 
@@ -23,6 +25,7 @@ import java.io.Serializable;
 public class BaseEntity implements Serializable {
 
     @TableId(value = "ID", type = IdType.INPUT)
+    @NotNull(message = "the job id cannot be null", groups = {UpdateGroup.class})
     private String id;
 
     /**

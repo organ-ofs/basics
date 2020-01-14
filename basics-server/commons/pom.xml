@@ -14,6 +14,7 @@
     <modules>
         <module>commons-utils</module>
         <module>commons-web</module>
+        <module>commons-plugin</module>
     </modules>
     <dependencies>
         <dependency>

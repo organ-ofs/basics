@@ -1,4 +1,4 @@
-package com.ofs.sys.core.config.cache;
+package com.ofs.commons.plugin.redis.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cache.CacheManager;

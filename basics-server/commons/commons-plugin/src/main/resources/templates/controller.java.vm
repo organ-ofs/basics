@@ -1,0 +1,54 @@
+package ${package.Controller}import com.frame.common.base.annotation.SystemLog;
+import com.frame.common.base.constant.FrameModelConstant;
+import com.frame.common.base.model.Param;
+import com.frame.common.base.model.ParamTable;
+import com.frame.common.base.model.Result;
+import com.frame.common.base.model.ResultTable;
+import com.frame.common.base.util.BeanConverterUtil;
+import io.swagger.annotations.Api;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+;
+${cfg.dto}
+        .${entity}Dto;
+${package.Service}
+        .I${entity}Service;
+${package.Entity}
+        .${entity};
+#if(${restControllerStyle})
+#else
+#end
+#if(${superControllerClassPackage})
+    ${superControllerClassPackage}
+        ;
+#end
+
+/**
+ * <p>
+ * $!{table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+@Slf4j
+@Api(
+        tags = "$!{table.comment}管理接口API",
+        description = "$!{table.comment}"
+)
+@RequestMapping("/api#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+        }
+

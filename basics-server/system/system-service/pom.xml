@@ -28,7 +28,7 @@
         <dependency>
             <groupId>com.ofs</groupId>
             <artifactId>commons-web</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${commons.version}</version>
         </dependency>
         <dependency>
             <groupId>com.ofs</groupId>

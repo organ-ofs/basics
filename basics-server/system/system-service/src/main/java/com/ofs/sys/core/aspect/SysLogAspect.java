@@ -43,6 +43,10 @@ public class SysLogAspect {
         this.sysLogService = sysLogService;
     }
 
+    /**
+     * 定义切点
+     * 匹配有SysLogs注解的方法
+     */
     @Pointcut("@annotation(com.ofs.web.annotation.SysLogs)")
     public void log() {
     }

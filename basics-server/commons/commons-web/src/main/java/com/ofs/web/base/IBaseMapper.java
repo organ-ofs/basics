@@ -13,5 +13,5 @@ public interface IBaseMapper<T> extends BaseMapper<T> {
      * @param t
      * @return
      */
-    IPage<T> listPage(Page page, @Param("params") T t);
+    IPage<T> listPage(Page<T> page, @Param("params") T t);
 }
