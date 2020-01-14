@@ -32,7 +32,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
     private ShiroService shiroService;
 
     @Override
-    public List<SysRole> findAllRoleByUserId(String uid, Boolean hasResource) {
+    public List<SysRole> getAllRoleByUserId(String uid, Boolean hasResource) {
         QueryWrapper<SysUserRole> wrapper = new QueryWrapper();
         wrapper.eq(SysUserRole.USER_ID, uid);
         List<SysUserRole> userRoles = userRoleService.list(wrapper);

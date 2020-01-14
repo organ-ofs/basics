@@ -69,7 +69,7 @@ public class FrameProperties {
         /**
          * 测试平台
          */
-        private String testTerminal = FrameKnowledge.FrameTerminalEnum.PC.getValue();
+        private String testTerminal = Knowledge.TerminalEnum.PC.getValue();
 
         /**
          * cors 的访问来源
@@ -88,7 +88,7 @@ public class FrameProperties {
         /**
          * 超级管理员
          */
-        private String adminAccount = "";
+        private String adminAccount = "admin";
 
         /**
          * jwtRealm isPermitted全局属性

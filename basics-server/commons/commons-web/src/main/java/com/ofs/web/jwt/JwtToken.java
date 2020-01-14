@@ -24,7 +24,7 @@ public class JwtToken implements AuthenticationToken {
 
     @Override
     public Object getPrincipal() {
-        return token;
+        return JwtUtil.getAccount(token);
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.Locale;
  * @Title: ErrorMsgKnowledge
  * @date 2019/3/22 10:53
  */
-public class FrameKnowledge {
+public class Knowledge {
 
 
     public static final String LOCALE_EN = "en";
@@ -109,7 +109,7 @@ public class FrameKnowledge {
      *
      * @author ly
      */
-    public enum FrameTerminalEnum {
+    public enum TerminalEnum {
 
         /**
          * PC
@@ -132,7 +132,7 @@ public class FrameKnowledge {
         /**
          * 构造方法
          */
-        FrameTerminalEnum(String value) {
+        TerminalEnum(String value) {
             this.value = value;
         }
 
@@ -146,13 +146,13 @@ public class FrameKnowledge {
          * @param value 值
          * @return 枚举类型
          */
-        public static FrameTerminalEnum get(String value) {
-            for (FrameTerminalEnum p : FrameTerminalEnum.values()) {
+        public static TerminalEnum get(String value) {
+            for (TerminalEnum p : TerminalEnum.values()) {
                 if (p.getValue().equals(value)) {
                     return p;
                 }
             }
-            return FrameTerminalEnum.PC;
+            return TerminalEnum.PC;
         }
     }
 

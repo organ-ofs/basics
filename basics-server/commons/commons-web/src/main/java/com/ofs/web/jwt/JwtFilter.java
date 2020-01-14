@@ -1,16 +1,19 @@
 package com.ofs.web.jwt;
 
-import com.alibaba.fastjson.JSON;
-import com.ofs.web.base.bean.ResponseResult;
-import com.ofs.web.base.bean.SystemCode;
-import com.ofs.web.constant.StaticConstant;
-import com.ofs.web.exception.RequestException;
-import com.ofs.web.utils.Tools;
-import org.apache.shiro.subject.Subject;
+import com.ofs.web.constant.CacheConstant;
+import com.ofs.web.constant.WebCommonConstant;
+import com.ofs.web.exception.AuthExpiredErrorException;
+import com.ofs.web.exception.AuthTokenErrorException;
+import com.ofs.web.knowledge.AuthMessageEnum;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.ExpiredCredentialsException;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -18,78 +21,117 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * @author ly
+ */
+@Slf4j
 public class JwtFilter extends BasicHttpAuthenticationFilter {
 
-    private Logger log = LoggerFactory.getLogger(this.getClass());
+    /**
+     * 已退出用户列表
+     */
+    private Cache<String, String> logoutCache;
 
     /**
-     * 判断用户是否想要登入。
-     * 检测header里面是否包含Authorization字段即可
+     * 设置Cache的key的前缀
+     */
+    public void setCacheManager(CacheManager cacheManager) {
+        this.logoutCache = cacheManager.getCache(CacheConstant.SHIRO_LOGOUT_TOKEN);
+    }
+
+    /**
+     * 检测header里面是否包含Authorization字段
      */
     @Override
     protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
         HttpServletRequest req = (HttpServletRequest) request;
-        String authorization = req.getHeader(StaticConstant.AUTHORIZATION);
+        String authorization = req.getHeader(JwtUtil.DEFAULT_JWT_PARAM);
         return authorization != null;
     }
 
     /**
-     *
+     * 登陆验证
      */
     @Override
-    protected boolean executeLogin(ServletRequest request, ServletResponse response) {
-        return Tools.executeLogin(request);
+    protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+        String jwtToken = httpServletRequest.getHeader(JwtUtil.DEFAULT_JWT_PARAM);
+
+        jwtToken = JwtUtil.getJwtToken(jwtToken);
+        if (!JwtUtil.isDecode(jwtToken)) {
+            log.error("jwt token 错误 :", AuthMessageEnum.FORBIDDEN_TOKEN_ERROR.getMessage());
+            throw new AuthTokenErrorException(AuthMessageEnum.FORBIDDEN_TOKEN_ERROR);
+        }
+        if (JwtUtil.isTokenExpired(jwtToken)) {
+            log.error("jwt 过期 :token expired");
+            throw new ExpiredCredentialsException("token expired");
+        }
+        String account = JwtUtil.getAccount(jwtToken);
+        String id = JwtUtil.getId(jwtToken);
+        //验证ID是否是已经退出的账户
+        if (StringUtils.isNotBlank(this.logoutCache.get(id))) {
+            log.error("[{}]:jwtId验证不通过，当前ID已经登出", id);
+            throw new AuthExpiredErrorException(AuthMessageEnum.TOKEN_EXPIRED_ERROR);
+        }
+        //验证签名
+        if (!JwtUtil.verify(jwtToken, account)) {
+            log.error("[{}]:jwt验证不通过", account);
+            throw new AuthTokenErrorException(AuthMessageEnum.FORBIDDEN_ACCOUNT_ERROR);
+        }
+        AuthenticationToken token = new JwtToken(jwtToken, null, null);
+        // 提交给realm进行登入，如果错误他会抛出异常并被捕获
+        SecurityUtils.getSubject().login(token);
+        // 如果没有抛出异常则代表登入成功，返回true
+        ///Boolean refreshFlg = JwtUtil.isRefreshToken(jwtToken);
+        httpServletResponse.setHeader(WebCommonConstant.EXPOSE_HEADERS_REFRESH, Boolean.FALSE.toString());
+        return true;
     }
 
+
+    /**
+     * 访问权限验证配置
+     * <p>
+     * 这里我们详细说明下为什么最终返回的都是true，即允许访问
+     * 例如我们提供一个地址 GET /article
+     * 登入用户和游客看到的内容是不同的
+     * 如果在这里返回了false，请求会被直接拦截，用户看不到任何东西
+     * 所以我们在这里返回true，Controller中可以通过 subject.isAuthenticated() 来判断用户是否登入
+     * 如果有些资源只有登入用户才能访问，我们只需要在方法上面加上 @RequiresAuthentication 注解即可
+     * 但是这样做有一个缺点，就是不能够对GET,POST等请求进行分别过滤鉴权(因为我们重写了官方的方法)，但实际上对应用影响不大
+     */
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-        HttpServletResponse res = WebUtils.toHttp(response);
-        if (!isLoginAttempt(request, response)) {
-            writerResponse(res, SystemCode.NOT_SING_IN.code, "无身份认证权限标示");
-            return false;
-        }
-        try {
-            executeLogin(request, response);
-        } catch (RequestException e) {
-            writerResponse(res, e.getStatus(), e.getMsg());
-            return false;
-        }
-        Subject subject = getSubject(request, response);
-        if (null != mappedValue) {
-            String[] value = (String[]) mappedValue;
-            for (String permission : value) {
-                if (permission == null || "".equals(permission.trim())) {
-                    continue;
-                }
-                if (subject.isPermitted(permission)) {
-                    return true;
-                }
+
+        if (isLoginAttempt(request, response)) {
+            try {
+                executeLogin(request, response);
+                return true;
+            } catch (Exception e) {
+                log.error("jwt 验证失败:", e);
             }
         }
-        //表示没有登录，返回登录提示
-        if (null == subject.getPrincipal()) {
-            writerResponse(res, SystemCode.NOT_SING_IN.code, SystemCode.NOT_SING_IN.msg);
-        } else {
-            writerResponse(res, SystemCode.FAIL.code, "无权限访问");
-        }
+        this.response401(response);
         return false;
-    }
-
-    private void writerResponse(HttpServletResponse response, Integer status, String content) {
-        response.setHeader("Content-Type", "application/json;charset=utf-8");
-        try {
-            response.getWriter().write(JSON.toJSONString(ResponseResult.builder()
-                    .status(status)
-                    .msg(content)
-                    .build()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
-    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws IOException {
+    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) {
         return false;
     }
+
+
+    /**
+     * 将非法请求返回401状态
+     */
+    private void response401(ServletResponse resp) {
+        try {
+            WebUtils.toHttp(resp).sendError(HttpServletResponse.SC_UNAUTHORIZED);
+
+        } catch (IOException e) {
+            log.error("jwt 验证失败");
+        }
+    }
+
 
 }

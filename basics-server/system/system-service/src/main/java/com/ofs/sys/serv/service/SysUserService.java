@@ -21,7 +21,7 @@ public interface SysUserService extends BaseService<SysUser> {
      * @param loginId 登陆名
      * @return User
      */
-    SysUser findUserByLoginId(String loginId, boolean hasMenu);
+    SysUser getUserByLoginId(String loginId, boolean hasMenu);
 
     /**
      * 根据ID查找用户
@@ -29,7 +29,7 @@ public interface SysUserService extends BaseService<SysUser> {
      * @param id ID
      * @return User
      */
-    SysUser findUserById(String id, boolean hasMenu);
+    SysUser getUserById(String id, boolean hasMenu);
 
     /**
      * 用户登录操作
@@ -50,7 +50,7 @@ public interface SysUserService extends BaseService<SysUser> {
      *
      * @return SysUser
      */
-    List<String> getAllPermissionTag();
+    List<String> getAllPermissionTag(String loginId);
 
     /**
      * 用户角色资源匹配

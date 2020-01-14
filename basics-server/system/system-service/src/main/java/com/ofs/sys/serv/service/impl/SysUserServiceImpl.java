@@ -46,24 +46,24 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     private ShiroService shiroService;
 
     @Override
-    public SysUser findUserByLoginId(String loginId, boolean hasMenu) {
+    public SysUser getUserByLoginId(String loginId, boolean hasMenu) {
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq(SysUser.LOGIN_ID, loginId);
         SysUser user = this.getOne(wrapper);
         if (user == null) {
             return null;
         }
-        user.setRoles(roleService.findAllRoleByUserId(user.getId(), hasMenu));
+        user.setRoles(roleService.getAllRoleByUserId(user.getId(), hasMenu));
         return user;
     }
 
     @Override
-    public SysUser findUserById(String id, boolean hasMenu) {
+    public SysUser getUserById(String id, boolean hasMenu) {
         SysUser user = this.getById(id);
         if (user == null) {
             return null;
         }
-        user.setRoles(roleService.findAllRoleByUserId(user.getId(), hasMenu));
+        user.setRoles(roleService.getAllRoleByUserId(user.getId(), hasMenu));
         return user;
     }
 
@@ -94,18 +94,18 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
             throw new RequestException(SystemCode.NOT_SING_IN);
         }
         JwtToken jwtToken = super.getJwtToken();
-        SysUser user = this.findUserByLoginId(jwtToken.getLoginId(), false);
+        SysUser user = this.getUserByLoginId(jwtToken.getLoginId(), false);
         if (user == null) {
             throw RequestException.fail("用户不存在");
         }
         //获取菜单/权限信息
-        List<SysMenus> allPer = userRolesRegexMenu(roleService.findAllRoleByUserId(user.getId(), true));
+        List<SysMenus> allPer = userRolesRegexMenu(roleService.getAllRoleByUserId(user.getId(), true));
         user.setMenus(allPer);
         return user;
     }
 
     @Override
-    public List<String> getAllPermissionTag() {
+    public List<String> getAllPermissionTag(String loginId) {
         JwtToken jwtToken = super.getJwtToken();
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq(SysUser.LOGIN_ID, jwtToken.getLoginId());
@@ -113,7 +113,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
         if (user == null) {
             throw RequestException.fail("用户不存在");
         }
-        List<SysRole> allRoleByUserId = roleService.findAllRoleByUserId(user.getId(), true);
+        List<SysRole> allRoleByUserId = roleService.getAllRoleByUserId(user.getId(), true);
         List<String> permissions = new LinkedList<>();
         for (SysRole sysRole : allRoleByUserId) {
             if (sysRole.getResources() != null && sysRole.getResources().size() > 0) {
@@ -149,7 +149,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
         userPage.getRecords().forEach(v -> {
             //查找匹配所有用户的角色
-            v.setRoles(roleService.findAllRoleByUserId(v.getId(), false));
+            v.setRoles(roleService.getAllRoleByUserId(v.getId(), false));
         });
         return userPage;
     }
@@ -175,8 +175,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
     @Override
     public void add(SysUser user) {
-        SysUser findUser = this.findUserByLoginId(user.getLoginId(), false);
-        if (findUser != null) {
+        SysUser getUser = this.getUserByLoginId(user.getLoginId(), false);
+        if (getUser != null) {
             throw RequestException.fail(
                     String.format("已经存在用户名为 %s 的用户", user.getLoginId()));
         }
@@ -195,9 +195,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
             throw RequestException.fail(
                     String.format("更新失败，不存在ID为 %s 的用户", user.getId()));
         }
-        SysUser findUser = this.getOne(new QueryWrapper<SysUser>()
+        SysUser getUser = this.getOne(new QueryWrapper<SysUser>()
                 .eq(SysUser.LOGIN_ID, user.getLoginId()).ne(SysUser.ID, user.getId()));
-        if (findUser != null) {
+        if (getUser != null) {
             throw RequestException.fail(
                     String.format("更新失败，已经存在用户名为 %s 的用户", user.getLoginId()));
         }
