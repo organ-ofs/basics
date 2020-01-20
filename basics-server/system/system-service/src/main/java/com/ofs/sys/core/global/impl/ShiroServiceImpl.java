@@ -1,6 +1,6 @@
 package com.ofs.sys.core.global.impl;
 
-import com.ofs.sys.core.config.shiro.MyRealm;
+import com.ofs.sys.core.auth.shiro.PasswordHash;
 import com.ofs.sys.core.global.ShiroService;
 import com.ofs.sys.serv.entity.SysMenus;
 import com.ofs.sys.serv.service.SysMenusService;
@@ -116,13 +116,13 @@ public class ShiroServiceImpl implements ShiroService {
 
     @Override
     public void clearAuthByUserId(String uid, Boolean author, Boolean out) {
-        MyRealm myRealm = SpringUtils.getBean(MyRealm.class);
+        PasswordHash.MyRealm myRealm = SpringUtils.getBean(PasswordHash.MyRealm.class);
         myRealm.clearAuthByUserId(uid, author, out);
     }
 
     @Override
     public void clearAuthByUserIdCollection(List<String> userList, Boolean author, Boolean out) {
-        MyRealm myRealm = SpringUtils.getBean(MyRealm.class);
+        PasswordHash.MyRealm myRealm = SpringUtils.getBean(PasswordHash.MyRealm.class);
         myRealm.clearAuthByUserIdCollection(userList, author, out);
     }
 }
