@@ -72,7 +72,7 @@ public class KickOutFilter extends BasicHttpAuthenticationFilter {
             return true;
         }
 
-        PasswordHash.ShiroUser shiroUser = PasswordHash.ShiroUser.getCurrentUser();
+        ShiroUser shiroUser = ShiroUser.getCurrentUser();
         String username = shiroUser.getAccount() + "_" + shiroUser.getTerminal();
         //jwtid
         Serializable sessionId = shiroUser.getJwtId();

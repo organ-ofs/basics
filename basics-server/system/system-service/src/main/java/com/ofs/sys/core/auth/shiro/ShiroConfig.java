@@ -97,8 +97,8 @@ public class ShiroConfig {
      * @return
      */
     @Bean(initMethod = "onInit")
-    public PasswordHash.MyRealm myRealm() {
-        PasswordHash.MyRealm myRealm = new PasswordHash.MyRealm();
+    public MyRealm myRealm() {
+        MyRealm myRealm = new MyRealm();
 
         //Authorization
         myRealm.setAuthorizationCachingEnabled(true);

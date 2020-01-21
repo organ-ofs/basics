@@ -67,7 +67,7 @@ public class AccountController {
     @PostMapping(value = "/all-permission-tag")
     @ApiOperation(value = "获取所有的权限标示")
     public ResponseResult<List<String>> getAllPermissionTag(@JwtClaim String t) {
-        return ResponseResult.success(userService.getAllPermissionTag());
+        return ResponseResult.success(userService.getAllPermissionTag(t));
     }
 
 }

@@ -1,6 +1,6 @@
 package com.ofs.sys.core.config.shiro;
 
-import com.ofs.sys.core.auth.shiro.PasswordHash;
+import com.ofs.sys.core.auth.shiro.MyRealm;
 import com.ofs.sys.core.global.ShiroService;
 import com.ofs.web.jwt.JwtFilter;
 import lombok.extern.slf4j.Slf4j;
@@ -55,10 +55,10 @@ public class ShiroConfiguration {
     }
 
     @Bean
-    public PasswordHash.MyRealm myRealm() {
-        PasswordHash.MyRealm myRealm = new PasswordHash.MyRealm();
+    public MyRealm myRealm() {
+        MyRealm myRealm = new MyRealm();
         myRealm.setCredentialsMatcher(new CredentialsMatcher());
-        myRealm.setAuthorizationCacheName(PasswordHash.MyRealm.class.getName() + ".authorizationCache");
+        myRealm.setAuthorizationCacheName(MyRealm.class.getName() + ".authorizationCache");
         return myRealm;
     }
 
