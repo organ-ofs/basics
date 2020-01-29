@@ -1,4 +1,4 @@
-package com.ofs.sys.core.auth.util;
+package com.ofs.web.auth.shiro;
 
 import org.apache.shiro.crypto.hash.SimpleHash;
 

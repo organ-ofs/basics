@@ -1,4 +1,4 @@
-package com.ofs.sys.core.auth.shiro;
+package com.ofs.web.auth.shiro;
 
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.codec.CodecSupport;

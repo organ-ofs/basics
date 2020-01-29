@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ProductController {
-    @Value("${server.port}")
+    @Value("${service.port}")
     String port;
 
     @GetMapping("/hi")

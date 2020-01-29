@@ -1,5 +1,6 @@
-package com.ofs.sys.core.auth.shiro;
+package com.ofs.web.auth.shiro;
 
+import com.ofs.web.auth.model.ShiroUser;
 import com.ofs.web.constant.CacheConstant;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;

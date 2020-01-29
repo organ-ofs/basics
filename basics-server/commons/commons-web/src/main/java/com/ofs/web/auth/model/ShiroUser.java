@@ -1,4 +1,4 @@
-package com.ofs.sys.core.auth.shiro;
+package com.ofs.web.auth.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,15 +22,19 @@ public class ShiroUser implements Serializable {
     /**
      * 用户ID
      */
-    private String authId;
+    private String id;
     /**
      * jwtID
      */
     private String jwtId;
+
     /**
      * 用户账户
      */
     private String account;
+
+    private String loginId;
+    private String password;
     /**
      * 用户名称
      */
@@ -56,7 +60,7 @@ public class ShiroUser implements Serializable {
     public ShiroUser(String account, String name, String authId) {
         this.account = account;
         this.name = name;
-        this.authId = authId;
+        this.id = id;
     }
 
 

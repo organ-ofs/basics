@@ -1,7 +1,9 @@
 package com.ofs.sys.core.config.shiro;
 
-import com.ofs.sys.core.auth.shiro.MyRealm;
-import com.ofs.sys.core.global.ShiroService;
+import com.ofs.web.auth.service.ShiroService;
+import com.ofs.web.auth.shiro.AgileSubjectFactory;
+import com.ofs.web.auth.shiro.CredentialsMatcher;
+import com.ofs.web.auth.shiro.MyRealm;
 import com.ofs.web.jwt.JwtFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;

@@ -1,4 +1,4 @@
-package com.ofs.sys.core.auth.shiro;
+package com.ofs.web.auth.shiro;
 
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.subject.SubjectContext;

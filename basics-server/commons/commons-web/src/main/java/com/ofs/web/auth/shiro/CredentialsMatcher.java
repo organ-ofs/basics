@@ -1,7 +1,7 @@
-package com.ofs.sys.core.config.shiro;
+package com.ofs.web.auth.shiro;
 
 
-import cn.licoy.encryptbody.util.MD5EncryptUtil;
+import com.ofs.utils.encrypt.utils.MD5EncryptUtil;
 import com.ofs.web.jwt.JwtToken;
 import com.ofs.web.utils.JwtUtil;
 import com.ofs.web.utils.Tools;

@@ -1,4 +1,4 @@
-package com.ofs.sys.core.auth.shiro;
+package com.ofs.web.auth.shiro;
 
 import com.ofs.web.constant.CacheConstant;
 import com.ofs.web.constant.FrameProperties;

@@ -1,6 +1,8 @@
-package com.ofs.sys.core.global;
+package com.ofs.web.auth.service;
 
-import com.ofs.sys.serv.entity.SysMenus;
+import com.ofs.web.auth.model.ShiroMenus;
+import com.ofs.web.auth.model.ShiroRole;
+import com.ofs.web.auth.model.ShiroUser;
 
 import java.util.List;
 import java.util.Map;
@@ -24,7 +26,7 @@ public interface ShiroService {
      * @param resource
      * @param permsList
      */
-    void iterationAllResourceInToFilter(SysMenus resource,
+    void iterationAllResourceInToFilter(ShiroMenus resource,
                                         List<String[]> permsList, List<String[]> anonList);
 
     /**
@@ -50,4 +52,27 @@ public interface ShiroService {
      */
     void clearAuthByUserIdCollection(List<String> userList, Boolean author, Boolean out);
 
+    /**
+     * 获取指定ID用户的所有角色（并附带查询所有的角色的权限）
+     *
+     * @param uid 用户ID
+     * @return 角色集合
+     */
+    List<ShiroRole> getAllRoleByUserId(String uid);
+
+
+    /**
+     * 获取当前登录用户所有的权限标示
+     *
+     * @return SysUser
+     */
+    List<String> getAllPermissionTag(String loginId);
+
+    /**
+     * 根据用户名查找用户
+     *
+     * @param loginId 登陆名
+     * @return User
+     */
+    ShiroUser getUserByLoginId(String loginId);
 }

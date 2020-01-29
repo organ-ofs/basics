@@ -1,7 +1,6 @@
 package com.ofs.sys.serv.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ofs.sys.core.global.ShiroService;
 import com.ofs.sys.serv.entity.SysResource;
 import com.ofs.sys.serv.entity.SysRole;
 import com.ofs.sys.serv.entity.SysUserRole;
@@ -9,6 +8,7 @@ import com.ofs.sys.serv.mapper.SysRoleMapper;
 import com.ofs.sys.serv.service.SysResourceService;
 import com.ofs.sys.serv.service.SysRoleService;
 import com.ofs.sys.serv.service.SysUserRoleService;
+import com.ofs.web.auth.service.ShiroService;
 import com.ofs.web.base.bean.SystemCode;
 import com.ofs.web.base.impl.BaseServiceImpl;
 import com.ofs.web.exception.RequestException;

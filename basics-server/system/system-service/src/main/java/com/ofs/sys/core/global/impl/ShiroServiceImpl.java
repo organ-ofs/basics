@@ -1,17 +1,25 @@
 package com.ofs.sys.core.global.impl;
 
-import com.ofs.sys.core.auth.shiro.MyRealm;
-import com.ofs.sys.core.global.ShiroService;
 import com.ofs.sys.serv.entity.SysMenus;
 import com.ofs.sys.serv.service.SysMenusService;
+import com.ofs.sys.serv.service.SysRoleService;
+import com.ofs.sys.serv.service.SysUserService;
+import com.ofs.web.auth.model.ShiroMenus;
+import com.ofs.web.auth.model.ShiroRole;
+import com.ofs.web.auth.model.ShiroUser;
+import com.ofs.web.auth.service.ShiroService;
+import com.ofs.web.auth.shiro.MyRealm;
 import com.ofs.web.base.bean.SystemCode;
 import com.ofs.web.exception.RequestException;
+import com.ofs.web.utils.BeanConverterUtil;
 import com.ofs.web.utils.SpringUtils;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.filter.mgt.DefaultFilterChainManager;
 import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 import org.apache.shiro.web.servlet.AbstractShiroFilter;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -29,6 +37,15 @@ public class ShiroServiceImpl implements ShiroService {
 
     @Autowired
     private SysMenusService menusServiceService;
+
+
+    @Autowired
+    @Lazy
+    private SysUserService userService;
+
+    @Autowired
+    @Lazy
+    private SysRoleService roleService;
 
     @Override
     public Map<String, String> getFilterChainDefinitionMap() {
@@ -53,7 +70,9 @@ public class ShiroServiceImpl implements ShiroService {
                         }
                     }
                 }
-                iterationAllResourceInToFilter(menu, permsList, anonList);
+                ShiroMenus shiroMenus = new ShiroMenus();
+                BeanUtils.copyProperties(menu, shiroMenus);
+                iterationAllResourceInToFilter(shiroMenus, permsList, anonList);
             }
         }
 
@@ -72,10 +91,10 @@ public class ShiroServiceImpl implements ShiroService {
     }
 
     @Override
-    public void iterationAllResourceInToFilter(SysMenus menu,
+    public void iterationAllResourceInToFilter(ShiroMenus menu,
                                                List<String[]> permsList, List<String[]> anonList) {
         if (menu.getChildren() != null && menu.getChildren().size() > 0) {
-            for (SysMenus v : menu.getChildren()) {
+            for (ShiroMenus v : menu.getChildren()) {
                 if (!StringUtils.isEmpty(v.getPath()) && !StringUtils.isEmpty(v.getPermission())) {
                     if (v.getVerification()) {
                         permsList.add(0, new String[]{v.getPath() + "/**", "perms[" + v.getPermission() + ":*]"});
@@ -122,5 +141,22 @@ public class ShiroServiceImpl implements ShiroService {
     @Override
     public void clearAuthByUserIdCollection(List<String> userList, Boolean author, Boolean out) {
         MyRealm myRealm = SpringUtils.getBean(MyRealm.class);
+    }
+
+    @Override
+    public List<ShiroRole> getAllRoleByUserId(String uid) {
+
+        List<ShiroRole> list = BeanConverterUtil.convert(roleService.getAllRoleByUserId(uid, false), ShiroRole.class);
+        return list;
+    }
+
+    @Override
+    public List<String> getAllPermissionTag(String loginId) {
+        return userService.getAllPermissionTag(loginId);
+    }
+
+    @Override
+    public ShiroUser getUserByLoginId(String loginId) {
+        return BeanConverterUtil.convert(userService.getUserByLoginId(loginId, false), ShiroUser.class);
     }
 }

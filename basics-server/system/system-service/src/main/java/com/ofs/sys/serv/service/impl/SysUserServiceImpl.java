@@ -1,10 +1,8 @@
 package com.ofs.sys.serv.service.impl;
 
-import cn.licoy.encryptbody.util.MD5EncryptUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.ofs.sys.core.global.ShiroService;
 import com.ofs.sys.serv.dto.ResetPasswordDto;
 import com.ofs.sys.serv.dto.SignInDto;
 import com.ofs.sys.serv.entity.SysMenus;
@@ -16,6 +14,8 @@ import com.ofs.sys.serv.service.SysRoleService;
 import com.ofs.sys.serv.service.SysUserRoleService;
 import com.ofs.sys.serv.service.SysUserService;
 import com.ofs.utils.DateUtils;
+import com.ofs.utils.encrypt.utils.MD5EncryptUtil;
+import com.ofs.web.auth.service.ShiroService;
 import com.ofs.web.base.bean.SystemCode;
 import com.ofs.web.base.impl.BaseServiceImpl;
 import com.ofs.web.exception.RequestException;

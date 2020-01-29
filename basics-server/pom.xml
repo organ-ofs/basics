@@ -157,12 +157,6 @@
                 <version>2.7.8</version>
             </dependency>
 
-            <!--Shiro-->
-            <dependency>
-                <groupId>org.apache.shiro</groupId>
-                <artifactId>shiro-spring</artifactId>
-                <version>${shiro.version}</version>
-            </dependency>
             <!--Shiro-Redis-->
             <dependency>
                 <groupId>org.crazycake</groupId>

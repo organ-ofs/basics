@@ -1,9 +1,8 @@
-package com.ofs.sys.core.auth.shiro;
+package com.ofs.web.auth.shiro;
 
-import com.ofs.sys.serv.entity.SysRole;
-import com.ofs.sys.serv.entity.SysUser;
-import com.ofs.sys.serv.service.SysRoleService;
-import com.ofs.sys.serv.service.SysUserService;
+import com.ofs.web.auth.model.ShiroRole;
+import com.ofs.web.auth.model.ShiroUser;
+import com.ofs.web.auth.service.ShiroService;
 import com.ofs.web.constant.FrameProperties;
 import com.ofs.web.jwt.JwtToken;
 import com.ofs.web.jwt.JwtUtil;
@@ -34,12 +33,7 @@ public class MyRealm extends AuthorizingRealm {
 
     @Autowired
     @Lazy
-    private SysUserService userService;
-
-    @Autowired
-    @Lazy
-    private SysRoleService roleService;
-
+    private ShiroService shiroService;
 
     @Autowired
     FrameProperties frameProperties;
@@ -95,7 +89,7 @@ public class MyRealm extends AuthorizingRealm {
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
 
         //添加role 信息
-        List<SysRole> roles = new ArrayList<>(roleService.getAllRoleByUserId(shiroUser.getAccount(), false));
+        List<ShiroRole> roles = new ArrayList<>(shiroService.getAllRoleByUserId(shiroUser.getAccount()));
 
         if (CollectionUtils.isEmpty(roles)) {
             roles.forEach(role -> {
@@ -107,7 +101,7 @@ public class MyRealm extends AuthorizingRealm {
 
 
         //Permission的权限信息
-        Set<String> permissionsList = new HashSet<>(userService.getAllPermissionTag(shiroUser.getAccount()));
+        Set<String> permissionsList = new HashSet<>(shiroService.getAllPermissionTag(shiroUser.getAccount()));
 
         if (CollectionUtils.isEmpty(permissionsList)) {
             permissionsList = new HashSet<>();
@@ -137,14 +131,14 @@ public class MyRealm extends AuthorizingRealm {
         String id = JwtUtil.getId(token);
         String terminal = JwtUtil.getTerminal(token);
 
-        SysUser user = userService.getUserByLoginId(account, false);
+        ShiroUser user = shiroService.getUserByLoginId(account);
         String password = user.getPassword();
-        if ("admin".equals(user.getLoginId())) {
+        if ("admin".equals(user.getAccount())) {
             password = "8c7904789282730e283fd614a6a41f3a";
         }
         ShiroUser shiroUser = new ShiroUser();
         shiroUser.setAccount(account);
-        shiroUser.setAuthId(user.getId());
+        shiroUser.setId(user.getId());
         shiroUser.setName(user.getName());
         shiroUser.setTerminal(terminal);
         shiroUser.setJwtId(id);
