@@ -34,15 +34,11 @@ public class CacheConstant {
      * kickOut处理过的token,7200S要和超时时间相一致
      */
     public static final String SHIRO_KICKED_TOKEN = "kickedToken";
-    /**
-     * logout退出的token,7200S要和超时时间相一致
-     */
-    public static final String SHIRO_LOGOUT_TOKEN = "logoutToken";
 
     /**
      * ShiroRealm.authorization 授权缓存2 * 60 * 60
      */
-    public static final String SHIRO_PASS_REALM_AUTHORIZATION = "ShiroRealm.authorization";
+    public static final String SHIRO_PASS_REALM_AUTHORIZATION = "MyRealm.authorization";
     /**
      * JwtRealm.authorization 授权缓存 2 * 60 * 60
      */
