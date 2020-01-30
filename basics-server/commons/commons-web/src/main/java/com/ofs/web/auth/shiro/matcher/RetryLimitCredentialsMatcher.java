@@ -1,4 +1,4 @@
-package com.ofs.web.auth.shiro;
+package com.ofs.web.auth.shiro.matcher;
 
 import com.ofs.web.constant.CacheConstant;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -52,6 +52,7 @@ public class RetryLimitCredentialsMatcher extends HashedCredentialsMatcher {
             // clear retry count
             passwordRetryCache.remove(keyUserName);
         } else {
+            //TODO 验证不成功是否要同步到缓存?
             passwordRetryCache.put(keyUserName, retryCount);
         }
         return matches;

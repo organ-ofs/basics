@@ -1,6 +1,5 @@
 package com.ofs.web.auth.shiro;
 
-import com.ofs.web.utils.DigestUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
 

@@ -1,4 +1,4 @@
-package com.ofs.sys.core.global.impl;
+package com.ofs.sys.core.shiro.impl;
 
 import com.ofs.sys.serv.entity.SysMenus;
 import com.ofs.sys.serv.service.SysMenusService;

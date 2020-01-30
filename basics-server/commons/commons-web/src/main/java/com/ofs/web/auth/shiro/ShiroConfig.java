@@ -1,5 +1,6 @@
 package com.ofs.web.auth.shiro;
 
+import com.ofs.web.auth.shiro.matcher.RetryLimitCredentialsMatcher;
 import com.ofs.web.constant.CacheConstant;
 import com.ofs.web.constant.FrameProperties;
 import com.ofs.web.jwt.JwtFilter;
@@ -24,10 +25,8 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import javax.servlet.Filter;
+import java.util.*;
 
 /**
  * 权限检查类
@@ -44,7 +43,6 @@ public class ShiroConfig {
      */
     @Autowired
     private FrameProperties frameProperties;
-
 
     /**
      * 缓存管理器 根据插件自动注入
@@ -75,9 +73,8 @@ public class ShiroConfig {
         securityManager.setAuthenticator(modularRealmAuthenticator());
         Collection<Realm> realms = new ArrayList<>();
         realms.add(myRealm());
-        realms.add(myRealm());
+        // 其他realm realms.add(myRealm());
         securityManager.setCacheManager(shiroCache);
-
         securityManager.setRealms(realms);
         /*
          * 关闭shiro自带的session，详情见文档
@@ -178,6 +175,7 @@ public class ShiroConfig {
 
     @Bean("shiroFilter")
     public ShiroFilterFactoryBean shiroFilter(DefaultWebSecurityManager securityManager) {
+        log.info("Shiro Configuration initialized");
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         //配置securityManager
         shiroFilter.setSecurityManager(securityManager);
@@ -194,6 +192,9 @@ public class ShiroConfig {
         shiroFilter.setLoginUrl("/api/login");
 
         // 自定义url规则
+        //<!-- 过滤链定义，从上向下顺序执行，一般将 /**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
+        //<!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
+        // Map<String, String> filterChainDefinitionMap = shiroService.getFilterChainDefinitionMap();
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 
         String[] ignoreUrl = this.frameProperties.getAuth().getIgnoreUrl();
@@ -223,7 +224,12 @@ public class ShiroConfig {
         }
         filterChainDefinitionMap.put("/test/**", "anon");
 
+
         shiroFilter.setFilterChainDefinitionMap(filterChainDefinitionMap);
+        //过滤器
+        Map<String, Filter> filters = new HashMap<>(16);
+        filters.put("perms", new JwtFilter());
+        shiroFilter.setFilters(filters);
         return shiroFilter;
     }
 

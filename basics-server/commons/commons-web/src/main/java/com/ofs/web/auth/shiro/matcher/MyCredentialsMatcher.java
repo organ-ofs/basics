@@ -1,4 +1,4 @@
-package com.ofs.web.auth.shiro;
+package com.ofs.web.auth.shiro.matcher;
 
 
 import com.ofs.utils.encrypt.utils.MD5EncryptUtil;
@@ -11,10 +11,13 @@ import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 
 /**
+ * <p>
+ *     Realm在验证用户身份的时候，进行密码匹配。
+ * </p>
  * @author gaoly
  * @version 2017/9/25
  */
-public class CredentialsMatcher extends SimpleCredentialsMatcher {
+public class MyCredentialsMatcher extends SimpleCredentialsMatcher {
 
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {

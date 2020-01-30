@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 /**
  * 加密相关工具类直接使用Spring util封装，减少jar依赖
  *
- * @author L.cm
+ * @author Ly
  */
 public class DigestUtils extends org.springframework.util.DigestUtils {
 
