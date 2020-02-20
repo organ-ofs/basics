@@ -31,7 +31,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
             buf.readBytes(data);
             //将data数据包装成string输出
             String request = new String(data, "utf-8");
-            System.out.println("service :" + request);
+            System.out.println("web :" + request);
 
             //以上代码是接收客户端信息//
 

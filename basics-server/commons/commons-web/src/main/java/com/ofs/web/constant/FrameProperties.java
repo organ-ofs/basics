@@ -4,24 +4,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 /**
  * @author ly
  */
-@ConfigurationProperties(prefix = "frame")
+@ConfigurationProperties(prefix = "ofs")
 @Component
 @Data
 @NoArgsConstructor
+@Validated
 public class FrameProperties {
     /**
      * Api账户信息
      */
-    private FrameProperties.Config config;
+    private Config config;
 
     /**
      * 权限模块控制
      */
-    private FrameProperties.Auth auth;
+    private Auth auth;
 
 
     /**

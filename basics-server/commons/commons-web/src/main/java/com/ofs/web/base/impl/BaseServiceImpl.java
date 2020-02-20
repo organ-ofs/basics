@@ -19,8 +19,8 @@ import java.util.List;
 public class BaseServiceImpl<M extends IBaseMapper<T>, T extends BaseEntity> extends ServiceImpl<M, T> implements BaseService<T> {
 
     @Override
-    public void add(T entity) throws Exception {
-        super.save(entity);
+    public boolean add(T entity) throws Exception {
+        return super.save(entity);
     }
 
     @Override

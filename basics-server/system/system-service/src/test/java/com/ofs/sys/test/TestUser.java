@@ -2,7 +2,7 @@ package com.ofs.sys.test;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ofs.sys.SystemApiApplication;
-import com.ofs.sys.serv.entity.SysUser;
+import com.ofs.sys.web.entity.SysUser;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,14 +30,14 @@ public class TestUser extends TestBase {
     @Rollback
     public void add() {
         SysUser info = SysUser.builder()
-                .loginId("2221a")
+                .account("2221a")
                 .status("1")
                 .password("123456")
                 .email("test@em.com")
                 .name("test")
                 .build();
         try {
-            MvcResult result = super.mockMvc.perform(post("/system/user/add")
+            MvcResult result = super.mockMvc.perform(post("/api/system/user/add")
                     .header("Authorization", header)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(JSONObject.toJSON(info).toString()))
@@ -55,7 +55,7 @@ public class TestUser extends TestBase {
     @Rollback
     public void remove() {
         try {
-            MvcResult result = super.mockMvc.perform(post("/system/user/remove")
+            MvcResult result = super.mockMvc.perform(post("/api/system/user/remove")
                     .header("Authorization", header)
                     .param("id", id))
                     .andExpect(status().isOk())
@@ -72,7 +72,7 @@ public class TestUser extends TestBase {
     @Rollback
     public void update() {
         SysUser info = SysUser.builder()
-                .loginId("222a")
+                .account("222a")
                 .status("1")
                 .password("123456")
                 .email("test@em.com")
@@ -80,7 +80,7 @@ public class TestUser extends TestBase {
                 .build();
         info.setId(id);
         try {
-            MvcResult result = super.mockMvc.perform(post("/system/user/edit")
+            MvcResult result = super.mockMvc.perform(post("/api/system/user/edit")
                     .header("Authorization", header)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(JSONObject.toJSON(info).toString()))
@@ -97,7 +97,7 @@ public class TestUser extends TestBase {
     @Test
     public void get() {
         try {
-            MvcResult result = super.mockMvc.perform(post("/system/user/get")
+            MvcResult result = super.mockMvc.perform(post("/api/system/user/get")
                     .header("Authorization", header)
                     .param("id", id))
                     .andExpect(status().isOk())
@@ -113,7 +113,7 @@ public class TestUser extends TestBase {
     @Test
     public void list() {
         try {
-            MvcResult result = super.mockMvc.perform(post("/system/user/list")
+            MvcResult result = super.mockMvc.perform(post("/api/system/user/list")
                     .header("Authorization", header)
                     .param("current", "1")
                     .param("size", "10")

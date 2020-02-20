@@ -143,7 +143,7 @@ public class JwtUtil {
     private static String sign(String account, String runAS, String jwtId, Knowledge.TerminalEnum terminal, long expireTime) {
         Date date = new Date(System.currentTimeMillis() + expireTime);
         Algorithm algorithm = Algorithm.HMAC256(generalKey(account).getEncoded());
-        // 附带username信息
+        // 附带account信息
         return JWT.create()
                 .withSubject(account)
                 .withExpiresAt(date)
@@ -306,5 +306,15 @@ public class JwtUtil {
         return expireTime;
     }
 
-
+    /**
+     * 获得token中的指定KEY值信息
+     */
+    public static String get(String token, String key) {
+        try {
+            DecodedJWT jwt = JWT.decode(token);
+            return jwt.getClaim(key).asString();
+        } catch (JWTDecodeException e) {
+            return null;
+        }
+    }
 }

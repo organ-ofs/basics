@@ -1,12 +1,13 @@
 package com.ofs.sys.core.aspect;
 
 import com.alibaba.fastjson.JSON;
-import com.ofs.sys.serv.dto.ResetPasswordDto;
-import com.ofs.sys.serv.dto.SignInDto;
-import com.ofs.sys.serv.entity.SysLog;
-import com.ofs.sys.serv.entity.SysUser;
-import com.ofs.sys.serv.service.SysLogService;
+import com.ofs.sys.web.dto.ResetPasswordDto;
+import com.ofs.sys.web.dto.SignInDto;
+import com.ofs.sys.web.entity.SysLog;
+import com.ofs.sys.web.entity.SysUser;
+import com.ofs.sys.web.service.SysLogService;
 import com.ofs.utils.DateUtils;
+import com.ofs.utils.IdentifierUtils;
 import com.ofs.web.annotation.SysLogs;
 import com.ofs.web.jwt.JwtToken;
 import com.ofs.web.utils.Tools;
@@ -61,6 +62,7 @@ public class SysLogAspect {
             spc = subject.getPrincipals();
         }
         SysLog sysLog = new SysLog();
+        sysLog.setId(IdentifierUtils.nextUuid());
         //获取动作Action释义
         sysLog.setContent(getMethodSysLogsAnnotationValue(joinPoint));
         //获取IP

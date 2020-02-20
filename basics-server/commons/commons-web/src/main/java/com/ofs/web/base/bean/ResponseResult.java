@@ -24,7 +24,7 @@ public class ResponseResult<T> implements Serializable {
     private static final long serialVersionUID = 8992436576262574064L;
 
     @ApiModelProperty(value = "响应状态回执码")
-    private Integer status;
+    private String status;
 
     @ApiModelProperty(value = "数据体")
     private T data;
@@ -35,14 +35,14 @@ public class ResponseResult<T> implements Serializable {
     @ApiModelProperty(value = "响应时间戳")
     private final long timestamps = System.currentTimeMillis();
 
-    public synchronized static <T> ResponseResult<T> e(SystemCode statusEnum) {
+    public synchronized static <T> ResponseResult<T> e(IMessageEnum statusEnum) {
         return e(statusEnum, null);
     }
 
-    public synchronized static <T> ResponseResult<T> e(SystemCode statusEnum, T data) {
+    public synchronized static <T> ResponseResult<T> e(IMessageEnum statusEnum, T data) {
         ResponseResult<T> res = new ResponseResult<T>();
-        res.setStatus(statusEnum.code);
-        res.setMsg(statusEnum.msg);
+        res.setStatus(statusEnum.getCode());
+        res.setMsg(statusEnum.getMessage());
         res.setData(data);
         return res;
     }
@@ -50,7 +50,7 @@ public class ResponseResult<T> implements Serializable {
     public synchronized static <T> ResponseResult<T> success() {
         ResponseResult<T> res = new ResponseResult<T>();
         res.setStatus(ResponseCode.OK.getCode());
-        res.setMsg(ResponseCode.OK.getMsg());
+        res.setMsg(ResponseCode.OK.getMessage());
         res.setData(null);
         return res;
     }
@@ -58,7 +58,7 @@ public class ResponseResult<T> implements Serializable {
     public synchronized static <T> ResponseResult<T> success(T data) {
         ResponseResult<T> res = new ResponseResult<>();
         res.setStatus(ResponseCode.OK.getCode());
-        res.setMsg(ResponseCode.OK.getMsg());
+        res.setMsg(ResponseCode.OK.getMessage());
         res.setData(data);
         return res;
     }
@@ -74,7 +74,7 @@ public class ResponseResult<T> implements Serializable {
     public synchronized static <T> ResponseResult<T> auth() {
         ResponseResult<T> res = new ResponseResult<>();
         res.setStatus(ResponseCode.SERVER_ERROR.getCode());
-        res.setMsg(ResponseCode.SERVER_ERROR.getMsg());
+        res.setMsg(ResponseCode.SERVER_ERROR.getMessage());
         res.setData(null);
         return res;
     }

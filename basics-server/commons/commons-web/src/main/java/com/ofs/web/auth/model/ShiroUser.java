@@ -33,8 +33,9 @@ public class ShiroUser implements Serializable {
      */
     private String account;
 
-    private String loginId;
     private String password;
+
+    private String salt;
     /**
      * 用户名称
      */
@@ -43,6 +44,11 @@ public class ShiroUser implements Serializable {
      * 终端
      */
     private String terminal;
+
+    /**
+     * 状态
+     */
+    private String status;
 
     /**
      * 模拟account的账户

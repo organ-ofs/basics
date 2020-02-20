@@ -66,13 +66,13 @@ public interface ShiroService {
      *
      * @return SysUser
      */
-    List<String> getAllPermissionTag(String loginId);
+    List<String> getAllPermissionTag(String account);
 
     /**
      * 根据用户名查找用户
      *
-     * @param loginId 登陆名
+     * @param account 登陆名
      * @return User
      */
-    ShiroUser getUserByLoginId(String loginId);
+    ShiroUser getUserByAccount(String account);
 }

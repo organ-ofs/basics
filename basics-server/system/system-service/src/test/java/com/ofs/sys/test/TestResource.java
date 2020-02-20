@@ -2,8 +2,8 @@ package com.ofs.sys.test;
 
 import com.alibaba.fastjson.JSONObject;
 import com.ofs.sys.SystemApiApplication;
-import com.ofs.sys.serv.entity.SysResource;
-import com.ofs.sys.serv.message.Dict;
+import com.ofs.sys.web.entity.SysResource;
+import com.ofs.sys.web.message.Dict;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -13,7 +13,7 @@ public class FtpUtils {
     //ftp服务器端口号默认为21
     public Integer port = 21;
     //ftp登录账号
-    public String username = "RYX";
+    public String account = "RYX";
     //ftp登录密码
     public String password = "gaoly";
 
@@ -28,7 +28,7 @@ public class FtpUtils {
         try {
             System.out.println("connecting...ftp服务器:" + this.hostname + ":" + this.port);
             ftpClient.connect(hostname, port); //连接ftp服务器
-            ftpClient.login(username, password); //登录ftp服务器
+            ftpClient.login(account, password); //登录ftp服务器
             int replyCode = ftpClient.getReplyCode(); //是否成功登录服务器
             if (!FTPReply.isPositiveCompletion(replyCode)) {
                 System.out.println("connect failed...ftp服务器:" + this.hostname + ":" + this.port);

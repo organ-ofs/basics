@@ -1,0 +1,90 @@
+package com.ofs.sys.web.controller;
+
+import com.ofs.sys.web.dto.SignInDto;
+import com.ofs.sys.web.service.SysUserService;
+import com.ofs.web.annotation.JwtClaim;
+import com.ofs.web.annotation.SysLogs;
+import com.ofs.web.base.bean.ResponseResult;
+import com.ofs.web.base.bean.SystemCode;
+import com.ofs.web.jwt.JwtToken;
+import com.ofs.web.knowledge.AuthMessageEnum;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+/**
+ * @author gaoly
+ * @version 2019/4/13/14:02
+ */
+@Slf4j
+@RestController
+@Api(tags = {"账户相关"})
+public class AccountController {
+
+    @Autowired
+    private SysUserService userService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    @PostMapping("/login")
+    @ApiOperation(value = "登录")
+    @SysLogs("登录")
+    public ResponseResult signIn(@Validated @ApiParam(value = "登录数据", required = true) SignInDto sign) {
+//        userService.signIn(sign);
+        Subject currentUser = SecurityUtils.getSubject();
+        JwtToken token = new JwtToken("", sign.getAccount(), sign.getPassword(), "");
+        try {
+            currentUser.login(token);
+        } catch (Exception e) {
+            log.error("登陆失败", e);
+        }
+        //验证是否登录成功
+        if (currentUser.isAuthenticated()) {
+            log.info("用户[" + sign.getAccount() + "]登录认证通过");
+
+            // return ResponseResult.success(JwtUtil.getAccessToken(sign.getAccount(), sign.getTerminal()));
+            return ResponseResult.success(((JwtToken) SecurityUtils.getSubject().getPrincipal()).getToken());
+        } else {
+            return ResponseResult.e(AuthMessageEnum.FORBIDDEN_ACCOUNT_ERROR);
+        }
+        //return ResponseResult.success(((JwtToken) SecurityUtils.getSubject().getPrincipal()).getToken());
+    }
+
+    @PostMapping(value = "/current")
+    @ApiOperation(value = "获取当前用户信息")
+    @SysLogs("获取当前用户信息")
+    public ResponseResult current() {
+        return ResponseResult.success(userService.getCurrentUser());
+    }
+
+    @PostMapping(value = "/logout")
+    @ApiOperation(value = "注销登录")
+    @SysLogs("注销登录")
+    public ResponseResult logout() {
+        try {
+            Subject subject = SecurityUtils.getSubject();
+            subject.logout();
+        } catch (Exception e) {
+            return ResponseResult.e(SystemCode.LOGOUT_FAIL);
+        }
+        return ResponseResult.e(SystemCode.LOGOUT_OK);
+    }
+
+    @PostMapping(value = "/all-permission-tag")
+    @ApiOperation(value = "获取所有的权限标示")
+    public ResponseResult<List<String>> getAllPermissionTag(@JwtClaim String t) {
+        return ResponseResult.success(userService.getAllPermissionTag(t));
+    }
+
+}

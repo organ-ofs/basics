@@ -10,25 +10,33 @@ public class JwtToken implements AuthenticationToken {
 
     private String token;
 
-    private String loginId;
+    private String account;
 
     private String password;
 
     private String uid;
+    /**
+     * 终端
+     */
+    private String terminal;
 
-    public JwtToken(String token, String loginId, String password) {
+    public JwtToken(String token, String account, String password, String terminal) {
         this.token = token;
-        this.loginId = loginId;
+        this.account = account;
         this.password = password;
+        this.terminal = terminal;
     }
 
+    // 获取“用户”
     @Override
     public Object getPrincipal() {
         return JwtUtil.getAccount(token);
     }
 
+
+    // 获取“密码”
     @Override
     public Object getCredentials() {
-        return token;
+        return this.getPassword();
     }
 }

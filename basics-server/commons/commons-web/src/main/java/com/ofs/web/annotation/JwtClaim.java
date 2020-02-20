@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JwtClaim {
 
-    String value() default "username";
+    String value() default "account";
 
     boolean exception() default true;
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ofs.sys.serv.mapper.SysUserMapper">
+<mapper namespace="com.ofs.sys.web.mapper.SysUserMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="BaseResultMap" type="com.ofs.sys.serv.entity.SysUser">
+    <resultMap id="BaseResultMap" type="com.ofs.sys.web.entity.SysUser">
         <result column="ID" property="id"/>
-        <result column="LOGIN_ID" property="loginId"/>
+        <result column="ACCOUNT" property="account"/>
         <result column="PASSWORD" property="password"/>
         <result column="NAME" property="name"/>
         <result column="MOBILE" property="mobile"/>
@@ -20,7 +20,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        T.ID, T.login_id, T.password, T.name, T.mobile, T.email, T.group_id, T.last_login_date, T.CREATE_DATE, T.UPDATE_DATE, T.CREATE_USER, T.UPDATE_USER
+        T.ID, T.account, T.password, T.name, T.mobile, T.email, T.group_id, T.last_login_date, T.CREATE_DATE, T.UPDATE_DATE, T.CREATE_USER, T.UPDATE_USER
     </sql>
 
 

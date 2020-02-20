@@ -57,13 +57,13 @@ public class BaseEntity implements Serializable {
     /**
      * 更新者
      */
-    @TableField(value = "UPDATE_USER", fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "UPDATE_USER", fill = FieldFill.UPDATE)
     public String updateUser;
 
     /**
      * 更新日期
      */
-    @TableField(value = "UPDATE_DATE", fill = FieldFill.INSERT_UPDATE)
+    @TableField(value = "UPDATE_DATE", fill = FieldFill.UPDATE)
     public String updateDate;
 
     public static final String ID = "ID";

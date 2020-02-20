@@ -18,7 +18,7 @@ public interface BaseService<T extends BaseEntity> extends IService<T> {
      * @param entity
      * @throws Exception
      */
-    void add(T entity) throws Exception;
+    boolean add(T entity) throws Exception;
 
     /**
      * update

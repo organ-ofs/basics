@@ -156,10 +156,10 @@ public class BaseBizGenerator extends VelocityTemplateEngine {
         //strategy.setSuperEntityColumns(new String[]{"ID", "CREATE_USER", "CREATE_DATE", "UPDATE_DATE", "UPDATE_USER", "VERSION_NUM", "DELETE_FLAG"});
         // 自定义 mapper 父类
         /// strategy.setSuperMapperClass("com.baomidou.web.TestMapper");
-        // 自定义 service 父类
-        strategy.setSuperServiceClass("com.frame.common.base.service.IBaseService");
-        // 自定义 service 实现类父类
-        strategy.setSuperServiceImplClass("com.frame.common.base.service.impl.BaseServiceImpl");
+        // 自定义 web 父类
+        strategy.setSuperServiceClass("com.frame.common.base.web.IBaseService");
+        // 自定义 web 实现类父类
+        strategy.setSuperServiceImplClass("com.frame.common.base.web.impl.BaseServiceImpl");
         // 自定义 controller 父类
         strategy.setSuperControllerClass("com.frame.common.web.base.BaseController");
         /// 【实体】是否生成字段常量（默认 false）
@@ -181,8 +181,8 @@ public class BaseBizGenerator extends VelocityTemplateEngine {
         pc.setEntity("model");
         pc.setMapper("mapper");
         ///pc.setXml("mapper.xml");
-        pc.setServiceImpl("service.impl");
-        pc.setService("service");
+        pc.setServiceImpl("web.impl");
+        pc.setService("web");
         pc.setController("controller");
         pc.setModuleName(moduleName);
         return pc;

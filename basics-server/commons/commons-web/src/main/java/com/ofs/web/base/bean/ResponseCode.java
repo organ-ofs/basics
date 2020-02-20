@@ -1,13 +1,9 @@
 package com.ofs.web.base.bean;
 
+import com.ofs.web.knowledge.IMessageEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import springfox.documentation.builders.ResponseMessageBuilder;
-import springfox.documentation.service.ResponseMessage;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author gaoly
@@ -16,42 +12,33 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public enum ResponseCode {
+public enum ResponseCode implements IMessageEnum {
 
     /**
      *
      */
-    OK(200, "成功。"),
+    OK("200", "成功。"),
     /**
      *
      */
-    BAD_REQUEST(400, "请求参数有误。"),
+    BAD_REQUEST("400", "请求参数有误。"),
     /**
      *
      */
-    AUTHENTICATE(401, "用户未登录或身份异常。"),
+    AUTHENTICATE("401", "用户未登录或身份异常。"),
     /**
      *
      */
-    AUTH_NO(403, "没有权限。"),
+    AUTH_NO("403", "没有权限。"),
     /**
      *
      */
-    SERVER_ERROR(500, "服务异常。");
+    SERVER_ERROR("500", "服务异常。");
 
 
-    private Integer code;
+    private String code;
 
-    private String msg;
+    private String message;
 
-    public static List<ResponseMessage> getArrayMessage() {
-        ArrayList<ResponseMessage> responseMessages = new ArrayList<>();
-        for (SystemCode statusEnum : SystemCode.values()) {
-            responseMessages.add(new ResponseMessageBuilder()
-                    .code(statusEnum.code)
-                    .message(statusEnum.msg)
-                    .build());
-        }
-        return responseMessages;
-    }
+
 }
