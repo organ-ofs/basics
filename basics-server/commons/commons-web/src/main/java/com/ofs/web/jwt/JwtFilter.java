@@ -1,5 +1,6 @@
 package com.ofs.web.jwt;
 
+import com.ofs.web.constant.CacheConstant;
 import com.ofs.web.constant.WebCommonConstant;
 import com.ofs.web.exception.AuthTokenErrorException;
 import com.ofs.web.knowledge.AuthMessageEnum;
@@ -7,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.ExpiredCredentialsException;
+import org.apache.shiro.cache.Cache;
+import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
 
@@ -15,6 +18,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.Deque;
 
 /**
  * @author ly
@@ -22,6 +27,21 @@ import java.io.IOException;
 @Slf4j
 public class JwtFilter extends BasicHttpAuthenticationFilter {
 
+    /**
+     * 登陆用户列表
+     */
+    private Cache<String, Deque<Serializable>> cache;
+
+    /**
+     * 设置Cache的key的前缀
+     */
+
+    public void setCacheManager(CacheManager cacheManager) {
+
+        this.cache = cacheManager.getCache(CacheConstant.SHIRO_KICK_OUT_DEQUE);
+
+
+    }
     /**
      * 检测header里面是否包含Authorization字段
      */
@@ -46,19 +66,24 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
             log.error("jwt token 错误 :", AuthMessageEnum.FORBIDDEN_TOKEN_ERROR.getMessage());
             throw new AuthTokenErrorException(AuthMessageEnum.FORBIDDEN_TOKEN_ERROR);
         }
+
         if (JwtUtil.isTokenExpired(jwtToken)) {
             log.error("jwt 过期 :token expired");
             throw new ExpiredCredentialsException("token expired");
         }
         String account = JwtUtil.getAccount(jwtToken);
         String id = JwtUtil.getId(jwtToken);
-
+        String terminal = JwtUtil.getTerminal(jwtToken);
+//        if (cache.get(account)==null) {
+//            log.error("jwt 无效 :token expired");
+//            throw new ExpiredCredentialsException("token expired");
+//        }
         //验证签名
         if (!JwtUtil.verify(jwtToken, account)) {
             log.error("[{}]:jwt验证不通过", account);
             throw new AuthTokenErrorException(AuthMessageEnum.FORBIDDEN_ACCOUNT_ERROR);
         }
-        AuthenticationToken token = new JwtToken(jwtToken, null, null, null);
+        AuthenticationToken token = new JwtToken(jwtToken, account, null, terminal, id);
         // 提交给realm进行登入，如果错误他会抛出异常并被捕获
         SecurityUtils.getSubject().login(token);
         // 如果没有抛出异常则代表登入成功，返回true

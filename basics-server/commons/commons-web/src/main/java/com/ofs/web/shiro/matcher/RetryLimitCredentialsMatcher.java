@@ -1,8 +1,12 @@
 package com.ofs.web.shiro.matcher;
 
 import com.ofs.web.constant.CacheConstant;
+import com.ofs.web.jwt.JwtToken;
+import com.ofs.web.jwt.JwtUtil;
+import com.ofs.web.utils.Tools;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.cache.Cache;
@@ -34,27 +38,39 @@ public class RetryLimitCredentialsMatcher extends HashedCredentialsMatcher {
      */
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
-        String account = (String) token.getPrincipal();
-        String keyUserName = "retry_" + account;
-        // retry count + 1
-        AtomicInteger retryCount = passwordRetryCache.get(keyUserName);
-        if (retryCount == null) {
-            retryCount = new AtomicInteger(0);
-            passwordRetryCache.put(keyUserName, retryCount);
-        }
-        if (retryCount.incrementAndGet() > this.maxRetryCount) {
-            // if retry count > 5 throw
-            throw new ExcessiveAttemptsException();
-        }
-
-        boolean matches = super.doCredentialsMatch(token, info);
-        if (matches) {
-            // clear retry count
-            passwordRetryCache.remove(keyUserName);
+        JwtToken jwtToken = (JwtToken) token;
+        if (jwtToken.getPassword() == null) {
+            // token 验证
+            boolean verify = JwtUtil.verify(jwtToken.getToken(), jwtToken.getAccount());
+            if (!verify) {
+                throw new DisabledAccountException(Tools.VERIFYFAIL);
+            }
+            return true;
         } else {
-            //TODO 验证不成功是否要同步到缓存?
-            passwordRetryCache.put(keyUserName, retryCount);
+            // 密码验证
+            String account = (String) token.getPrincipal();
+            String keyUserName = "retry_" + account;
+            // retry count + 1
+            AtomicInteger retryCount = passwordRetryCache.get(keyUserName);
+            if (retryCount == null) {
+                retryCount = new AtomicInteger(0);
+                passwordRetryCache.put(keyUserName, retryCount);
+            }
+            if (retryCount.incrementAndGet() > this.maxRetryCount) {
+                // if retry count > 5 throw
+                throw new ExcessiveAttemptsException();
+            }
+            boolean matches = super.doCredentialsMatch(token, info);
+            if (matches) {
+                // clear retry count
+                passwordRetryCache.remove(keyUserName);
+            } else {
+                //TODO 验证不成功是否要同步到缓存?
+                passwordRetryCache.put(keyUserName, retryCount);
+            }
+            return matches;
         }
-        return matches;
     }
+
+
 }

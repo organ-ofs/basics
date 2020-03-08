@@ -2,7 +2,6 @@ package com.ofs.sys.web.service;
 
 
 import com.ofs.sys.web.dto.ResetPasswordDto;
-import com.ofs.sys.web.dto.SignInDto;
 import com.ofs.sys.web.entity.SysMenus;
 import com.ofs.sys.web.entity.SysRole;
 import com.ofs.sys.web.entity.SysUser;
@@ -31,12 +30,6 @@ public interface SysUserService extends BaseService<SysUser> {
      */
     SysUser getUserById(String id, boolean hasMenu);
 
-    /**
-     * 用户登录操作
-     *
-     * @param signInDto 登录信息
-     */
-    void signIn(SignInDto signInDto);
 
     /**
      * 获取当前登录用户信息

@@ -64,7 +64,7 @@ public class Tools {
         if (authorization == null || "".equals(authorization.trim())) {
             throw RequestException.fail("未含授权标示，禁止访问");
         }
-        JwtToken token = new JwtToken(authorization, null, null, null);
+        JwtToken token = new JwtToken(authorization, null, null, null, null);
         // 提交给realm进行登入，如果错误他会抛出异常并被捕获
         Subject subject = SecurityUtils.getSubject();
         try {

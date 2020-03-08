@@ -25,6 +25,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.servlet.Filter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -76,8 +77,9 @@ public class ShiroConfig {
         Collection<Realm> realms = new ArrayList<>();
         realms.add(myRealm());
         // 其他realm realms.add(myRealm());
-        securityManager.setCacheManager(shiroCache);
         securityManager.setRealms(realms);
+        //自定义缓存管理
+        securityManager.setCacheManager(shiroCache);
         /*
          * 关闭shiro自带的session，详情见文档
          * http://shiro.apache.org/session-management.html#SessionManagement-StatelessApplications%28Sessionless%29
@@ -149,6 +151,7 @@ public class ShiroConfig {
     @Bean
     public JwtFilter jwtFilter() {
         JwtFilter jwtFilter = new JwtFilter();
+        jwtFilter.setCacheManager(shiroCache);
         return jwtFilter;
     }
 
@@ -180,7 +183,8 @@ public class ShiroConfig {
         shiroFilter.setSecurityManager(securityManager);
 
         // 添加自己的过滤器并且取名为jwt
-        Map<String, javax.servlet.Filter> filterMap = new LinkedHashMap<>();
+
+        Map<String, Filter> filterMap = new LinkedHashMap<>();
         filterMap.put("header", headerFilter());
         filterMap.put("user", jwtFilter());
         if (this.frameProperties.getAuth().isKickOutValid()) {

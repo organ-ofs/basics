@@ -9,7 +9,6 @@ import com.ofs.web.base.IBaseMapper;
 import com.ofs.web.base.bean.SystemCode;
 import com.ofs.web.exception.RequestException;
 import com.ofs.web.jwt.JwtToken;
-import com.ofs.web.utils.Tools;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.BeanUtils;
@@ -62,7 +61,7 @@ public class BaseServiceImpl<M extends IBaseMapper<T>, T extends BaseEntity> ext
 
     @Override
     public JwtToken getJwtToken() {
-        Tools.executeLogin();
+//        Tools.executeLogin();
         Subject subject = SecurityUtils.getSubject();
         if (!subject.isAuthenticated()) {
             throw new RequestException(SystemCode.NOT_SING_IN);

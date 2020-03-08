@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * 验证用户auth
  * @author gaoly
  */
 public class AuthHandlerInterceptor implements HandlerInterceptor {

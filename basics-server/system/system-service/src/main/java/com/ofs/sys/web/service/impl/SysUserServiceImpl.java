@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ofs.sys.web.dto.ResetPasswordDto;
-import com.ofs.sys.web.dto.SignInDto;
 import com.ofs.sys.web.entity.SysMenus;
 import com.ofs.sys.web.entity.SysResource;
 import com.ofs.sys.web.entity.SysRole;
@@ -21,7 +20,6 @@ import com.ofs.web.base.impl.BaseServiceImpl;
 import com.ofs.web.exception.RequestException;
 import com.ofs.web.jwt.JwtToken;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.DisabledAccountException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,26 +64,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
         user.setRoles(roleService.getAllRoleByUserId(user.getId(), hasMenu));
         return user;
     }
-
-    @Override
-    public void signIn(SignInDto signInDto) {
-        if ("".equals(signInDto.getAccount()) || "".equals(signInDto.getPassword())) {
-            throw new RequestException(SystemCode.SING_IN_INPUT_EMPTY);
-        }
-        JwtToken token = new JwtToken(null, signInDto.getAccount(), signInDto.getPassword(), null);
-        Subject subject = SecurityUtils.getSubject();
-        try {
-            subject.login(token);
-            if (!subject.isAuthenticated()) {
-                throw new RequestException(SystemCode.SIGN_IN_INPUT_FAIL);
-            }
-        } catch (DisabledAccountException e) {
-            throw new RequestException(SystemCode.SIGN_IN_INPUT_FAIL.code, e.getMessage(), e);
-        } catch (Exception e) {
-            throw new RequestException(SystemCode.SIGN_IN_FAIL, e);
-        }
-    }
-
 
     @Override
     public SysUser getCurrentUser() {

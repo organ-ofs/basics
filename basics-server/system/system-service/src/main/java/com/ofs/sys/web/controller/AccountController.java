@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -28,6 +29,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
+@RequestMapping("/api")
 @Api(tags = {"账户相关"})
 public class AccountController {
 
@@ -43,7 +45,7 @@ public class AccountController {
     public ResponseResult signIn(@Validated @ApiParam(value = "登录数据", required = true) SignInDto sign) {
 //        userService.signIn(sign);
         Subject currentUser = SecurityUtils.getSubject();
-        JwtToken token = new JwtToken("", sign.getAccount(), sign.getPassword(), "");
+        JwtToken token = new JwtToken("", sign.getAccount(), sign.getPassword(), "", null);
         try {
             currentUser.login(token);
         } catch (Exception e) {

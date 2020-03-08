@@ -1,5 +1,6 @@
 package com.ofs.web.config;
 
+import com.ofs.web.constant.StaticConstant;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -34,7 +35,7 @@ public class Swagger2Config {
                 .modelRef(new ModelRef("string")).parameterType("header")
                 //Basic
                 //required表示是否必填，defaultvalue表示默认值
-                .required(false).defaultValue("Basic ").build();
+                .required(false).defaultValue(StaticConstant.TOKEN_START).build();
         //添加完此处一定要把下边的带***的也加上否则不生效
         pars.add(ticketPar.build());
 

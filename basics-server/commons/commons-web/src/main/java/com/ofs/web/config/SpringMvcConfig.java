@@ -33,9 +33,9 @@ public class SpringMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         log.info("----------------注册拦截器拦截所有/**");
-        registry.addInterceptor(getAuthHandlerInterceptor())
-                .addPathPatterns("/**")
-                .excludePathPatterns("/login", "/swagger-ui.html", "/**/*.js", "/**/*.css", "/swagger-resources/**", "/**/*.png");
+//        registry.addInterceptor(getAuthHandlerInterceptor())
+//                .addPathPatterns("/**")
+//                .excludePathPatterns("/login", "/swagger-ui.html", "/**/*.js", "/**/*.css", "/swagger-resources/**", "/**/*.png");
     }
 
     @Override
