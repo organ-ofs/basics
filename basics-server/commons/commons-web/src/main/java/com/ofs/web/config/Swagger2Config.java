@@ -56,9 +56,9 @@ public class Swagger2Config {
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.any())
-                .paths(PathSelectors.ant("/api/**"))
+                .paths(PathSelectors.ant("/**"))
                 .build()
-                .pathMapping("/api/**");
+                .pathMapping("/**");
     }
 
     private ApiInfo apiInfo() {

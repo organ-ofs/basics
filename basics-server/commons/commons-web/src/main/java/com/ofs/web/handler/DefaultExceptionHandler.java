@@ -1,7 +1,7 @@
 package com.ofs.web.handler;
 
 
-import com.ofs.web.base.bean.ResponseResult;
+import com.ofs.web.base.bean.Result;
 import com.ofs.web.base.bean.SystemCode;
 import com.ofs.web.exception.RequestException;
 import lombok.extern.slf4j.Slf4j;
@@ -29,37 +29,38 @@ public class DefaultExceptionHandler {
      */
     @ExceptionHandler(value = RequestException.class)
     @ResponseBody
-    public ResponseResult requestExceptionHandler(RequestException e) {
+    public Result requestExceptionHandler(RequestException e) {
         if (e.getE() != null) {
             e.printStackTrace();
         }
-        return ResponseResult.builder().msg(e.getMsg()).status(e.getStatus()).build();
+
+        return Result.builder().msg(e.getMsg()).code(e.getStatus()).build();
     }
 
 
     @ExceptionHandler(value = DataIntegrityViolationException.class)
     @ResponseBody
-    public ResponseResult requestExceptionHandler(DataIntegrityViolationException e) {
-        return ResponseResult.builder().msg("数据操作格式异常").status(SystemCode.FAIL.code).build();
+    public Result requestExceptionHandler(DataIntegrityViolationException e) {
+        return Result.builder().msg("数据操作格式异常").code(SystemCode.FAIL.code).build();
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseBody
-    public ResponseResult methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+    public Result methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         BindingResult result = e.getBindingResult();
         String s = "参数验证失败";
         if (result.hasErrors()) {
             List<ObjectError> errors = result.getAllErrors();
             s = errors.get(0).getDefaultMessage();
         }
-        return ResponseResult.builder().status(SystemCode.FAIL.code).msg(s).build();
+        return Result.builder().code(SystemCode.FAIL.code).msg(s).build();
     }
 
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
-    public ResponseResult requestExceptionHandler(Exception e) {
+    public Result requestExceptionHandler(Exception e) {
         e.printStackTrace();
-        return ResponseResult.builder().msg("服务器飘了，管理员去拿刀修理了~").status(SystemCode.FAIL.code).build();
+        return Result.builder().msg("服务器飘了，管理员去拿刀修理了~").code(SystemCode.FAIL.code).build();
     }
 
 

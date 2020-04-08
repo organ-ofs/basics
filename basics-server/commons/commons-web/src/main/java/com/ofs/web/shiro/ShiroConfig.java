@@ -4,6 +4,7 @@ import com.ofs.web.constant.CacheConstant;
 import com.ofs.web.constant.FrameProperties;
 import com.ofs.web.jwt.JwtFilter;
 import com.ofs.web.shiro.matcher.RetryLimitCredentialsMatcher;
+import com.ofs.web.shiro.util.PasswordHash;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
@@ -183,21 +184,18 @@ public class ShiroConfig {
         shiroFilter.setSecurityManager(securityManager);
 
         // 添加自己的过滤器并且取名为jwt
-
         Map<String, Filter> filterMap = new LinkedHashMap<>();
         filterMap.put("header", headerFilter());
-        filterMap.put("user", jwtFilter());
+        filterMap.put("jwt", jwtFilter());
         if (this.frameProperties.getAuth().isKickOutValid()) {
             filterMap.put("kickOut", kickOutFilter());
         }
         shiroFilter.setFilters(filterMap);
-
-        shiroFilter.setLoginUrl("/api/login");
+        shiroFilter.setLoginUrl("/login");
 
         // 自定义url规则
         //<!-- 过滤链定义，从上向下顺序执行，一般将 /**放在最为下边 -->:这是一个坑呢，一不小心代码就不好使了;
         //<!-- authc:所有url都必须认证通过才可以访问; anon:所有url都都可以匿名访问-->
-        // Map<String, String> filterChainDefinitionMap = shiroService.getFilterChainDefinitionMap();
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 
         String[] ignoreUrl = this.frameProperties.getAuth().getIgnoreUrl();
@@ -219,17 +217,16 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/**/*.html", "anon");
         // 所有请求通过我们自己的JWT Filter
 
-        filterChainDefinitionMap.put("/api/login", "header,anon");
+        filterChainDefinitionMap.put("/login", "header,anon");
+        filterChainDefinitionMap.put("/logout", "header,jwt");
+        filterChainDefinitionMap.put("/test/**", "header,anon");
         if (this.frameProperties.getAuth().isKickOutValid()) {
-            filterChainDefinitionMap.put("/api/**", "header,user,kickOut");
+            filterChainDefinitionMap.put("/**", "header,jwt,kickOut");
         } else {
-            filterChainDefinitionMap.put("/api/**", "header,user");
+            filterChainDefinitionMap.put("/**", "header,jwt");
         }
-        filterChainDefinitionMap.put("/test/**", "anon");
-
 
         shiroFilter.setFilterChainDefinitionMap(filterChainDefinitionMap);
-
         return shiroFilter;
     }
 

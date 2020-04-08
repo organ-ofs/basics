@@ -12,8 +12,9 @@ import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 
 /**
  * <p>
- *     Realm在验证用户身份的时候，进行密码匹配。
+ * Realm在验证用户身份的时候，进行密码匹配。
  * </p>
+ *
  * @author gaoly
  * @version 2017/9/25
  */

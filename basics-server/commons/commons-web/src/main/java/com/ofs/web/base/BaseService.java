@@ -55,6 +55,7 @@ public interface BaseService<T extends BaseEntity> extends IService<T> {
 
     /**
      * 查询所有
+     *
      * @param entity
      * @return
      */
@@ -62,6 +63,7 @@ public interface BaseService<T extends BaseEntity> extends IService<T> {
 
     /**
      * 获取登陆信息
+     *
      * @return
      */
     JwtToken getJwtToken();

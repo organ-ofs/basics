@@ -1,4 +1,4 @@
-package com.ofs.web.shiro;
+package com.ofs.web.shiro.util;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;

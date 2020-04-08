@@ -25,12 +25,3 @@ spring:
   aop:
     proxy-target-class: true
     auto: true
-
-ofs:
-  config:
-    encryptEnable: false
-  quartz:
-    enable: false
-  auth:
-    password-retry-limit: 5
-    kickOutValid: false

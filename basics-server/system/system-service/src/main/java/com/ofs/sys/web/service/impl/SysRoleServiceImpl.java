@@ -79,6 +79,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
             throw new RequestException(SystemCode.FAIL.code, "删除失败", e);
         }
     }
+
     @Override
     public void update(SysRole role) {
         if (this.getById(role.getId()) == null) {

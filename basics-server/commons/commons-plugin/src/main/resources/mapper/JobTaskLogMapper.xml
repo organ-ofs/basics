@@ -8,7 +8,6 @@
         SELECT t.create_date, t.update_date, t.exec_times, t.exec_status, t.error, t.ip
         FROM ST_TBL_JOB_TASK_LOG t
         WHERE t.job_name = #{condition.jobName}
-
           AND t.job_group = #{condition.jobGroup}
           and t.DELETE_FLAG = '0'
         order by t.create_date desc

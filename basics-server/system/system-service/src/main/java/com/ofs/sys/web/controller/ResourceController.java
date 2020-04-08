@@ -4,7 +4,7 @@ import com.ofs.sys.web.entity.SysResource;
 import com.ofs.sys.web.service.SysResourceService;
 import com.ofs.web.base.BaseController;
 import com.ofs.web.base.BaseService;
-import com.ofs.web.base.bean.ResponseResult;
+import com.ofs.web.base.bean.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,16 +34,16 @@ public class ResourceController extends BaseController<SysResource> {
 
     @ApiOperation(value = "获取所有资源树 - 权限配置可用", httpMethod = "POST", produces = "application/json")
     @RequestMapping(value = "/getTree", method = RequestMethod.POST)
-    public ResponseResult getTree(SysResource resource, HttpServletResponse response) {
+    public Result getTree(SysResource resource, HttpServletResponse response) {
         List<SysResource> data = service.getTree(resource);
-        return ResponseResult.success(data);
+        return Result.result(data);
     }
 
     @ApiOperation(value = "根据角色获取资源树-菜单可用", httpMethod = "POST", produces = "application/json")
     @RequestMapping(value = "/getTreeByRole", method = RequestMethod.POST)
-    public ResponseResult getTreeByRole(String roleId, HttpServletResponse response) {
+    public Result getTreeByRole(String roleId, HttpServletResponse response) {
         List<SysResource> data = service.getTreeByRole(roleId);
-        return ResponseResult.success(data);
+        return Result.result(data);
     }
 
 }

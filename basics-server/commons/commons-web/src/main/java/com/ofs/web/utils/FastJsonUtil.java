@@ -106,7 +106,7 @@ public class FastJsonUtil {
     /**
      * 用fastjson 将json字符串解析为一个 Map<String, Object>
      *
-     * @return Map<String, Object>
+     * @return Map<String   ,       Object>
      */
     public static Map<String, Object> getMap(String jsonString) {
         Map<String, Object> t = null;

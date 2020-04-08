@@ -6,6 +6,7 @@ import com.ofs.web.constant.FrameProperties;
 import com.ofs.web.jwt.JwtToken;
 import com.ofs.web.jwt.JwtUtil;
 import com.ofs.web.knowledge.DataDictKnowledge;
+import com.ofs.web.shiro.util.ShiroByteSource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -33,6 +34,7 @@ public class MyRealm extends AuthorizingRealm {
 
     @Autowired
     FrameProperties frameProperties;
+
     /**
      * 本real支持的验证规则
      */
@@ -76,7 +78,7 @@ public class MyRealm extends AuthorizingRealm {
                 //无账号
                 throw new DisabledAccountException();
             }
-            String salt = shiroUser.getSalt();//mSmo6X
+            String salt = shiroUser.getSalt();
             salt = "k2oB4E";
             String password = shiroUser.getPassword();
             String status = shiroUser.getStatus();

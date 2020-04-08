@@ -11,19 +11,23 @@ spring:
   application:
     name: ofs-sys
   profiles:
-    active: @env@
+    #  从外部项目引入 include ,从本目录引用active
+    include: @env@
+    # active: @env@
   level:
     root: debug
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    password: root
-    timeout: 3600
-    jedis:
-      pool:
-        max-active: 10
-        max-idle: 3
-        min-idle: 3
   aop:
     proxy-target-class: true
     auto: true
+ofs:
+  config:
+    encryptEnable: false
+  quartz:
+    enable: false
+  auth:
+    password-retry-limit: 5
+    kickOutValid: false
+    ignoreUrl:
+    - /swagger-resources/**
+    - /webjars/**
+    - /v2/api-docs/**

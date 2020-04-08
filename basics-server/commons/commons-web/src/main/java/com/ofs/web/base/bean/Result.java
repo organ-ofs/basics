@@ -19,6 +19,7 @@ import java.text.MessageFormat;
 @EqualsAndHashCode(callSuper = false)
 @ToString
 @Builder
+@AllArgsConstructor
 public class Result<T> extends BaseDto {
 
     private static final long serialVersionUID = 1L;
@@ -28,10 +29,10 @@ public class Result<T> extends BaseDto {
     private boolean status;
 
     //"返回状态码", notes = "只有status为false才会有信息")
-    private String msgId;
+    private String code;
 
     //"返回状态说明", notes = "只有status为false才会有信息")
-    private String msgText;
+    private String msg;
 
     //"返回实体对象", notes = "只有status为true时才会有信息")
     private T data;
@@ -39,12 +40,22 @@ public class Result<T> extends BaseDto {
     //"加密后的内容", notes = "只有启动加密后才会有信息")
     private String encryptData;
 
+    public Result() {
+        this.status = true;
+        this.code = ResultCode.OK.getCode();
+        this.msg = ResultCode.OK.getMessage();
+    }
+
     /**
      * Instantiates a new Response dto.
      * 默认为成功
      */
-    public Result() {
-        this.status = true;
+    public static Result result() {
+        return Result.builder()
+                .status(true)
+                .code(ResultCode.OK.getCode())
+                .msg(ResultCode.OK.getMessage())
+                .build();
     }
 
     /**
@@ -52,9 +63,13 @@ public class Result<T> extends BaseDto {
      *
      * @param data
      */
-    public Result(T data) {
-        this.status = true;
-        this.data = data;
+    public static <T> Result result(T data) {
+        return Result.builder()
+                .status(true)
+                .code(ResultCode.OK.getCode())
+                .msg(ResultCode.OK.getMessage())
+                .data(data)
+                .build();
     }
 
     /**
@@ -62,34 +77,25 @@ public class Result<T> extends BaseDto {
      *
      * @param data
      */
-    public Result(boolean status, String msgId, String msgText, T data) {
-        this.status = status;
-        if (StringUtils.isEmpty(msgId)) {
-            this.status = true;
-        } else {
-            this.status = false;
-        }
-        this.msgId = msgId;
-        this.msgText = msgText;
-        this.data = data;
+    public static <T> Result result(boolean status, String msgId, String msgText, T data) {
+        return Result.builder()
+                .status(status)
+                .code(msgId)
+                .msg(msgText)
+                .data(data)
+                .build();
     }
 
+
     /**
-     * 成功设置
-     *
-     * @param data
+     * 错误设置
      */
-    public Result(boolean status, String msgId, String msgText, T data, String encryptToken) {
-        this.status = status;
-        if (StringUtils.isEmpty(msgId)) {
-            this.status = true;
-        } else {
-            this.status = false;
-        }
-        this.msgId = msgId;
-        this.msgText = msgText;
-        this.data = data;
-        this.encryptData = "";
+    public static Result error() {
+        return Result.builder()
+                .status(false)
+                .code(ResultCode.ERROR.getCode())
+                .msg(ResultCode.ERROR.getMessage())
+                .build();
     }
 
     /**
@@ -97,11 +103,12 @@ public class Result<T> extends BaseDto {
      *
      * @param error
      */
-    public Result(BaseErrorException error) {
-
-        this.status = false;
-        this.msgId = error.getId();
-        this.msgText = error.getMessage();
+    public static <T> Result error(BaseErrorException error) {
+        return Result.builder()
+                .status(false)
+                .code(error.getId())
+                .msg(error.getMessage())
+                .build();
     }
 
 
@@ -110,8 +117,8 @@ public class Result<T> extends BaseDto {
      *
      * @param msgId
      */
-    public Result(IMessageEnum msgId) {
-        this(msgId, null);
+    public static Result error(IMessageEnum msgId) {
+        return error(msgId, null);
     }
 
     /**
@@ -120,14 +127,17 @@ public class Result<T> extends BaseDto {
      * @param msgId
      * @param args
      */
-    public Result(IMessageEnum msgId, Object[] args) {
-        this.status = false;
-        this.msgId = msgId.getCode();
-        String messageTemplate = LocaleMessageSourceUtil.getMessage(this.msgId);
+    public static Result error(IMessageEnum msgId, Object[] args) {
+        String code = msgId.getCode();
+        String messageTemplate = LocaleMessageSourceUtil.getMessage(code);
         if (StringUtils.isNotEmpty(messageTemplate) && args != null && args.length > 0) {
             messageTemplate = MessageFormat.format(messageTemplate, args);
         }
-        this.msgText = messageTemplate;
+        return Result.builder()
+                .status(false)
+                .code(code)
+                .msg(messageTemplate)
+                .build();
 
     }
 
@@ -137,25 +147,15 @@ public class Result<T> extends BaseDto {
      * @param result
      */
     public void converter(Result<?> result) {
-        this.msgId = result.getMsgId();
+        this.code = result.getCode();
         this.status = result.isStatus();
-        this.msgText = result.getMsgText();
+        this.msg = result.getMsg();
     }
 
     public boolean isStatus() {
         return status;
     }
 
-
-    /**
-     * 调协 MSGID 时，status 为False
-     *
-     * @param msgId
-     */
-    public void setMsgId(String msgId) {
-        this.msgId = msgId;
-        this.status = false;
-    }
 }
 
 

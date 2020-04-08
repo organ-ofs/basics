@@ -12,12 +12,16 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public enum ResponseCode implements IMessageEnum {
+public enum ResultCode implements IMessageEnum {
 
     /**
      *
      */
     OK("200", "成功。"),
+    /**
+     *
+     */
+    ERROR("00", "失败。"),
     /**
      *
      */

@@ -5,17 +5,16 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ofs.utils.IdentifierUtils;
 import com.ofs.web.annotation.SysLogs;
-import com.ofs.web.base.bean.ResponseResult;
+import com.ofs.web.base.bean.RequestTable;
+import com.ofs.web.base.bean.Result;
+import com.ofs.web.base.bean.ResultTable;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,6 +24,12 @@ import java.util.Date;
  * @version 2019/5/25/11:36
  */
 public abstract class BaseController<T extends BaseEntity> {
+
+    /**
+     * //相关参数注解 @RequestParam("id") @ApiParam(value = "ID") @RequestBody
+     *
+     * @param binder
+     */
 
     @InitBinder
     public void initBinder(ServletRequestDataBinder binder) {
@@ -45,41 +50,41 @@ public abstract class BaseController<T extends BaseEntity> {
     @PostMapping("/list")
     @ApiOperation(value = "分页")
     @ApiImplicitParam(paramType = "header", name = "Authorization", value = "身份认证Token", required = false)
-    ResponseResult<IPage<T>> listPage(@RequestBody T dto, @RequestParam long size, @RequestParam long current) {
-        return ResponseResult.success(getService().listPage(new Page(current, size), dto));
+    Result<IPage<T>> listPage(RequestTable<T> request) {
+        return ResultTable.result(getService().listPage(new Page(request.getCurrent(), request.getCurrent()), request.getData()));
     }
 
 
     @PostMapping("/edit")
     @ApiOperation(value = "更新根据ID")
     @SysLogs("更新根据ID")
-    ResponseResult edit(@RequestBody @Validated T dto) throws Exception {
+    Result edit(@Validated T dto) throws Exception {
         getService().update(dto);
-        return ResponseResult.success();
+        return Result.result();
     }
 
     @PostMapping("/remove")
     @ApiOperation(value = "删除根据ID")
     @SysLogs("删除根据ID")
-    ResponseResult remove(@RequestParam("id") String id) throws Exception {
+    Result remove(String id) throws Exception {
         getService().remove(id);
-        return ResponseResult.success();
+        return Result.result();
     }
 
     @PostMapping("/get")
     @ApiOperation(value = "查询根据ID")
     @SysLogs("查询根据ID")
-    ResponseResult get(@RequestParam("id") @ApiParam(value = "ID") String id) {
+    Result get(String id) {
         T data = (T) getService().getById(id);
-        return ResponseResult.success(data);
+        return Result.result(data);
     }
 
     @PostMapping("/add")
     @ApiOperation(value = "新增")
     @SysLogs("新增")
-    ResponseResult add(@RequestBody @Validated T dto) throws Exception {
+    Result add(@Validated T dto) throws Exception {
         dto.setId(IdentifierUtils.nextUuid());
         getService().add(dto);
-        return ResponseResult.success();
+        return Result.result();
     }
 }

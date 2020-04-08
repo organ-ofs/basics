@@ -1,4 +1,4 @@
-package com.ofs.web.shiro;
+package com.ofs.web.shiro.util;
 
 import org.apache.shiro.crypto.hash.SimpleHash;
 

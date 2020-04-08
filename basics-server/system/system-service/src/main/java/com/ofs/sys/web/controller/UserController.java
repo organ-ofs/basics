@@ -6,7 +6,7 @@ import com.ofs.sys.web.service.SysUserService;
 import com.ofs.web.annotation.SysLogs;
 import com.ofs.web.base.BaseController;
 import com.ofs.web.base.BaseService;
-import com.ofs.web.base.bean.ResponseResult;
+import com.ofs.web.base.bean.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +38,8 @@ public class UserController extends BaseController<SysUser> {
     @PostMapping("/reset/password")
     @ApiOperation(value = "重置密码")
     @SysLogs("重置密码")
-    public ResponseResult resetPassword(@RequestBody @Validated ResetPasswordDto dto) {
+    public Result resetPassword(@RequestBody @Validated ResetPasswordDto dto) {
         service.resetPassword(dto);
-        return ResponseResult.success();
+        return Result.result();
     }
 }

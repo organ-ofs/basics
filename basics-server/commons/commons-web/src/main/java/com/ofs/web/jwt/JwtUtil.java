@@ -29,11 +29,19 @@ public class JwtUtil {
     /**
      * 权限
      */
+    public static final String TEST_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlzcyI6IiIsInRlcm1pbmFsIjoiUEMiLCJleHAiOjE1ODYzMzQ1MTcsImp0aSI6IjcwZTAxMGM4YWNkNTQ1OTk5ZmUyOTE0NmM5OTE1ZmUyIn0.DvYrV5iK71A5jVGKSP1OZ_f-gFV6zXBr97zCOeJu33k";
+    /**
+     * 权限
+     */
     public static final String DEFAULT_JWT_PARAM = "Authorization";
     /**
      * 权限中的字符串
      */
-    private static final String BEARER = "bearer";
+    private static final String BEARER = "Bearer";
+    /**
+     * 权限中的字符串
+     */
+    private static final String BASIC = "Basic ";
     /**
      * 过期时间12小时
      */
@@ -64,9 +72,11 @@ public class JwtUtil {
         if (StringUtils.isBlank(token)) {
             return token;
         }
-        String headStr = token.substring(0, 6).toLowerCase();
-        if (headStr.compareTo(BEARER) == 0) {
-            token = token.substring(7, token.length());
+        if (token.startsWith(BEARER)) {
+            token = token.substring(7);
+        }
+        if (token.startsWith(BASIC)) {
+            token = token.substring(6);
         }
         return token;
     }

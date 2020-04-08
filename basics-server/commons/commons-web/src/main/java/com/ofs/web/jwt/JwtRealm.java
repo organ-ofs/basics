@@ -125,7 +125,7 @@ public class JwtRealm extends AuthorizingRealm {
             log.debug("JWT 登陆");
         }
         JwtToken jwtAuth = (JwtToken) auth;
-        String token = (String) jwtAuth.getToken();
+        String token = jwtAuth.getToken();
 
         String account = JwtUtil.getAccount(token);
         String id = JwtUtil.getId(token);

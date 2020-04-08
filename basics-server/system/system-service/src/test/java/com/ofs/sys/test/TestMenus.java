@@ -55,13 +55,7 @@ public class TestMenus extends TestBase {
                 .build();
 
         try {
-            MvcResult result = super.mockMvc.perform(post("/system/menu/add")
-                    .header("Authorization", header)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(JSONObject.toJSON(info).toString()))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                    .andDo(MockMvcResultHandlers.print())
+            MvcResult result = super.request("/system/menu/add", info)
                     .andReturn();
 
         } catch (Exception e) {

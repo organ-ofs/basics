@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +31,10 @@ public class ResultTable<T> extends Result<List<T>> {
     //"页码大小")
     private long size;
 
+    public ResultTable() {
+        super();
+    }
+
     public ResultTable(Page<T> page) {
         super();
         this.total = page.getTotal();
@@ -50,18 +53,30 @@ public class ResultTable<T> extends Result<List<T>> {
         super.setData(page.getRecords());
     }
 
-
-    public ResultTable() {
-        super();
-        this.current = 1;
-        total = 0;
-        size = 20;
-        super.setData(new ArrayList<T>());
+    /**
+     * 返回所有数据
+     *
+     * @param data
+     * @param <T>
+     * @return
+     */
+    public static <T> ResultTable result(List<T> data) {
+        ResultTable result = new ResultTable();
+        result.setCurrent(1);
+        result.setTotal(data.size());
+        result.setSize(data.size());
+        result.setData(data);
+        return result;
     }
 
-    public ResultTable(List<T> data) {
-        super(data);
-        total = data.size();
+    /**
+     * 分页
+     *
+     * @param data
+     * @return
+     */
+    public static <T> ResultTable result(IPage<T> data) {
+        return new ResultTable(data);
     }
 
 }

@@ -22,10 +22,9 @@
         <dubbo.version>2.7.0</dubbo.version>
         <druid.version>1.1.10</druid.version>
         <oracle.version>12.1.0.1</oracle.version>
+        <swagger.version>2.7.0</swagger.version>
         <zookeeper.version>3.4.6</zookeeper.version>
         <lombok.version>1.18.4</lombok.version>
-        <swagger.version>2.7.0</swagger.version>
-        <commons.version>1.0.0-SNAPSHOT</commons.version>
         <commons-lang3.version>3.5</commons-lang3.version>
         <httpclient.version>4.5.7</httpclient.version>
         <zkclient.version>0.10</zkclient.version>
@@ -42,7 +41,9 @@
         <jedis.vetsion>2.9.0</jedis.vetsion>
         <mysql.version>6.0.6</mysql.version>
         <mybatis.plus.version>3.1.0</mybatis.plus.version>
-
+        <mybatis.version>2.1.0</mybatis.version>
+        <api.version>1.0.0-SNAPSHOT</api.version>
+        <commons.version>1.0.0-SNAPSHOT</commons.version>
     </properties>
 
     <dependencyManagement>
@@ -53,12 +54,6 @@
                 <artifactId>spring-boot-starter-web</artifactId>
                 <version>${spring-boot.version}</version>
             </dependency>
-            <!-- 加密 -->
-            <dependency>
-                <groupId>cn.licoy</groupId>
-                <artifactId>encrypt-body-spring-boot-starter</artifactId>
-                <version>1.0.2.RELEASE</version>
-            </dependency>
             <!--JWT-->
             <dependency>
                 <groupId>com.auth0</groupId>
@@ -66,6 +61,17 @@
                 <version>${jwt.version}</version>
             </dependency>
 
+            <!--Shiro-Redis-->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.crazycake</groupId>
+                <artifactId>shiro-redis</artifactId>
+                <version>${shiro-radis.version}</version>
+            </dependency>
             <!--Spring Cache-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -119,6 +125,7 @@
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.version}</version>
             </dependency>
+            <!--alibaba druid -->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
@@ -128,7 +135,7 @@
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>2.1.0</version>
+                <version>${mybatis.version}</version>
             </dependency>
             <!--Mybatis-Plus-->
             <dependency>
@@ -139,15 +146,7 @@
             <dependency>
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-extension</artifactId>
-                <version>3.1.0</version>
-            </dependency>
-
-            <!--LOMBOK-->
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-                <scope>provided</scope>
+                <version>${mybatis.plus.version}</version>
             </dependency>
 
             <!--数据库连接池 HikariCP-->
@@ -156,21 +155,13 @@
                 <artifactId>HikariCP</artifactId>
                 <version>2.7.8</version>
             </dependency>
-
-            <!--Shiro-Redis-->
-            <dependency>
-                <groupId>org.crazycake</groupId>
-                <artifactId>shiro-redis</artifactId>
-                <version>${shiro-radis.version}</version>
-            </dependency>
-
             <!--dubbo-->
             <dependency>
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo-spring-boot-starter</artifactId>
                 <version>${dubbo.version}</version>
             </dependency>
-            <!-- dubbo新特性，元数据中心-->
+            <!-- dubbo，元数据中心-->
             <dependency>
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo-metadata-report-zookeeper</artifactId>
@@ -296,17 +287,34 @@
                 <artifactId>kaptcha</artifactId>
                 <version>${kaptcha.version}</version>
             </dependency>
-
+            <!--quartz-->
             <dependency>
                 <groupId>org.quartz-scheduler</groupId>
                 <artifactId>quartz</artifactId>
                 <version>${quartz.version}</version>
+            </dependency>
+            <!--LOMBOK-->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <scope>provided</scope>
             </dependency>
 
             <dependency>
                 <groupId>com.ofs</groupId>
                 <artifactId>commons-utils</artifactId>
                 <version>${commons.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ofs</groupId>
+                <artifactId>commons-web</artifactId>
+                <version>${commons.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ofs</groupId>
+                <artifactId>config</artifactId>
+                <version>1.0.0-SNAPSHOT</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -352,6 +360,7 @@
         <module>system</module>
         <module>commons</module>
         <module>plugin</module>
+        <module>config</module>
     </modules>
 
     <build>
