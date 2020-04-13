@@ -25,5 +25,15 @@
         T.ID, T.MENU_ID, T.TYPE, T.CONTENT, T.IP, T.AJAX, T.URI, T.PARAMS, T.HTTP_METHOD, T.CLASS_METHOD,
         T.CREATE_DATE, T.UPDATE_DATE, T.CREATE_USER, T.UPDATE_USER
     </sql>
+    <sql id="Base_Where_Clause">
+        <where>
 
+        </where>
+    </sql>
+    <select id="listPage" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM sys_log T
+        <include refid="Base_Where_Clause"/>
+    </select>
 </mapper>

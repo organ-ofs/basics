@@ -26,7 +26,7 @@ public class GeneratorTest extends BaseBizGenerator {
                 "sys_menus",
                 "sys_resource",
                 "sys_role",
-                "sys_role_resource",
+                "sys_role_permission",
                 "sys_user",
                 "sys_user_role",
 

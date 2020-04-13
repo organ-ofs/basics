@@ -19,11 +19,13 @@ public class JwtToken implements AuthenticationToken {
      * 终端
      */
     private String terminal;
+    private String address;
 
-    public JwtToken(String token, String account, String password, String terminal, String uid) {
+    public JwtToken(String token, String account, String password, String address, String terminal, String uid) {
         this.token = token;
         this.account = account;
         this.password = password;
+        this.address = address;
         this.terminal = terminal;
         this.uid = uid;
     }

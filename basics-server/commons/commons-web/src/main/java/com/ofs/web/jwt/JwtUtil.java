@@ -29,7 +29,7 @@ public class JwtUtil {
     /**
      * 权限
      */
-    public static final String TEST_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlzcyI6IiIsInRlcm1pbmFsIjoiUEMiLCJleHAiOjE1ODYzMzQ1MTcsImp0aSI6IjcwZTAxMGM4YWNkNTQ1OTk5ZmUyOTE0NmM5OTE1ZmUyIn0.DvYrV5iK71A5jVGKSP1OZ_f-gFV6zXBr97zCOeJu33k";
+    public static final String TEST_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlzcyI6IiIsInRlcm1pbmFsIjoiUEMiLCJleHAiOjE5MDIxMjg0ODMsImp0aSI6ImI3NzcyYzc3MjllOTRlZWM5NTFiODJlZmVhMWY1NjRmIn0.EjGeiqOkiW16sD-XraHxyeE9iTnc21kdYsmhKGNOb1o";
     /**
      * 权限
      */
@@ -45,12 +45,12 @@ public class JwtUtil {
     /**
      * 过期时间12小时
      */
-    private static final long EXPIRE_TIME_TEN_HOURS = 12 * 60 * 60 * 1000L;
+    private static final long EXPIRE_TIME_ONE_DAY = 24 * 60 * 60 * 1000L;
 
     /**
      * 过期时间60分钟
      */
-    private static final long EXPIRE_TIME_ONE_DAY = 60 * 60 * 1000L;
+    private static final long EXPIRE_TIME_ONE_HOURS = 60 * 60 * 1000L;
     /**
      * salt
      */
@@ -305,10 +305,9 @@ public class JwtUtil {
      * 取得配置文件中设置的超时时间
      */
     public static long getJwtExpireTime() {
-        long expireTime = EXPIRE_TIME_ONE_DAY;
+        long expireTime = EXPIRE_TIME_ONE_HOURS;
         try {
             expireTime = ApplicationContextComponent.getBeanByType(FrameProperties.class).getAuth().getJwtExpireTime();
-
         } catch (Exception e) {
             log.error("Token过期时间为60分钟", e);
         }

@@ -17,8 +17,8 @@ import lombok.experimental.Accessors;
 @Builder
 @EqualsAndHashCode(callSuper = true)
 @Accessors
-@TableName("SYS_ROLE_RESOURCE")
-public class SysRoleResource extends BaseEntity {
+@TableName("SYS_ROLE_PERMISSION")
+public class SysRolePermission extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @TableField
@@ -26,10 +26,10 @@ public class SysRoleResource extends BaseEntity {
     private String roleId;
 
     @TableField
-    @ApiModelProperty(value = "资源ID")
-    private String resourceId;
+    @ApiModelProperty(value = "权限标识")
+    private String permission;
 
     public static final String ROLE_ID = "role_id";
 
-    public static final String RESOURCE_ID = "resource_id";
+    public static final String PERMISSION = "permission";
 }

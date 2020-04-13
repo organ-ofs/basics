@@ -2,12 +2,12 @@ package com.ofs.sys.web.controller;
 
 import com.ofs.sys.web.dto.SignInDto;
 import com.ofs.sys.web.service.SysUserService;
-import com.ofs.web.annotation.JwtClaim;
 import com.ofs.web.annotation.SysLogs;
 import com.ofs.web.base.bean.Result;
 import com.ofs.web.base.bean.SystemCode;
 import com.ofs.web.jwt.JwtToken;
 import com.ofs.web.knowledge.AuthMessageEnum;
+import com.ofs.web.utils.WebTools;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -42,9 +43,11 @@ public class AccountController {
     @PostMapping("/login")
     @ApiOperation(value = "登录")
     @SysLogs("登录")
-    public Result signIn(@Validated @ApiParam(value = "登录数据", required = true) SignInDto sign) {
+    public Result signIn(@Validated @ApiParam(value = "登录", required = true) SignInDto sign, HttpServletRequest request) {
         Subject currentUser = SecurityUtils.getSubject();
-        JwtToken token = new JwtToken("", sign.getAccount(), sign.getPassword(), "", null);
+        String ip = WebTools.getClientIp(request);
+        String terminal = "";
+        JwtToken token = new JwtToken("", sign.getAccount(), sign.getPassword(), ip, terminal, null);
         try {
             currentUser.login(token);
         } catch (Exception e) {
@@ -54,7 +57,7 @@ public class AccountController {
         if (currentUser.isAuthenticated()) {
             log.info("用户[" + sign.getAccount() + "]登录认证通过");
 
-            return Result.result(((JwtToken) SecurityUtils.getSubject().getPrincipal()).getToken());
+            return Result.result(((JwtToken) currentUser.getPrincipal()).getToken());
         } else {
             return Result.error(AuthMessageEnum.FORBIDDEN_ACCOUNT_ERROR);
         }
@@ -82,8 +85,9 @@ public class AccountController {
 
     @PostMapping(value = "/system/permissions")
     @ApiOperation(value = "获取所有的权限标示")
-    public Result<List<String>> getAllPermissionTag(@JwtClaim String t) {
-        return Result.result(userService.getAllPermissionTag(t));
+    public Result<List<String>> getAllPermissionTag() {
+        JwtToken token = WebTools.getJwtToken();
+        return Result.result(userService.getAllPermissionTag(token.getAccount()));
     }
 
 }

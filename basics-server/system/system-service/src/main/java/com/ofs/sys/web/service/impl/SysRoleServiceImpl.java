@@ -1,7 +1,6 @@
 package com.ofs.sys.web.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ofs.sys.web.entity.SysResource;
 import com.ofs.sys.web.entity.SysRole;
 import com.ofs.sys.web.entity.SysUserRole;
 import com.ofs.sys.web.mapper.SysRoleMapper;
@@ -9,8 +8,8 @@ import com.ofs.sys.web.service.SysResourceService;
 import com.ofs.sys.web.service.SysRoleService;
 import com.ofs.sys.web.service.SysUserRoleService;
 import com.ofs.web.auth.service.ShiroService;
+import com.ofs.web.base.BaseServiceImpl;
 import com.ofs.web.base.bean.SystemCode;
-import com.ofs.web.base.impl.BaseServiceImpl;
 import com.ofs.web.exception.RequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -32,20 +31,13 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
     private ShiroService shiroService;
 
     @Override
-    public List<SysRole> getAllRoleByUserId(String uid, Boolean hasResource) {
+    public List<SysRole> getAllRoleByUserId(String uid) {
         QueryWrapper<SysUserRole> wrapper = new QueryWrapper();
         wrapper.eq(SysUserRole.USER_ID, uid);
         List<SysUserRole> userRoles = userRoleService.list(wrapper);
         List<SysRole> roles = new ArrayList<>();
         userRoles.forEach(v -> {
             SysRole role = this.getById(v.getRoleId());
-            if (role != null) {
-                if (hasResource) {
-                    SysResource resource = SysResource.builder().roleId(role.getId()).build();
-                    List<SysResource> permissions = resourceService.getListByRole(resource);
-                    role.setResources(permissions);
-                }
-            }
             roles.add(role);
         });
         return roles;

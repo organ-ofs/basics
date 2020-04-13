@@ -8,13 +8,12 @@ import java.util.List;
 public interface SysRoleService extends BaseService<SysRole> {
 
     /**
-     * 获取指定ID用户的所有角色（并附带查询所有的角色的权限）
+     * 获取指定ID用户的所有角色
      *
      * @param uid         用户ID
-     * @param hasResource
      * @return 角色集合
      */
-    List<SysRole> getAllRoleByUserId(String uid, Boolean hasResource);
+    List<SysRole> getAllRoleByUserId(String uid);
 
     /**
      * 更新缓存

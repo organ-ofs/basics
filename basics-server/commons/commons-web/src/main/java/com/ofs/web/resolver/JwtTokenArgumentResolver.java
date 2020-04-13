@@ -20,6 +20,7 @@ import java.lang.annotation.Annotation;
  * 自定义参数解析器
  * supportsParameter：用于判定是否需要处理该参数分解，返回true为需要，并会去调用下面的方法resolveArgument。
  * resolveArgument：真正用于处理参数分解的方法，返回的Object就是controller方法上的形参对象。
+ *  使用方法：   public Result<List<String>> getAllPermissionTag(@JwtClaim String t)
  */
 public class JwtTokenArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
@@ -32,23 +33,24 @@ public class JwtTokenArgumentResolver implements HandlerMethodArgumentResolver {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         String authorization = request.getHeader(StaticConstant.AUTHORIZATION);
         String result = null;
-        JwtClaim token = null;
+        JwtClaim jwtClaim = null;
         if (authorization != null) {
+            String token = JwtUtil.getJwtToken(authorization);
             Annotation[] methodAnnotations = parameter.getParameterAnnotations();
             for (Annotation methodAnnotation : methodAnnotations) {
                 if (methodAnnotation instanceof JwtClaim) {
-                    token = (JwtClaim) methodAnnotation;
+                    jwtClaim = (JwtClaim) methodAnnotation;
                     break;
                 }
             }
             if (token != null) {
-                result = JwtUtil.get(authorization, token.value());
+                result = JwtUtil.get(token, jwtClaim.value());
             }
         }
         if (result != null) {
             return result;
         }
-        if (token == null || token.exception()) {
+        if (jwtClaim == null || jwtClaim.exception()) {
             throw new RequestException(SystemCode.NOT_SING_IN);
         } else {
             return null;

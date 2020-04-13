@@ -6,7 +6,6 @@ import com.ofs.web.base.BaseController;
 import com.ofs.web.base.BaseService;
 import com.ofs.web.base.bean.Result;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +35,6 @@ public class LogController extends BaseController<SysLog> {
 
     @PostMapping("/removes")
     @ApiOperation("批量删除")
-    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "身份认证Token")
     public Result removeList(@RequestBody @ApiParam("ID集合") List<String> logList) throws Exception {
         service.removes(logList);
         return Result.result();

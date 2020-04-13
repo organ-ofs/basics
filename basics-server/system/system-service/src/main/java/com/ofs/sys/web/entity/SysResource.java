@@ -54,14 +54,7 @@ public class SysResource extends BaseEntity {
     @ApiModelProperty(value = "状态：1启用，0停用")
     private String status;
 
-    @TableField(exist = false)
-    private List<SysResource> children;
 
-    /**
-     * 是否有子节点
-     */
-    @TableField(exist = false)
-    private Boolean leaf;
     @TableField(exist = false)
     private List<String> ids;
     @TableField(exist = false)

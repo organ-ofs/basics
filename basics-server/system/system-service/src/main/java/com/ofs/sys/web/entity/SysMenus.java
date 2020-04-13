@@ -22,15 +22,15 @@ public class SysMenus extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
+    @TableField
+    @ApiModelProperty(value = "code")
+    private String code;
+
     private String name;
 
     @TableField
     @ApiModelProperty(value = "父ID")
     private String parentId;
-
-    @TableField
-    @ApiModelProperty(value = "资源ID")
-    private String resourceId;
 
     @TableField
     @ApiModelProperty(value = "1 级菜单 2 级菜单……")
@@ -62,7 +62,7 @@ public class SysMenus extends BaseEntity {
 
     @TableField
     @ApiModelProperty(value = "0 禁用 1 启用")
-    private String hidden;
+    private String status;
 
     @TableField
     @ApiModelProperty(value = "是否需要权限验证")
@@ -72,6 +72,21 @@ public class SysMenus extends BaseEntity {
     @ApiModelProperty(value = "说明")
     private String description;
 
+    /**
+     * 是否有子节点
+     */
+    @TableField(exist = false)
+    private Boolean leaf;
+    @TableField(exist = false)
+    private List<String> ids;
+    @TableField(exist = false)
+    private String roleId;
+    /**
+     * 是否有权限
+     */
+    @TableField(exist = false)
+    private String isAuth;
+
     @TableField(exist = false)
     private List<SysMenus> children;
 
@@ -79,8 +94,6 @@ public class SysMenus extends BaseEntity {
     public static final String NAME = "name";
 
     public static final String PARENT_ID = "parent_id";
-
-    public static final String RESOURCE_ID = "resource_id";
 
     public static final String GRADE = "grade";
 

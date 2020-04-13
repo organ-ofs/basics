@@ -20,7 +20,7 @@ public interface SysUserService extends BaseService<SysUser> {
      * @param account 登陆名
      * @return User
      */
-    SysUser getUserByAccount(String account, boolean hasMenu);
+    SysUser getUserByAccount(String account);
 
     /**
      * 根据ID查找用户
@@ -28,7 +28,7 @@ public interface SysUserService extends BaseService<SysUser> {
      * @param id ID
      * @return User
      */
-    SysUser getUserById(String id, boolean hasMenu);
+    SysUser getUserById(String id);
 
 
     /**

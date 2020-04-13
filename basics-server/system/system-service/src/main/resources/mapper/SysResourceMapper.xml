@@ -17,18 +17,17 @@
         <result column="CREATE_USER" property="createUser"/>
         <result column="UPDATE_USER" property="updateUser"/>
         <result column="IS_AUTH" property="isAuth"/>
-        <result column="LEAF" property="leaf"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
-    <sql id="BASE_COLUMN_LIST">
+    <sql id="Base_Column_List">
         T.ID, T.CODE, T.NAME, T.PERMISSION, T.URL, T.PARENT_ID, T.TYPE, T.DESCRIPTION,
         T.CREATE_DATE, T.UPDATE_DATE, T.CREATE_USER, T.UPDATE_USER
     </sql>
 
 
     <!-- 默认where判断条件 -->
-    <sql id="BASE_WHERE_CLAUSE">
+    <sql id="Base_Where_Clause">
         <where>
             <trim prefixOverrides="and">
                 <if test="params.name != null">and T.RESOURCE_NAME = #{params.name}</if>
@@ -44,23 +43,21 @@
     <!-- 根据条件查询信息 -->
     <select id="getList" resultMap="BaseResultMap">
         SELECT
-        <include refid="BASE_COLUMN_LIST"/>
-        , (select case when count(*) >0 then 0 else 1 end from SYS_RESOURCE M where M.PARENT_ID=T.ID) LEAF
+        <include refid="Base_Column_List"/>
         <!--         , DECODE(R.ROLE_ID,NULL,0,1 ) IS_AUTH-->
         ,case when R.ROLE_ID is null then '0' else '1' end as IS_AUTH
         FROM SYS_RESOURCE T
-        LEFT JOIN SYS_ROLE_RESOURCE R ON R.RESOURCE_ID=T.ID
-        <include refid="BASE_WHERE_CLAUSE"/>
+        LEFT JOIN SYS_ROLE_PERMISSION R ON R.PERMISSION=T.PERMISSION
+        <include refid="Base_Where_Clause"/>
         ORDER BY T.SORT
     </select>
     <!-- 根据角色ID条件查询信息 -->
     <select id="getListByRole" resultMap="BaseResultMap">
         SELECT
-        <include refid="BASE_COLUMN_LIST"/>
-        , (select case when count(*) >0 then 0 else 1 end from SYS_RESOURCE M where M.PARENT_ID=T.ID) LEAF
+        <include refid="Base_Column_List"/>
         FROM SYS_RESOURCE T
-        INNER JOIN SYS_ROLE_RESOURCE R ON R.RESOURCE_ID=T.ID
-        <include refid="BASE_WHERE_CLAUSE"/>
+        INNER JOIN SYS_ROLE_PERMISSION R ON R.PERMISSION=T.PERMISSION
+        <include refid="Base_Where_Clause"/>
         ORDER BY T.SORT
     </select>
 
@@ -73,8 +70,8 @@
 
     <select id="listPage" resultMap="BaseResultMap">
         SELECT
-        <include refid="BASE_COLUMN_LIST"/>
+        <include refid="Base_Column_List"/>
         FROM SYS_RESOURCE T
-        <include refid="BASE_WHERE_CLAUSE"/>
+        <include refid="Base_Where_Clause"/>
     </select>
 </mapper>

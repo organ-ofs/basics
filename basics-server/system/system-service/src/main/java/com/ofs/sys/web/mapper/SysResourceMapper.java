@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public interface SysResourceMapper extends IBaseMapper<SysResource> {
     /**
-     * 删除下属的子菜单
+     * 删除下属的子按钮
      *
      * @param ids
      */

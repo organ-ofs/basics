@@ -3,7 +3,7 @@ package com.ofs.sys.web.service.impl;
 import com.ofs.sys.web.entity.SysUserRole;
 import com.ofs.sys.web.mapper.SysUserRoleMapper;
 import com.ofs.sys.web.service.SysUserRoleService;
-import com.ofs.web.base.impl.BaseServiceImpl;
+import com.ofs.web.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**

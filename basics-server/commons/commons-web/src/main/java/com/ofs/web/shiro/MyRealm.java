@@ -70,6 +70,7 @@ public class MyRealm extends AuthorizingRealm {
         JwtToken token = (JwtToken) auth;
         String tokenStr = token.getToken();
         if (StringUtils.isNotEmpty(tokenStr)) {
+            // token 验证通过登录直接通过
             return new SimpleAuthenticationInfo(token, token, getName());
         } else {
             //查出是否有此用户
@@ -79,7 +80,9 @@ public class MyRealm extends AuthorizingRealm {
                 throw new DisabledAccountException();
             }
             String salt = shiroUser.getSalt();
-            salt = "k2oB4E";
+            if (StringUtils.isEmpty(salt)) {
+                salt = "k2oB4E";
+            }
             String password = shiroUser.getPassword();
             String status = shiroUser.getStatus();
 
@@ -91,6 +94,7 @@ public class MyRealm extends AuthorizingRealm {
             if ("admin".equals(token.getAccount())) {
                 password = "b3144b6de9ae1dd2d56b6367dbdfdc21";
             }
+            token.setUid(shiroUser.getId());
             token.setToken(JwtUtil.getAccessToken(token.getAccount(), token.getTerminal()));
             // 若存在，将此用户存放到登录认证info中，Shiro会为我们进行密码对比校验
             return new SimpleAuthenticationInfo(token, password, ShiroByteSource.of(salt)

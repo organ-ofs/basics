@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.ofs.sys.SystemApiApplication;
 import com.ofs.sys.web.entity.SysResource;
 import com.ofs.sys.web.message.Dict;
+import com.ofs.web.base.bean.RequestTable;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,16 +31,13 @@ public class TestResource extends TestBase {
     @Test
     @Rollback
     public void list() {
+
+        RequestTable<SysResource> request = new RequestTable<>();
+        request.setCurrent(1);
+        request.setSize(20);
+        request.setData(SysResource.builder().build());
         try {
-            MvcResult result = super.mockMvc.perform(post("/system/resource/list")
-                    .header("Authorization", header)
-                    .param("current", "1")
-                    .param("size", "10")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{}"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                    .andDo(MockMvcResultHandlers.print())
+            super.request("/system/resource/list", request)
                     .andReturn();
         } catch (Exception e) {
             e.printStackTrace();

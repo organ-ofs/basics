@@ -65,7 +65,7 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         jwtToken = JwtUtil.getJwtToken(jwtToken);
         // 拦截测试token
         if (JwtUtil.TEST_TOKEN.equals(jwtToken)) {
-            AuthenticationToken token = new JwtToken(jwtToken, "admin", null, "PC", "1");
+            AuthenticationToken token = new JwtToken(jwtToken, "admin", null, "PC", "", "1");
             SecurityUtils.getSubject().login(token);
             return true;
         }
@@ -82,11 +82,12 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
         String id = JwtUtil.getId(jwtToken);
         String terminal = JwtUtil.getTerminal(jwtToken);
 
+
         if (!JwtUtil.verify(jwtToken, account)) {
             log.error("[{}]:jwt验证不通过", account);
             throw new AuthTokenErrorException(AuthMessageEnum.FORBIDDEN_ACCOUNT_ERROR);
         }
-        AuthenticationToken token = new JwtToken(jwtToken, account, null, terminal, id);
+        AuthenticationToken token = new JwtToken(jwtToken, account, null, null, terminal, id);
         // 提交给realm进行登入，如果错误他会抛出异常并被捕获
         SecurityUtils.getSubject().login(token);
         // 如果没有抛出异常则代表登入成功，返回true

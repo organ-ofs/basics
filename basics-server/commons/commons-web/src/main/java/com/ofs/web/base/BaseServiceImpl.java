@@ -1,17 +1,12 @@
-package com.ofs.web.base.impl;
+package com.ofs.web.base;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.ofs.web.base.BaseEntity;
-import com.ofs.web.base.BaseService;
-import com.ofs.web.base.IBaseMapper;
 import com.ofs.web.base.bean.SystemCode;
 import com.ofs.web.exception.RequestException;
 import com.ofs.web.jwt.JwtToken;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-import org.springframework.beans.BeanUtils;
+import com.ofs.web.utils.WebTools;
 
 import java.util.List;
 
@@ -60,19 +55,8 @@ public class BaseServiceImpl<M extends IBaseMapper<T>, T extends BaseEntity> ext
     }
 
     @Override
-    public JwtToken getJwtToken() {
-//        Tools.executeLogin();
-        Subject subject = SecurityUtils.getSubject();
-        if (!subject.isAuthenticated()) {
-            throw new RequestException(SystemCode.NOT_SING_IN);
-        }
-        JwtToken jwtToken = new JwtToken();
-        Object principal = subject.getPrincipal();
-        if (principal == null) {
-            throw RequestException.fail("用户信息获取失败");
-        }
-        BeanUtils.copyProperties(principal, jwtToken);
-        return jwtToken;
+    public String getAccount() {
+        JwtToken token = WebTools.getJwtToken();
+        return token.getAccount();
     }
-
 }

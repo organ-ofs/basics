@@ -4,7 +4,7 @@ package com.ofs.web.shiro.matcher;
 import com.ofs.utils.encrypt.utils.MD5EncryptUtil;
 import com.ofs.web.jwt.JwtToken;
 import com.ofs.web.jwt.JwtUtil;
-import com.ofs.web.utils.Tools;
+import com.ofs.web.utils.WebTools;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.DisabledAccountException;
@@ -33,7 +33,7 @@ public class MyCredentialsMatcher extends SimpleCredentialsMatcher {
         } else {
             boolean verify = JwtUtil.verify(jwtToken.getToken(), jwtToken.getAccount());
             if (!verify) {
-                throw new DisabledAccountException(Tools.VERIFYFAIL);
+                throw new DisabledAccountException(WebTools.VERIFYFAIL);
             }
         }
         return true;

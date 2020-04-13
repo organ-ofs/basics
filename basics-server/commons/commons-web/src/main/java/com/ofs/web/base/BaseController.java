@@ -8,13 +8,15 @@ import com.ofs.web.annotation.SysLogs;
 import com.ofs.web.base.bean.RequestTable;
 import com.ofs.web.base.bean.Result;
 import com.ofs.web.base.bean.ResultTable;
-import io.swagger.annotations.ApiImplicitParam;
+import com.ofs.web.jwt.JwtToken;
+import com.ofs.web.utils.WebTools;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -33,7 +35,6 @@ public abstract class BaseController<T extends BaseEntity> {
 
     @InitBinder
     public void initBinder(ServletRequestDataBinder binder) {
-
         //自动转换日期类型的字段格式
         binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"), true));
 
@@ -49,16 +50,15 @@ public abstract class BaseController<T extends BaseEntity> {
 
     @PostMapping("/list")
     @ApiOperation(value = "分页")
-    @ApiImplicitParam(paramType = "header", name = "Authorization", value = "身份认证Token", required = false)
-    Result<IPage<T>> listPage(RequestTable<T> request) {
-        return ResultTable.result(getService().listPage(new Page(request.getCurrent(), request.getCurrent()), request.getData()));
+    Result<IPage<T>> listPage(@RequestBody RequestTable<T> request) {
+        return ResultTable.result(getService().listPage(new Page(request.getCurrent(), request.getSize()), request.getData()));
     }
 
 
     @PostMapping("/edit")
     @ApiOperation(value = "更新根据ID")
     @SysLogs("更新根据ID")
-    Result edit(@Validated T dto) throws Exception {
+    Result edit(@RequestBody @Validated T dto) throws Exception {
         getService().update(dto);
         return Result.result();
     }
@@ -82,9 +82,14 @@ public abstract class BaseController<T extends BaseEntity> {
     @PostMapping("/add")
     @ApiOperation(value = "新增")
     @SysLogs("新增")
-    Result add(@Validated T dto) throws Exception {
+    Result add(@RequestBody @Validated T dto) throws Exception {
         dto.setId(IdentifierUtils.nextUuid());
         getService().add(dto);
         return Result.result();
+    }
+
+    public String getAccount() {
+        JwtToken token = WebTools.getJwtToken();
+        return token.getAccount();
     }
 }

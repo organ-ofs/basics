@@ -3,14 +3,9 @@ package com.ofs.sys.web.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.ofs.sys.web.entity.SysMenus;
-import com.ofs.sys.web.entity.SysResource;
 import com.ofs.sys.web.mapper.SysMenusMapper;
-import com.ofs.sys.web.message.Dict;
 import com.ofs.sys.web.service.SysMenusService;
-import com.ofs.sys.web.service.SysResourceService;
-import com.ofs.utils.IdentifierUtils;
-import com.ofs.web.base.impl.BaseServiceImpl;
-import com.ofs.web.exception.RequestException;
+import com.ofs.web.base.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,41 +20,9 @@ import java.util.stream.Collectors;
 @Service
 public class SysMenusServiceImpl extends BaseServiceImpl<SysMenusMapper, SysMenus> implements SysMenusService {
 
+
     @Autowired
-    private SysResourceService resourceService;
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public boolean add(SysMenus entity) throws Exception {
-
-        SysResource resource = SysResource.builder()
-                .parentId(entity.getParentId())
-                .name(entity.getName())
-                .url(entity.getPath())
-                .type(Dict.DictEnum.MENU.getCode())
-                .build();
-        resource.setId(IdentifierUtils.nextUuid());
-        boolean b = resourceService.add(resource);
-        if (!b) {
-            throw RequestException.fail("操作失败");
-        }
-        entity.setId(IdentifierUtils.nextUuid());
-        b = super.save(entity);
-        if (!b) {
-            throw RequestException.fail("操作失败");
-        }
-        return true;
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void update(SysMenus entity) throws Exception {
-        boolean b = super.updateById(entity);
-        if (!b) {
-            throw RequestException.fail("操作失败");
-        }
-    }
-
+    SysMenusMapper mapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -67,8 +30,6 @@ public class SysMenusServiceImpl extends BaseServiceImpl<SysMenusMapper, SysMenu
         SysMenus menus = super.getById(id);
         if (menus != null) {
             super.remove(id);
-            String resourceId = menus.getResourceId();
-            resourceService.remove(resourceId);
         }
 
         //子项
@@ -77,9 +38,72 @@ public class SysMenusServiceImpl extends BaseServiceImpl<SysMenusMapper, SysMenu
         List<SysMenus> menusList = baseMapper.selectList(wrapper);
         if (CollectionUtils.isNotEmpty(menusList)) {
             List<String> ids = menusList.stream().map(SysMenus::getId).collect(Collectors.toList());
-            List<String> resourceIds = menusList.stream().map(SysMenus::getResourceId).collect(Collectors.toList());
             super.removeByIds(ids);
-            resourceService.removes(resourceIds);
         }
     }
+
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public List<SysMenus> getTree(SysMenus menus) {
+        menus.setParentId("0");
+        List<SysMenus> list = mapper.getList(menus);
+        this.getMenus(list, menus);
+        return list;
+    }
+
+    /**
+     * 递归获取资源
+     *
+     * @param list
+     * @return
+     */
+    private List<SysMenus> getMenus(List<SysMenus> list, SysMenus menu) {
+        if (CollectionUtils.isNotEmpty(list)) {
+            list.stream().forEach(e -> {
+                if (e.getLeaf()) {
+                    menu.setParentId(e.getId());
+                    List<SysMenus> menusList = mapper.getList(menu);
+                    e.setChildren(menusList);
+                    this.getMenus(menusList, menu);
+                }
+            });
+        }
+        return list;
+    }
+
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public List<SysMenus> getTreeByRole(String roleId) {
+        SysMenus menus = SysMenus.builder()
+                .roleId(roleId)
+                .parentId("0")
+                .build();
+        List<SysMenus> list = mapper.getListByRole(menus);
+        this.getMenusByRole(list, menus);
+        return list;
+    }
+
+
+    /**
+     * 递归获取资源
+     *
+     * @param list
+     * @return
+     */
+    private List<SysMenus> getMenusByRole(List<SysMenus> list, SysMenus menus) {
+        if (CollectionUtils.isNotEmpty(list)) {
+            list.stream().forEach(e -> {
+                if (e.getLeaf()) {
+                    menus.setParentId(e.getId());
+                    List<SysMenus> menuss = mapper.getListByRole(menus);
+                    e.setChildren(menuss);
+                    this.getMenus(menuss, menus);
+                }
+            });
+        }
+        return list;
+    }
+
 }

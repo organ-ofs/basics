@@ -146,7 +146,7 @@ public class ShiroServiceImpl implements ShiroService {
     @Override
     public List<ShiroRole> getAllRoleByUserId(String uid) {
 
-        List<ShiroRole> list = BeanConverterUtil.convert(roleService.getAllRoleByUserId(uid, false), ShiroRole.class);
+        List<ShiroRole> list = BeanConverterUtil.convert(roleService.getAllRoleByUserId(uid), ShiroRole.class);
         return list;
     }
 
@@ -157,6 +157,6 @@ public class ShiroServiceImpl implements ShiroService {
 
     @Override
     public ShiroUser getUserByAccount(String account) {
-        return BeanConverterUtil.convert(userService.getUserByAccount(account, false), ShiroUser.class);
+        return BeanConverterUtil.convert(userService.getUserByAccount(account), ShiroUser.class);
     }
 }

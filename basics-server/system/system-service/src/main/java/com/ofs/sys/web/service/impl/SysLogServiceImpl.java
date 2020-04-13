@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.ofs.sys.web.entity.SysLog;
 import com.ofs.sys.web.mapper.SysLogMapper;
 import com.ofs.sys.web.service.SysLogService;
-import com.ofs.web.base.impl.BaseServiceImpl;
+import com.ofs.web.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**

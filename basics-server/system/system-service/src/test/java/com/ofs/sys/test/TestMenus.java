@@ -1,23 +1,17 @@
 package com.ofs.sys.test;
 
-import com.alibaba.fastjson.JSONObject;
 import com.ofs.sys.SystemApiApplication;
-import com.ofs.sys.web.entity.SysResource;
-import com.ofs.sys.web.message.Dict;
+import com.ofs.sys.web.entity.SysMenus;
+import com.ofs.web.base.bean.RequestTable;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {SystemApiApplication.class})
@@ -28,18 +22,13 @@ public class TestMenus extends TestBase {
     @Test
     @Rollback
     public void list() {
+        RequestTable<SysMenus> request = new RequestTable<>();
+        request.setCurrent(1);
+        request.setSize(20);
+        request.setData(SysMenus.builder().build());
         try {
-            MvcResult result = super.mockMvc.perform(post("/system/menu/list")
-                    .header("Authorization", header)
-                    .param("current", "1")
-                    .param("size", "10")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{}"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                    .andDo(MockMvcResultHandlers.print())
+            super.request("/system/menu/list", request)
                     .andReturn();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,16 +37,13 @@ public class TestMenus extends TestBase {
     @Test
     @Rollback
     public void add() {
-        SysResource info = SysResource.builder()
-                .type("1").status("1").parentId("0").name("测试新增")
-                .code("test").type(Dict.DictEnum.MENU.getCode())
-                .url("/test/add")
+        SysMenus info = SysMenus.builder()
+                .status("1").parentId("0").name("测试新增")
+                .code("test")
                 .build();
-
         try {
-            MvcResult result = super.request("/system/menu/add", info)
+            super.request("/system/menu/add", info)
                     .andReturn();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -69,14 +55,10 @@ public class TestMenus extends TestBase {
     public void remove() {
         String id = "63fb073973c54df7ad5fbc8eb883b775";
         try {
-            MvcResult result = super.mockMvc.perform(post("/system/menu/remove")
-                    .header("Authorization", header)
-                    .param("id", id))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                    .andDo(MockMvcResultHandlers.print())
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            params.add("id", id);
+            super.request("/system/menu/remove", params)
                     .andReturn();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,20 +68,13 @@ public class TestMenus extends TestBase {
     @Test
     @Rollback
     public void update() {
-        SysResource info = SysResource.builder()
+        SysMenus info = SysMenus.builder()
                 .name("修改的测试名")
                 .build();
         info.setId("63fb073973c54df7ad5fbc8eb883b775");
         try {
-            MvcResult result = super.mockMvc.perform(post("/system/menu/edit")
-                    .header("Authorization", header)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(JSONObject.toJSON(info).toString()))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                    .andDo(MockMvcResultHandlers.print())
+            super.request("/system/menu/edit", info)
                     .andReturn();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -110,14 +85,10 @@ public class TestMenus extends TestBase {
     public void get() {
         String id = "63fb073973c54df7ad5fbc8eb883b775";
         try {
-            MvcResult result = super.mockMvc.perform(post("/system/menu/get")
-                    .header("Authorization", header)
-                    .param("id", id))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                    .andDo(MockMvcResultHandlers.print())
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            params.add("id", id);
+            super.request("/system/menu/get", params)
                     .andReturn();
-
         } catch (Exception e) {
             e.printStackTrace();
         }

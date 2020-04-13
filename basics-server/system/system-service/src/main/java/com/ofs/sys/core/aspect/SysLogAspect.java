@@ -10,7 +10,7 @@ import com.ofs.utils.DateUtils;
 import com.ofs.utils.IdentifierUtils;
 import com.ofs.web.annotation.SysLogs;
 import com.ofs.web.jwt.JwtToken;
-import com.ofs.web.utils.Tools;
+import com.ofs.web.utils.WebTools;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.Subject;
@@ -25,9 +25,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author gaoly
@@ -66,8 +71,8 @@ public class SysLogAspect {
         //获取动作Action释义
         sysLog.setContent(getMethodSysLogsAnnotationValue(joinPoint));
         //获取IP
-        sysLog.setIp(Tools.getClientIp(request));
-        sysLog.setAjax(Tools.ajax(request) ? "1" : "0");
+        sysLog.setIp(WebTools.getClientIp(request));
+        sysLog.setAjax(WebTools.ajax(request) ? "1" : "0");
         sysLog.setUri(request.getRequestURI());
         String s = this.paramFilter(joinPoint.getArgs());
         //根据系统需求自定义
@@ -100,6 +105,7 @@ public class SysLogAspect {
     }
 
     private String paramFilter(Object[] params) {
+        List<Object> logArgs = new ArrayList<>();
         //判断是否含有密码敏感数据
         final String filterString = "******";
         if (params.length > 0) {
@@ -107,21 +113,26 @@ public class SysLogAspect {
                 if (params[i] instanceof SignInDto) {
                     SignInDto sign = (SignInDto) params[i];
                     sign.setPassword(filterString);
-                    params[i] = sign;
+                    logArgs.add(sign);
                 }
                 if (params[i] instanceof SysUser) {
                     SysUser userAddDTO = (SysUser) params[i];
                     userAddDTO.setPassword(filterString);
-                    params[i] = userAddDTO;
+                    logArgs.add(userAddDTO);
                 }
                 if (params[i] instanceof ResetPasswordDto) {
                     ResetPasswordDto resetPasswordDTO = (ResetPasswordDto) params[i];
                     resetPasswordDTO.setPassword(filterString);
-                    params[i] = resetPasswordDTO;
+                    logArgs.add(resetPasswordDTO);
+                }
+                if (params[i] instanceof ServletRequest || params[i] instanceof ServletResponse || params[i] instanceof MultipartFile) {
+                    //ServletRequest不能序列化，从入参里排除，否则报异常：java.lang.IllegalStateException: It is illegal to call this method if the current request is not in asynchronous mode (i.e. isAsyncStarted() returns false)
+                    //ServletResponse不能序列化 从入参里排除，否则报异常：java.lang.IllegalStateException: getOutputStream() has already been called for this response
+                    continue;
                 }
             }
         }
-        return JSON.toJSONString(params);
+        return JSON.toJSONString(logArgs);
     }
 
 

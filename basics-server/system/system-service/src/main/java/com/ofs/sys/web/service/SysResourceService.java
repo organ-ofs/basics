@@ -13,22 +13,6 @@ import java.util.List;
 public interface SysResourceService extends BaseService<SysResource> {
 
     /**
-     * 根据角色Id获取资源树
-     *
-     * @param roleId
-     * @return
-     */
-    List<SysResource> getTreeByRole(String roleId);
-
-    /**
-     * 获取资源树
-     *
-     * @param resource
-     * @return
-     */
-    List<SysResource> getTree(SysResource resource);
-
-    /**
      * 获取资源list by role
      *
      * @param resource

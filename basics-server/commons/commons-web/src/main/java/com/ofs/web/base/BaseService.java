@@ -3,7 +3,6 @@ package com.ofs.web.base;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ofs.web.jwt.JwtToken;
 
 import java.util.List;
 
@@ -62,9 +61,9 @@ public interface BaseService<T extends BaseEntity> extends IService<T> {
     List<T> list(T entity);
 
     /**
-     * 获取登陆信息
+     * 获取登陆账号
      *
      * @return
      */
-    JwtToken getJwtToken();
+    String getAccount();
 }

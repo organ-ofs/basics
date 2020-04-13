@@ -6,7 +6,6 @@
     <resultMap id="BaseResultMap" type="com.ofs.sys.web.entity.SysMenus">
         <result column="ID" property="id"/>
         <result column="NAME" property="name"/>
-        <result column="RESOURCE_ID" property="resourceId"/>
         <result column="PARENT_ID" property="parentId"/>
         <result column="GRADE" property="grade"/>
         <result column="PATH" property="path"/>
@@ -15,7 +14,6 @@
         <result column="PERMISSION" property="permission"/>
         <result column="SORT" property="sort"/>
         <result column="ICON" property="icon"/>
-        <result column="HIDDEN" property="hidden"/>
         <result column="VERIFICATION" property="verification"/>
         <result column="DESCRIPTION" property="description"/>
         <result column="CREATE_DATE" property="createDate"/>
@@ -26,20 +24,46 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        T.ID, T.NAME, T.RESOURCE_ID, T.PARENT_ID, T.GRADE, T.PATH, T.COMPONENT, T.TITLE, T.PERMISSION,
+        T.ID, T.NAME, T.PARENT_ID, T.GRADE, T.PATH, T.COMPONENT, T.TITLE, T.PERMISSION,
         T.SORT, T.ICON, T.HIDDEN, T.VERIFICATION, T.DESCRIPTION,
         T.CREATE_DATE, T.UPDATE_DATE, T.CREATE_USER, T.UPDATE_USER
     </sql>
 
-    <sql id="where">
+    <sql id="Base_Where_Clause">
         <where>
             <if test="params.title!=null and params.title!=''">T.TITLE=#{params.title}</if>
+            <if test="params.roleId!=null and params.roleId!=''">R.roleId=#{params.roleId}</if>
+            <if test="params.parentId!=null and params.parentId!=''">T.PARENT_ID=#{params.parentId}</if>
         </where>
     </sql>
     <select id="listPage" resultMap="BaseResultMap">
         SELECT
         <include refid="Base_Column_List"/>
         FROM sys_menus T
-        <include refid="where"/>
+        <include refid="Base_Where_Clause"/>
+    </select>
+    <!-- 根据条件查询信息 -->
+    <select id="getList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        , (select case when count(*) >0 then 1 else 0 end from sys_menus M where M.PARENT_ID=T.ID) LEAF
+        <!--         , DECODE(R.ROLE_ID,NULL,0,1 ) IS_AUTH-->
+        ,case when R.ROLE_ID is null then '0' else '1' end as IS_AUTH
+        FROM sys_menus T
+        LEFT JOIN SYS_ROLE_PERMISSION R ON R.PERMISSION=T.PERMISSION
+        <include refid="Base_Where_Clause"/>
+        ORDER BY T.SORT
+    </select>
+    <!-- 根据条件查询信息 -->
+    <select id="getListByRole" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        , (select case when count(*) >0 then 1 else 0 end from sys_menus M where M.PARENT_ID=T.ID) LEAF
+        <!--         , DECODE(R.ROLE_ID,NULL,0,1 ) IS_AUTH-->
+        ,case when R.ROLE_ID is null then '0' else '1' end as IS_AUTH
+        FROM SYS_MENUS T
+        INNER JOIN SYS_ROLE_PERMISSION R ON R.PERMISSION=T.PERMISSION
+        <include refid="Base_Where_Clause"/>
+        ORDER BY T.SORT
     </select>
 </mapper>

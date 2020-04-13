@@ -1,22 +1,18 @@
 package com.ofs.sys.test;
 
-import com.alibaba.fastjson.JSONObject;
 import com.ofs.sys.SystemApiApplication;
 import com.ofs.sys.web.entity.SysUser;
+import com.ofs.web.base.bean.RequestTable;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.transaction.annotation.Transactional;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {SystemApiApplication.class})
@@ -37,13 +33,7 @@ public class TestUser extends TestBase {
                 .name("test")
                 .build();
         try {
-            MvcResult result = super.mockMvc.perform(post("/api/system/user/add")
-                    .header("Authorization", header)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(JSONObject.toJSON(info).toString()))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                    .andDo(MockMvcResultHandlers.print())
+            MvcResult result = super.request("/system/user/add", info)
                     .andReturn();
 
         } catch (Exception e) {
@@ -55,12 +45,9 @@ public class TestUser extends TestBase {
     @Rollback
     public void remove() {
         try {
-            MvcResult result = super.mockMvc.perform(post("/api/system/user/remove")
-                    .header("Authorization", header)
-                    .param("id", id))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                    .andDo(MockMvcResultHandlers.print())
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            params.add("id", id);
+            MvcResult result = super.request("/system/user/remove", params)
                     .andReturn();
 
         } catch (Exception e) {
@@ -80,13 +67,7 @@ public class TestUser extends TestBase {
                 .build();
         info.setId(id);
         try {
-            MvcResult result = super.mockMvc.perform(post("/api/system/user/edit")
-                    .header("Authorization", header)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(JSONObject.toJSON(info).toString()))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                    .andDo(MockMvcResultHandlers.print())
+            MvcResult result = super.request("/system/user/edit", info)
                     .andReturn();
 
         } catch (Exception e) {
@@ -97,12 +78,9 @@ public class TestUser extends TestBase {
     @Test
     public void get() {
         try {
-            MvcResult result = super.mockMvc.perform(post("/api/system/user/get")
-                    .header("Authorization", header)
-                    .param("id", id))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                    .andDo(MockMvcResultHandlers.print())
+            MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+            params.add("id", id);
+            MvcResult result = super.request("/system/user/get", params)
                     .andReturn();
 
         } catch (Exception e) {
@@ -112,18 +90,13 @@ public class TestUser extends TestBase {
 
     @Test
     public void list() {
+        RequestTable<SysUser> request = new RequestTable<>();
+        request.setCurrent(1);
+        request.setSize(20);
+        request.setData(SysUser.builder().build());
         try {
-            MvcResult result = super.mockMvc.perform(post("/api/system/user/list")
-                    .header("Authorization", header)
-                    .param("current", "1")
-                    .param("size", "10")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{}"))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                    .andDo(MockMvcResultHandlers.print())
+            super.request("/system/user/list", request)
                     .andReturn();
-
         } catch (Exception e) {
             e.printStackTrace();
         }

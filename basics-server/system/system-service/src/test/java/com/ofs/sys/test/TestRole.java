@@ -1,8 +1,8 @@
 package com.ofs.sys.test;
 
-import com.alibaba.fastjson.JSONObject;
 import com.ofs.sys.SystemApiApplication;
 import com.ofs.sys.web.entity.SysRole;
+import com.ofs.web.base.bean.RequestTable;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,21 +29,13 @@ public class TestRole extends TestBase {
     @Test
     @Rollback
     public void add() {
-        SysRole role = SysRole.builder()
+        SysRole info = SysRole.builder()
                 .code("admin1")
                 .name("admin1")
                 .description("说明")
                 .build();
-        role.setCreateDate("");
-        role.setCreateUser("");
         try {
-            MvcResult result = super.mockMvc.perform(post("/system/role/add")
-                    .header("Authorization", header)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(JSONObject.toJSON(role).toString()))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                    .andDo(MockMvcResultHandlers.print())
+            super.request("/system/role/add", info)
                     .andReturn();
 
         } catch (Exception e) {
@@ -54,20 +46,14 @@ public class TestRole extends TestBase {
     @Test
     @Rollback
     public void update() {
-        SysRole role = SysRole.builder()
+        SysRole info = SysRole.builder()
                 .code("admin")
                 .name("admin")
                 .description("更新说明")
                 .build();
-        role.setId(id);
+        info.setId(id);
         try {
-            MvcResult result = super.mockMvc.perform(post("/system/role/edit")
-                    .header("Authorization", header)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(JSONObject.toJSON(role).toString()))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                    .andDo(MockMvcResultHandlers.print())
+            MvcResult result = super.request("/system/role/edit", info)
                     .andReturn();
 
         } catch (Exception e) {
@@ -78,22 +64,17 @@ public class TestRole extends TestBase {
     @Test
     @Rollback
     public void list() {
-        SysRole role = SysRole.builder().build();
+        RequestTable<SysRole> request = new RequestTable<>();
+        request.setCurrent(1);
+        request.setSize(20);
+        request.setData(SysRole.builder().build());
         try {
-            MvcResult result = super.mockMvc.perform(post("/system/role/list")
-                    .header("Authorization", header)
-                    .param("current", "1")
-                    .param("size", "10")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(JSONObject.toJSONString(role)))
-                    .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                    .andDo(MockMvcResultHandlers.print())
+            super.request("/system/role/list", request)
                     .andReturn();
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+
     }
 
     @Test

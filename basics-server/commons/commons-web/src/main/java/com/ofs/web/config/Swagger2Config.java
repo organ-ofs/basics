@@ -1,6 +1,6 @@
 package com.ofs.web.config;
 
-import com.ofs.web.constant.StaticConstant;
+import com.ofs.web.jwt.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -24,6 +24,7 @@ import java.util.List;
 @Configuration
 @EnableSwagger2
 public class Swagger2Config {
+    String Bearer = "Bearer " + JwtUtil.TEST_TOKEN;
 
     @Bean
     public Docket createSysApi() {
@@ -35,7 +36,7 @@ public class Swagger2Config {
                 .modelRef(new ModelRef("string")).parameterType("header")
                 //Basic
                 //required表示是否必填，defaultvalue表示默认值
-                .required(false).defaultValue(StaticConstant.TOKEN_START).build();
+                .required(false).defaultValue(Bearer).build();
         //添加完此处一定要把下边的带***的也加上否则不生效
         pars.add(ticketPar.build());
 

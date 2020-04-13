@@ -8,8 +8,8 @@ import com.ofs.commons.plugin.quartz.dto.JobTaskLogDto;
 import com.ofs.commons.plugin.quartz.entity.JobTaskLog;
 import com.ofs.commons.plugin.quartz.mapper.JobTaskLogMapper;
 import com.ofs.commons.plugin.quartz.service.IJobTaskLogService;
+import com.ofs.web.base.BaseServiceImpl;
 import com.ofs.web.base.bean.ResultTable;
-import com.ofs.web.base.impl.BaseServiceImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 

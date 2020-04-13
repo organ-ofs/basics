@@ -9,18 +9,15 @@ import com.ofs.sys.web.entity.SysResource;
 import com.ofs.sys.web.entity.SysRole;
 import com.ofs.sys.web.entity.SysUser;
 import com.ofs.sys.web.mapper.SysUserMapper;
+import com.ofs.sys.web.service.SysResourceService;
 import com.ofs.sys.web.service.SysRoleService;
-import com.ofs.sys.web.service.SysUserRoleService;
 import com.ofs.sys.web.service.SysUserService;
 import com.ofs.utils.DateUtils;
 import com.ofs.utils.encrypt.utils.MD5EncryptUtil;
 import com.ofs.web.auth.service.ShiroService;
-import com.ofs.web.base.bean.SystemCode;
-import com.ofs.web.base.impl.BaseServiceImpl;
+import com.ofs.web.base.BaseServiceImpl;
 import com.ofs.web.exception.RequestException;
-import com.ofs.web.jwt.JwtToken;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 @Service
 public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> implements SysUserService {
@@ -38,64 +36,62 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     private SysRoleService roleService;
 
     @Autowired
-    private SysUserRoleService userRoleService;
+    private SysResourceService resourceService;
 
     @Autowired
     private ShiroService shiroService;
 
     @Override
-    public SysUser getUserByAccount(String account, boolean hasMenu) {
+    public SysUser getUserByAccount(String account) {
         QueryWrapper wrapper = new QueryWrapper();
         wrapper.eq(SysUser.ACCOUNT, account);
         SysUser user = this.getOne(wrapper);
         if (user == null) {
             return null;
         }
-        user.setRoles(roleService.getAllRoleByUserId(user.getId(), hasMenu));
+        user.setRoles(roleService.getAllRoleByUserId(user.getId()));
         return user;
     }
 
     @Override
-    public SysUser getUserById(String id, boolean hasMenu) {
+    public SysUser getUserById(String id) {
         SysUser user = this.getById(id);
         if (user == null) {
             return null;
         }
-        user.setRoles(roleService.getAllRoleByUserId(user.getId(), hasMenu));
+        user.setRoles(roleService.getAllRoleByUserId(user.getId()));
         return user;
     }
 
     @Override
     public SysUser getCurrentUser() {
-        Subject subject = SecurityUtils.getSubject();
-        if (!subject.isAuthenticated()) {
-            throw new RequestException(SystemCode.NOT_SING_IN);
-        }
-        JwtToken jwtToken = super.getJwtToken();
-        SysUser user = this.getUserByAccount(jwtToken.getAccount(), false);
+        SysUser user = this.getUserByAccount(super.getAccount());
         if (user == null) {
             throw RequestException.fail("用户不存在");
         }
         //获取菜单/权限信息
-        List<SysMenus> allPer = userRolesRegexMenu(roleService.getAllRoleByUserId(user.getId(), true));
+        List<SysMenus> allPer = userRolesRegexMenu(roleService.getAllRoleByUserId(user.getId()));
         user.setMenus(allPer);
         return user;
     }
 
     @Override
     public List<String> getAllPermissionTag(String account) {
-        JwtToken jwtToken = super.getJwtToken();
         QueryWrapper wrapper = new QueryWrapper();
-        wrapper.eq(SysUser.ACCOUNT, jwtToken.getAccount());
+        wrapper.eq(SysUser.ACCOUNT, super.getAccount());
         SysUser user = this.getOne(wrapper);
         if (user == null) {
             throw RequestException.fail("用户不存在");
         }
-        List<SysRole> allRoleByUserId = roleService.getAllRoleByUserId(user.getId(), true);
+        List<SysRole> roles = roleService.getAllRoleByUserId(user.getId());
         List<String> permissions = new LinkedList<>();
-        for (SysRole sysRole : allRoleByUserId) {
-            if (sysRole.getResources() != null && sysRole.getResources().size() > 0) {
-                sysRole.getResources().forEach(s -> permissions.add(s.getPermission()));
+
+        for (SysRole role : roles) {
+            SysResource resource = SysResource.builder().roleId(role.getId()).build();
+            List<SysResource> resources = resourceService.getListByRole(resource);
+            if (CollectionUtils.isNotEmpty(resources)) {
+                List<String> list = resources.stream().map(SysResource::getPermission).collect(Collectors.toList());
+                permissions.addAll(list);
             }
         }
         return permissions;
@@ -127,7 +123,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
         userPage.getRecords().forEach(v -> {
             //查找匹配所有用户的角色
-            v.setRoles(roleService.getAllRoleByUserId(v.getId(), false));
+            v.setRoles(roleService.getAllRoleByUserId(v.getId()));
         });
         return userPage;
     }
@@ -153,7 +149,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
     @Override
     public boolean add(SysUser user) {
-        SysUser getUser = this.getUserByAccount(user.getAccount(), false);
+        SysUser getUser = this.getUserByAccount(user.getAccount());
         if (getUser != null) {
             throw RequestException.fail(
                     String.format("已经存在用户名为 %s 的用户", user.getAccount()));

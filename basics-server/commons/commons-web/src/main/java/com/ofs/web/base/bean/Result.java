@@ -1,6 +1,5 @@
 package com.ofs.web.base.bean;
 
-import com.ofs.web.base.BaseDto;
 import com.ofs.web.exception.BaseErrorException;
 import com.ofs.web.knowledge.IMessageEnum;
 import com.ofs.web.utils.LocaleMessageSourceUtil;
@@ -20,7 +19,7 @@ import java.text.MessageFormat;
 @ToString
 @Builder
 @AllArgsConstructor
-public class Result<T> extends BaseDto {
+public class Result<T> {
 
     private static final long serialVersionUID = 1L;
 
