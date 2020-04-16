@@ -40,6 +40,8 @@ public class SysRole extends BaseEntity {
 
     @TableField(exist = false)
     private List<SysResource> resources;
+    @TableField(exist = false)
+    private List<SysMenus> menus;
 
 
     public static final String CODE = "code";

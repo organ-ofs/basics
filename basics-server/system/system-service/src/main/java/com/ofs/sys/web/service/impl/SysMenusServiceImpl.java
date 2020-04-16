@@ -72,12 +72,11 @@ public class SysMenusServiceImpl extends BaseServiceImpl<SysMenusMapper, SysMenu
         return list;
     }
 
-
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public List<SysMenus> getTreeByRole(String roleId) {
+    public List<SysMenus> getTreeByRole(List<String> roleIds) {
         SysMenus menus = SysMenus.builder()
-                .roleId(roleId)
+                .roleIds(roleIds)
                 .parentId("0")
                 .build();
         List<SysMenus> list = mapper.getListByRole(menus);

@@ -19,5 +19,12 @@ public interface SysMenusService extends BaseService<SysMenus> {
      */
     List<SysMenus> getTree(SysMenus menus);
 
-    List<SysMenus> getTreeByRole(String roleId);
+    /**
+     * 获取菜单树
+     *
+     * @param roleIds
+     * @return
+     */
+    List<SysMenus> getTreeByRole(List<String> roleIds);
+
 }

@@ -41,12 +41,4 @@ public class MenuController extends BaseController<SysMenus> {
         return Result.result(data);
     }
 
-    @ApiOperation(value = "根据角色获取资源树-菜单可用", httpMethod = "POST", produces = "application/json")
-    @RequestMapping(value = "/getTreeByRole", method = RequestMethod.POST)
-    public Result getTreeByRole(String roleId, HttpServletResponse response) {
-        List<SysMenus> data = service.getTreeByRole(roleId);
-        return Result.result(data);
-    }
-
-
 }

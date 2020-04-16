@@ -81,6 +81,8 @@ public class SysMenus extends BaseEntity {
     private List<String> ids;
     @TableField(exist = false)
     private String roleId;
+    @TableField(exist = false)
+    private List<String> roleIds;
     /**
      * 是否有权限
      */

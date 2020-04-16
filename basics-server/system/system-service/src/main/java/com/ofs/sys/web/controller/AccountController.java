@@ -90,4 +90,10 @@ public class AccountController {
         return Result.result(userService.getAllPermissionTag(token.getAccount()));
     }
 
+    @PostMapping(value = "/system/menus")
+    @ApiOperation(value = "获取用户的菜单树")
+    public Result<List<String>> getMenus() {
+        JwtToken token = WebTools.getJwtToken();
+        return Result.result(userService.getMenus(token.getAccount()));
+    }
 }

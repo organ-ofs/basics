@@ -9,24 +9,24 @@ import com.ofs.sys.web.entity.SysResource;
 import com.ofs.sys.web.entity.SysRole;
 import com.ofs.sys.web.entity.SysUser;
 import com.ofs.sys.web.mapper.SysUserMapper;
+import com.ofs.sys.web.service.SysMenusService;
 import com.ofs.sys.web.service.SysResourceService;
 import com.ofs.sys.web.service.SysRoleService;
 import com.ofs.sys.web.service.SysUserService;
-import com.ofs.utils.DateUtils;
 import com.ofs.utils.encrypt.utils.MD5EncryptUtil;
 import com.ofs.web.auth.service.ShiroService;
 import com.ofs.web.base.BaseServiceImpl;
 import com.ofs.web.exception.RequestException;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.shiro.SecurityUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +37,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
     @Autowired
     private SysResourceService resourceService;
+
+    @Autowired
+    private SysMenusService menusService;
 
     @Autowired
     private ShiroService shiroService;
@@ -70,24 +73,26 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
             throw RequestException.fail("用户不存在");
         }
         //获取菜单/权限信息
-        List<SysMenus> allPer = userRolesRegexMenu(roleService.getAllRoleByUserId(user.getId()));
-        user.setMenus(allPer);
+        if (CollectionUtils.isNotEmpty(user.getRoles())) {
+            List<String> roleIds = user.getRoles().stream().map(SysRole::getId).collect(Collectors.toList());
+            List<SysMenus> allPer = menusService.getTreeByRole(roleIds);
+            user.setMenus(allPer);
+        }
         return user;
     }
 
     @Override
     public List<String> getAllPermissionTag(String account) {
-        QueryWrapper wrapper = new QueryWrapper();
-        wrapper.eq(SysUser.ACCOUNT, super.getAccount());
-        SysUser user = this.getOne(wrapper);
+        SysUser user = this.getUserByAccount(super.getAccount());
         if (user == null) {
             throw RequestException.fail("用户不存在");
         }
         List<SysRole> roles = roleService.getAllRoleByUserId(user.getId());
         List<String> permissions = new LinkedList<>();
 
-        for (SysRole role : roles) {
-            SysResource resource = SysResource.builder().roleId(role.getId()).build();
+        if (CollectionUtils.isNotEmpty(roles)) {
+            List<String> roleIds = roles.stream().map(SysRole::getId).collect(Collectors.toList());
+            SysResource resource = SysResource.builder().roleIds(roleIds).build();
             List<SysResource> resources = resourceService.getListByRole(resource);
             if (CollectionUtils.isNotEmpty(resources)) {
                 List<String> list = resources.stream().map(SysResource::getPermission).collect(Collectors.toList());
@@ -98,21 +103,17 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     }
 
     @Override
-    public List<SysMenus> userRolesRegexMenu(List<SysRole> roles) {
-        if (roles != null && roles.size() > 0) {
-            Map<String, SysResource> menuMap = new LinkedHashMap<>();
-            roles.forEach(role -> {
-                if (role.getResources() != null && role.getResources().size() > 0) {
-                    role.getResources().forEach(menu -> //含有则不覆盖
-                            menuMap.putIfAbsent(menu.getId(), menu));
-                }
-            });
-            Map<String, SysMenus> cacheMap = new ConcurrentHashMap<>(16);
-            List<SysMenus> menuList = new CopyOnWriteArrayList<>();
-
-            return menuList;
+    public List<SysMenus> getMenus(String account) {
+        SysUser user = this.getUserByAccount(super.getAccount());
+        if (user == null) {
+            throw RequestException.fail("用户不存在");
         }
-        return null;
+        List<SysRole> roles = roleService.getAllRoleByUserId(user.getId());
+        if (CollectionUtils.isNotEmpty(roles)) {
+            List<String> roleIds = roles.stream().map(SysRole::getId).collect(Collectors.toList());
+            return menusService.getTreeByRole(roleIds);
+        }
+        return new ArrayList<>();
     }
 
     @Override
@@ -120,7 +121,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
         wrapper.orderByDesc(SysUser.CREATE_DATE);
         IPage<SysUser> userPage = super.listPage(new Page<>(page.getCurrent(), page.getSize()), user);
-
         userPage.getRecords().forEach(v -> {
             //查找匹配所有用户的角色
             v.setRoles(roleService.getAllRoleByUserId(v.getId()));
@@ -129,16 +129,16 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     }
 
     @Override
-    public void remove(String userId) {
+    public void remove(String userId) throws Exception {
         SysUser user = this.getById(userId);
         if (user == null) {
             throw RequestException.fail("用户不存在！");
         }
-//        SysUser sysUser = new SysUser();
-//        BeanUtils.copyProperties(SecurityUtils.getSubject().getPrincipal(), sysUser);
-//        if (user.getAccount().equals(sysUser.getAccount())) {
-//            throw RequestException.fail("不能删除自己的账户！");
-//        }
+        SysUser sysUser = new SysUser();
+        BeanUtils.copyProperties(SecurityUtils.getSubject().getPrincipal(), sysUser);
+        if (user.getAccount().equals(sysUser.getAccount())) {
+            throw RequestException.fail("不能删除自己的账户！");
+        }
         try {
             super.removeById(userId);
             shiroService.clearAuthByUserId(userId, true, true);
@@ -148,6 +148,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean add(SysUser user) {
         SysUser getUser = this.getUserByAccount(user.getAccount());
         if (getUser != null) {
@@ -155,7 +156,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
                     String.format("已经存在用户名为 %s 的用户", user.getAccount()));
         }
         try {
-            user.setCreateDate(DateUtils.getCurrentTime());
             user.setPassword(MD5EncryptUtil.encrypt(user.getPassword() + user.getAccount()));
             super.save(user);
         } catch (Exception e) {
@@ -165,6 +165,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void update(SysUser user) {
         if (this.getById(user.getId()) == null) {
             throw RequestException.fail(
@@ -188,9 +189,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
 
     @Override
     public void resetPassword(ResetPasswordDto resetPasswordDTO) {
-        SysUser user = this.getById(resetPasswordDTO.getAccount().trim());
+        SysUser user = this.getUserByAccount(resetPasswordDTO.getAccount().trim());
         if (user == null) {
-            throw RequestException.fail(String.format("不存在ID为 %s 的用户", resetPasswordDTO.getAccount()));
+            throw RequestException.fail(String.format("不存在的用户: %s", resetPasswordDTO.getAccount()));
         }
         String password = MD5EncryptUtil.encrypt(String.valueOf(resetPasswordDTO.getPassword()) + user.getAccount());
         user.setPassword(password);
@@ -198,7 +199,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserMapper, SysUser> 
             this.updateById(user);
             shiroService.clearAuthByUserId(user.getId(), true, true);
         } catch (Exception e) {
-            throw RequestException.fail(String.format("ID为 %s 的用户密码重置失败", resetPasswordDTO.getAccount()), e);
+            throw RequestException.fail(String.format("用户密码重置失败: %s", resetPasswordDTO.getAccount()), e);
         }
     }
+
 }

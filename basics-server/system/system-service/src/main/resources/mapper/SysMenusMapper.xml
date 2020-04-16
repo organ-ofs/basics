@@ -31,9 +31,15 @@
 
     <sql id="Base_Where_Clause">
         <where>
-            <if test="params.title!=null and params.title!=''">T.TITLE=#{params.title}</if>
-            <if test="params.roleId!=null and params.roleId!=''">R.roleId=#{params.roleId}</if>
-            <if test="params.parentId!=null and params.parentId!=''">T.PARENT_ID=#{params.parentId}</if>
+            <if test="params.title!=null and params.title!=''">and T.TITLE=#{params.title}</if>
+            <if test="params.roleId!=null and params.roleId!=''">and R.ROLE_ID=#{params.roleId}</if>
+            <if test="params.roleIds!=null and params.roleIds.size>0">
+                and R.ROLE_ID in
+                <foreach collection="params.roleIds" item="id" separator="," open="(" close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="params.parentId!=null and params.parentId!=''">and T.PARENT_ID=#{params.parentId}</if>
         </where>
     </sql>
     <select id="listPage" resultMap="BaseResultMap">
@@ -59,8 +65,6 @@
         SELECT
         <include refid="Base_Column_List"/>
         , (select case when count(*) >0 then 1 else 0 end from sys_menus M where M.PARENT_ID=T.ID) LEAF
-        <!--         , DECODE(R.ROLE_ID,NULL,0,1 ) IS_AUTH-->
-        ,case when R.ROLE_ID is null then '0' else '1' end as IS_AUTH
         FROM SYS_MENUS T
         INNER JOIN SYS_ROLE_PERMISSION R ON R.PERMISSION=T.PERMISSION
         <include refid="Base_Where_Clause"/>

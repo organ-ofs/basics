@@ -36,6 +36,12 @@
                 <if test="params.parentId != null">and T.PARENT_ID = #{params.parentId}</if>
                 <if test="params.type != null">and T.TYPE = #{params.type}</if>
                 <if test="params.roleId != null">and R.ROLE_ID = #{params.roleId}</if>
+                <if test="params.roleIds!=null and params.roleIds.size>0">
+                    and R.ROLE_ID in
+                    <foreach collection="params.roleIds" item="id" separator="," open="(" close=")">
+                        #{id}
+                    </foreach>
+                </if>
             </trim>
         </where>
     </sql>

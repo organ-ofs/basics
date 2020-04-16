@@ -3,7 +3,6 @@ package com.ofs.sys.web.service;
 
 import com.ofs.sys.web.dto.ResetPasswordDto;
 import com.ofs.sys.web.entity.SysMenus;
-import com.ofs.sys.web.entity.SysRole;
 import com.ofs.sys.web.entity.SysUser;
 import com.ofs.web.base.BaseService;
 
@@ -46,12 +45,11 @@ public interface SysUserService extends BaseService<SysUser> {
     List<String> getAllPermissionTag(String account);
 
     /**
-     * 用户角色资源匹配
+     * 获取用户的菜单树
      *
-     * @param roles 用户角色集
-     * @return 资源集合
+     * @return menus
      */
-    List<SysMenus> userRolesRegexMenu(List<SysRole> roles);
+    List<SysMenus> getMenus(String account);
 
     /**
      * 重置用户密码

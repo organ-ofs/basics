@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ofs.sys.web.entity.SysRole;
 import com.ofs.sys.web.entity.SysUserRole;
 import com.ofs.sys.web.mapper.SysRoleMapper;
-import com.ofs.sys.web.service.SysResourceService;
 import com.ofs.sys.web.service.SysRoleService;
 import com.ofs.sys.web.service.SysUserRoleService;
 import com.ofs.web.auth.service.ShiroService;
@@ -25,9 +24,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
     private SysUserRoleService userRoleService;
 
     @Autowired
-    private SysResourceService resourceService;
-
-    @Autowired
     private ShiroService shiroService;
 
     @Override
@@ -46,7 +42,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
     @Override
     public void removes(List<String> ids) {
         ids.forEach(id -> {
-
             try {
                 this.remove(id);
                 this.updateCache(id, true, false);
@@ -79,7 +74,6 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
         }
         try {
             this.updateById(role);
-
             this.updateCache(role.getId(), true, false);
         } catch (Exception e) {
             throw RequestException.fail("角色更新失败！", e);
@@ -93,8 +87,7 @@ public class SysRoleServiceImpl extends BaseServiceImpl<SysRoleMapper, SysRole> 
         wrapper.eq(SysRole.NAME, role.getName());
         SysRole roleOld = this.getOne(wrapper);
         if (roleOld != null) {
-            throw RequestException.fail(
-                    String.format("已经存在名称为 %s 的角色", role.getName()));
+            throw RequestException.fail(String.format("已经存在名称为 %s 的角色", role.getName()));
         }
         try {
             super.add(role);

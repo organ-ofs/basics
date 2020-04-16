@@ -16,5 +16,47 @@ spring:
         max-active: 10
         max-idle: 3
         min-idle: 3
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@12.3.10.15:1521/qjsdb
+    username: tax_dev
+    password: tax_dev
+    druid:
+      # 初始化时建立的连接数
+      initial-size: 5
+      # 最小连接数
+      min-idle: 5
+      # 最大连接数
+      max-active: 50
+      # 获取连接最大等待时间，单位：毫秒
+      max-wait: 60000
+      validation-query: select 1 from dual
+      validation-query-timeout: 2
+      #是否强制关闭连接时长大于removeAbandonedTimeoutMillis的连接
+      remove-abandoned: true
+      #一个连接从被连接到被关闭之间的最大生命周期
+      remove-abandoned-timeout: 180
+      #强制关闭连接时是否记录日志
+      log-abandoned: true
+      time-between-log-stats-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      filters: stat,wall,config
+      connect-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=10000
+      #connection-properties: config.decrypt=true;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAIA9ciLS8jjSqRW7VR2GlJNPMMwm9RVeqmfZfBT0d9vB4Agx1/l2vh0H7enubf0ImAKSSAOJM5w4fGsKlxcDxQkCAwEAAQ==
+      filter:
+        config:
+          enabled: true
+        stat:
+          log-slow-sql: true
+        wall:
+          config:
+            multi-statement-allow: false
 quartz:
   enabled: true
+mybatis:
+  type-aliases-package: com.ofs.commons.plugin
+  mapper-locations: classpath:mapper/*.xml

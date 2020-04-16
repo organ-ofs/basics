@@ -18,7 +18,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @ComponentScan(basePackages = {"com.ofs"})
 public class SystemApiApplication {
     public static void main(String[] args) {
-//        SpringApplication.run(SystemApiApplication.class);
         try {
             SpringApplication.run(SystemApiApplication.class, args);
             System.out.println("Server startup done.");

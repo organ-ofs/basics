@@ -3,6 +3,7 @@ package com.ofs.web.base;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.ofs.utils.DateUtils;
 import com.ofs.utils.IdentifierUtils;
 import com.ofs.web.annotation.SysLogs;
 import com.ofs.web.base.bean.RequestTable;
@@ -59,6 +60,7 @@ public abstract class BaseController<T extends BaseEntity> {
     @ApiOperation(value = "更新根据ID")
     @SysLogs("更新根据ID")
     Result edit(@RequestBody @Validated T dto) throws Exception {
+        dto.setUpdateDate(DateUtils.getCurrentTime());
         getService().update(dto);
         return Result.result();
     }
@@ -84,6 +86,7 @@ public abstract class BaseController<T extends BaseEntity> {
     @SysLogs("新增")
     Result add(@RequestBody @Validated T dto) throws Exception {
         dto.setId(IdentifierUtils.nextUuid());
+        dto.setCreateDate(DateUtils.getCurrentTime());
         getService().add(dto);
         return Result.result();
     }
