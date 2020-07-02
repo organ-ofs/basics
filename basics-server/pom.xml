@@ -39,7 +39,7 @@
         <quartz.version>2.2.3</quartz.version>
         <jwt.version>3.7.0</jwt.version>
         <jedis.vetsion>2.9.0</jedis.vetsion>
-        <mysql.version>6.0.6</mysql.version>
+        <mysql.version>8.0.16</mysql.version>
         <mybatis.plus.version>3.1.0</mybatis.plus.version>
         <mybatis.version>2.1.0</mybatis.version>
         <api.version>1.0.0-SNAPSHOT</api.version>
