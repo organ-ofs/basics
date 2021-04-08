@@ -3,10 +3,13 @@ package com.ofs.web.utils;
  * @author ly
  */
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.ofs.web.base.BaseEntity;
+import com.ofs.web.exception.FunctionErrorException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -60,6 +63,32 @@ public class BeanConverterUtil {
         BeanUtils.copyProperties(from, to);
     }
 
+    /**
+     * 通过类，方法名去创建实例执行对应的方法，使用对应的参数
+     * 这里只是为了解决主子表子表外键的set方法的共通设置
+     *
+     * @param entity
+     * @param methodName
+     * @param param
+     */
+    public static void callMethodByClass(BaseEntity entity, String methodName, String param) {
+
+        if (entity == null) {
+            return;
+        }
+
+        if ("".equals(Objects.toString(methodName, StringUtils.EMPTY))) {
+            return;
+        }
+
+        try {
+            Object obj = entity.getClass().newInstance();
+            Method m = obj.getClass().getDeclaredMethod(methodName, String.class);
+            m.invoke(entity, param);
+        } catch (Exception e) {
+            throw new FunctionErrorException(e);
+        }
+    }
 
     /**
      * Id转换为set方法

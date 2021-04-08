@@ -1,8 +1,8 @@
 package com.ofs.web.utils;
 
-
 import com.ofs.web.constant.BaseDataConstant;
 import com.ofs.web.exception.GlobalErrorException;
+import com.ofs.web.knowledge.FrameMessageEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 
@@ -18,14 +18,32 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.ofs.web.knowledge.FrameMessageEnum.*;
-
 /**
  * @author: ly
  * @date: 2018/7/23 17:46
  */
 @Slf4j
 public class SecurityUtil {
+
+    /**
+     * 消息摘要
+     *
+     * @author zhouzhian
+     */
+    public static class MessageDigestUtil {
+
+        public static byte[] digest(String content, boolean isMd5) {
+            try {
+                String algorithm = isMd5 ? "MD5" : "SHA";
+                MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
+                return messageDigest.digest(content.getBytes());
+            } catch (Exception e) {
+                log.error("digest:", e);
+                throw new GlobalErrorException(FrameMessageEnum.DECRYPT_ERROR);
+            }
+        }
+
+    }
 
     /**
      * 对称加密算法
@@ -37,9 +55,9 @@ public class SecurityUtil {
         private static final String CIPHER_ALGORITHM = "AES/CBC/NoPadding";
 
 
-        /*
-         * 加密用的Key 可以用26个字母和数字组成 此处使用AES-128-EBC加密模式，key需要为16位。
-         */
+  /*
+     * 加密用的Key 可以用26个字母和数字组成 此处使用AES-128-EBC加密模式，key需要为16位。
+     */
 
         /**
          * 加密
@@ -54,13 +72,13 @@ public class SecurityUtil {
             try {
                 if (key == null) {
                     log.error("AesUtil encrypt Key为空null");
-                    throw new GlobalErrorException(ENCRYPT_ERROR);
+                    throw new GlobalErrorException(FrameMessageEnum.ENCRYPT_ERROR);
                 }
                 // 判断Key是否为16位
                 if (key.length() != 16) {
                     log.error("AesUtil encrypt Key长度不是16位");
 
-                    throw new GlobalErrorException(ENCRYPT_ERROR);
+                    throw new GlobalErrorException(FrameMessageEnum.ENCRYPT_ERROR);
                 }
                 //"算法/模式/补码方式"NoPadding PkcsPadding
                 Cipher cipher = Cipher.getInstance(CIPHER_ALGORITHM);
@@ -86,7 +104,7 @@ public class SecurityUtil {
 
             } catch (Exception e) {
                 log.error("encrypt:", e);
-                throw new GlobalErrorException(ENCRYPT_ERROR);
+                throw new GlobalErrorException(FrameMessageEnum.ENCRYPT_ERROR);
             }
 
 
@@ -105,12 +123,12 @@ public class SecurityUtil {
                 // 判断Key是否正确
                 if (key == null) {
                     log.error("AesUtil decrypt Key为空null");
-                    throw new GlobalErrorException(DECRYPT_ERROR);
+                    throw new GlobalErrorException(FrameMessageEnum.DECRYPT_ERROR);
                 }
                 // 判断Key是否为16位
                 if (key.length() != 16) {
                     log.error("AesUtil decrypt Key 不为16位");
-                    throw new GlobalErrorException(DECRYPT_ERROR);
+                    throw new GlobalErrorException(FrameMessageEnum.DECRYPT_ERROR);
                 }
                 byte[] encrypted = new Base64().decode(data);
 
@@ -128,7 +146,7 @@ public class SecurityUtil {
             } catch (Exception e) {
 
                 log.error("decrypt:", e);
-                throw new GlobalErrorException(DECRYPT_ERROR);
+                throw new GlobalErrorException(FrameMessageEnum.DECRYPT_ERROR);
             }
         }
 
@@ -216,7 +234,7 @@ public class SecurityUtil {
                 return Base64.encodeBase64String(signature.sign());
             } catch (Exception e) {
                 log.error("sign:", e);
-                throw new GlobalErrorException(SIGN_ERROR);
+                throw new GlobalErrorException(FrameMessageEnum.SIGN_ERROR);
             }
         }
 
@@ -246,7 +264,7 @@ public class SecurityUtil {
                 return signature.verify(Base64.decodeBase64(sign));
             } catch (Exception e) {
                 log.error("verify:", e);
-                throw new GlobalErrorException(VERIFY_ERROR);
+                throw new GlobalErrorException(FrameMessageEnum.VERIFY_ERROR);
             }
         }
 
@@ -292,7 +310,7 @@ public class SecurityUtil {
                 return new String(decryptedData, BaseDataConstant.DEFAULT_CHARSET);
             } catch (Exception e) {
                 log.error("decryptByPrivateKey:", e);
-                throw new GlobalErrorException(DECRYPT_ERROR);
+                throw new GlobalErrorException(FrameMessageEnum.DECRYPT_ERROR);
             }
         }
 
@@ -339,7 +357,7 @@ public class SecurityUtil {
                 return new String(decryptedData, BaseDataConstant.DEFAULT_CHARSET);
             } catch (Exception e) {
                 log.error("decryptByPublicKey:", e);
-                throw new GlobalErrorException(DECRYPT_ERROR);
+                throw new GlobalErrorException(FrameMessageEnum.DECRYPT_ERROR);
             }
         }
 
@@ -386,7 +404,7 @@ public class SecurityUtil {
                 return Base64.encodeBase64String(encryptedData);
             } catch (Exception e) {
                 log.error("encryptByPublicKey:", e);
-                throw new GlobalErrorException(ENCRYPT_ERROR);
+                throw new GlobalErrorException(FrameMessageEnum.ENCRYPT_ERROR);
             }
         }
 
@@ -432,7 +450,7 @@ public class SecurityUtil {
                 return Base64.encodeBase64String(encryptedData);
             } catch (Exception e) {
                 log.error("encryptByPrivateKey:", e);
-                throw new GlobalErrorException(ENCRYPT_ERROR);
+                throw new GlobalErrorException(FrameMessageEnum.ENCRYPT_ERROR);
             }
         }
 
